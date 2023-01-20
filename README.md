@@ -2,7 +2,7 @@
 
 **sued is not exactly ready. It doesn't even open files yet.**
 
-A text editor that works and is an editor.
+A text editor that ~~works~~ will work and ~~is~~ will be an editor.
 
 Syntax highlighting? Code analysis? *Modal editing?* **Cursor positioning??**
 
