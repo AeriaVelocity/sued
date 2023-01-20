@@ -1,5 +1,7 @@
 # sued - Shut Up Editor
 
+**sued is not exactly ready. It doesn't even open files yet.**
+
 A text editor that works and is an editor.
 
 Syntax highlighting? Code analysis? *Modal editing?* **Cursor positioning??**
