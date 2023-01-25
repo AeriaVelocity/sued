@@ -5,12 +5,12 @@ use rand::Rng;
 
 fn main() {
     // Startup message
-    let messages = vec!["the editor of all time", "shut up and edit", "the nonstandard text editor", "sued as in editor, not as in law"];
-    let message = messages[rand::thread_rng().gen_range(0..messages.len())];
+    let messages: Vec<&str> = vec!["the editor of all time", "shut up and edit", "the nonstandard text editor", "sued as in editor, not as in law"];
+    let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     println!("sued - {message}\n`~exit` or <C-c> exits");
 
     // Create 'command' variable
-    let mut command = String::new();
+    let mut command: String = String::new();
 
     // Main while loop
     while !command.eq("~exit") {
@@ -24,12 +24,17 @@ fn main() {
 
         // Remove newline from the end of the command variable,
         // since read_line adds a newline which makes sense actually
-        let len = command.trim_end_matches(&['\r', '\n'][..]).len();
+        let len: usize = command.trim_end_matches(&['\r', '\n'][..]).len();
         command.truncate(len);
 
-        // Print the command entered, for debug purposes
-        // TODO Add editor commands
+        // Handle commands, which don't yet do anything
+        // If a command isn't recognised, the text will
+        // be println!'d instead
         // TODO Will replace with editor functionality
-        println!("{}", command);
+        let _cmdproc: () = match command.as_str() {
+            "~save" => { println!("not implemented"); },
+            "~open" => { println!("not implemented"); },
+            _ => { println!("{}", command) }
+        };
     }
 }
