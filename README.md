@@ -16,11 +16,11 @@ Written in Rust, because frick you, that's why.
 
 - [ ] Write a file buffer (**important!!**)
 - [ ] Implement file saving
-    - [x] Add functionality for `save()` function
+    - [ ] Add functionality for `save()` function
     - [ ] Make it actually save a file
 - [ ] Implement file opening
     - [x] Add functionality for `open()` function
     - [ ] Make it actually open a file
 - [ ] Implement way to show file contents (need to write file buffer first)
-    - [x] Add functionality for `show()` function
+    - [ ] Add functionality for `show()` function
     - [ ] Make it actually display file contents
