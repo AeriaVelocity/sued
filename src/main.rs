@@ -15,6 +15,13 @@ fn startup_message() {
         "sued, man! ~run man sued",
         "there is no visual mode",
         "the itor fell off",
+        "the editor that edits itself",
+        "no distractions, just text",
+        "the ultimate blank slate",
+        "words matter; nothing else does",
+        "the text editor that doesn't care",
+        "write like no one is watching, because they're not",
+        "a hacker's weapon of choice",
     ];
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     println!("sued - {message}\ntype ~ for commands, otherwise just start typing");
@@ -40,13 +47,18 @@ fn show() {
     println!("sorry, no file buffer yet"); // TODO write the damn file buffer already
 }
 
-fn open(command_args: Vec<&str>) -> &str {
+fn open(command_args: Vec<&str>) -> bool {
     if command_args.len() <= 1 {
         println!("open what?");
-        return "";
+        return false;
     }
     else {
-        return command_args[1];
+        let file_contents = fs::read_to_string(command_args[1]);
+        match file_contents {
+            Ok(_) => {},
+            Err(_) => println!("file {} doesn't exist, so it will be created", command_args[1])
+        }
+        return true;
     }
 }
 
@@ -89,13 +101,12 @@ fn main() {
         let len: usize = command.trim_end_matches(&['\r', '\n'][..]).len();
         command.truncate(len);
         let command_args = command.split(" ").collect::<Vec<&str>>();
-        // TODO replace with editor functionality
         let _cmdproc: () = match command_args[0] {
             "~"     => { display_help(); },
             "~help" => { extended_help(); },
             "~save" => { save(); },
             "~show" => { show(); },
-            "~open" => { println!("{}", open(command_args)); },
+            "~open" => { if open(command_args.clone()) { println!("file {} opened", command_args[1]) } },
             "~run"  => { shell_command(command_args); },
             "~exit" => {},
             _       => { if command_args[0].starts_with("~") { println!("{} is an unknown command", command_args[0]); } else { write(command.as_str()); } }
