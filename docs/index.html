@@ -1,0 +1,69 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <title>sued</title>
+        <meta name="description" content="sued, the text editor of all time">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                font-family: "JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", monospace;
+                font-size: 16px;
+                color: #ddd;
+                background-color: black;
+                max-width: 789px;
+                margin: auto;
+            }
+            p {
+                margin-left: 40px;
+            }
+            a {
+                color: white;
+            }
+            h1, h2, h3 {
+                font-size: 16px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre align="center">SUED(1)                            User Commands                            SUED(1)</pre>
+        <h1>NAME</h1>
+        <p>sued - the text editor of all time, a post-classic line editor</p>
+        <h1>SYNOPSIS</h1>
+        <p>sued [file]</p>
+        <h1>DESCRIPTION</h1>
+        <p>sued is a line editor written in Rust by <a href="https://that1m8head.github.io">Arsalan Kazmi</a> in the image of the standard text editor, ed.</p>
+        <p>sued is not nearly as powerful as its inspiration, but it matches it in the terseness department, while at the same time being quite a bit more user-friendly.</p>
+        <p><span style="color:red">important:</span> sued is not production-ready and it's still in the middle of being created, and it's nowhere near able to edit text.</p>
+        <h1>OPTIONS</h1>
+        <p>None yet, lmao. Maybe in the future, but not now.</p>
+        <h1>COMMANDS</h1>
+        <p>All commands start with ~. Run ~ by itself to see a list of commands.</p>
+        <p><strong>save</strong> - Write the file buffer to the provided file name. <span style="color:red">Not working yet.</span></p>
+        <p><strong>open</strong> - Find or create a file and open its contents up in sued. <span style="color:red">Not working yet.</span></p>
+        <p><strong>show</strong> - Display the buffer contents. <span style="color:red">Not working yet.</span></p>
+        <p><strong>run</strong>  - Run the provided executable. Can only run executables, <strong>not</strong> shell builtins.</p>
+        <p><strong>exit</strong> - Quit sued, discarding the buffer contents.</p>
+        <p><strong>help</strong> - Display some information about sued onto the screen.</p>
+        <h1>FAQ</h1>
+        <p>
+            <ul>
+                <li>Why a line editor?</li>
+                <p>
+                    <ol>
+                        <li>I like ed. I find it extremely pleasant to use, despite its terseness. I wanted to try my hand at writing a similar text editor, just a lot less complex.</li>
+                        <li>I don't want to go insane trying to develop a Vim-like editor. Especially not when projects like <a href="https://github.com/helix-editor/helix">Helix</a> exist.</li>
+                    </ol>
+                </p>
+                <li>If it's ed-like, why not copy ed's syntax?</li>
+                <p>sued is actually more modelled after my earlier attempt at a line editor, <a href="https://github.com/That1M8Head/Streakline">Streakline</a>. In Streakline, editing is straightforward. You open the editor and start typing. It used commands prefixed with ~, so sued does too.</p>
+                <li>What does sued stand for?</li>
+                <p>It stands for "shut up editor". This can be read as "shut up and edit", "the shut up editor" or "Shut up, editor!"</p>
+                <li>How do you pronounce sued?</li>
+                <p>"soo-ed". Don't pronounce it "sood". Otherwise people are going to think a text editor's going to go to court(!)</p>
+                <li>"Post-classic"?</li>
+                <p>It's a play on words, since Helix describes itself as "post-modern" -- sued is "post-classic".</p>
+            </ul>
+        </p>
+        <pre align="center">That1M8Head                         March 2023                              SUED(1)</pre>
+    </body>
+</html>
