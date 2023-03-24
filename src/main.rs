@@ -1,7 +1,8 @@
-// main.rs - sued, the text editor of all time, short for Shut Up Editor
+// main.rs - sued, the text editor that doesn't give a damn, short for Shut Up Editor
 
 use std::io;
 use std::fs;
+use std::path;
 use std::process::Command;
 use which::which;
 use rand::Rng;
@@ -39,32 +40,34 @@ fn extended_help() {
               sued written by Arsalan Kazmi (That1M8Head)");
 }
 
-fn save() {
-    println!("sorry, can't save yet"); // TODO write the file buffer first. then implement saving
+fn save(buffer_contents: Vec<String>, file_path: &str) {
+    println!("sorry, can't save yet"); // TODO the file buffer exists now, so implement saving!!
 }
 
-fn show() {
-    println!("sorry, no file buffer yet"); // TODO write the damn file buffer already
-}
-
-fn open(command_args: Vec<&str>) -> bool {
-    if command_args.len() <= 1 {
-        println!("open what?");
-        return false;
+fn show(buffer_contents: Vec<String>) {
+    if buffer_contents.len() < 1 {
+        println!("no buffer contents");
     }
     else {
-        let file_contents = fs::read_to_string(command_args[1]);
-        match file_contents {
+        for line in buffer_contents.iter() {
+            println!("{}", line);
+        }
+    }
+}
+
+fn open(command_args: Vec<&str>) -> String {
+    if command_args.len() <= 1 {
+        println!("open what?");
+        return "".to_string();
+    }
+    else {
+        let file_exists = fs::read_to_string(command_args[1]);
+        match file_exists {
             Ok(_) => {},
             Err(_) => println!("file {} doesn't exist, so it will be created", command_args[1])
         }
-        return true;
+        return fs::read_to_string(command_args[1]).unwrap();
     }
-}
-
-fn write(to_write: &str) {
-    // TODO implement file buffer, then implement writing to buffer
-    println!("{}", to_write);
 }
 
 fn shell_command(mut command_args: Vec<&str>) {
@@ -93,6 +96,8 @@ fn shell_command(mut command_args: Vec<&str>) {
 fn main() {
     startup_message();
     let mut command: String = String::new();
+    let mut file_buffer: Vec<String> = Vec::new();
+    let mut file_path: String = String::new();
     while !command.eq("~exit") {
         command.clear();
         io::stdin()
@@ -104,12 +109,25 @@ fn main() {
         let _cmdproc: () = match command_args[0] {
             "~"     => { display_help(); },
             "~help" => { extended_help(); },
-            "~save" => { save(); },
-            "~show" => { show(); },
-            "~open" => { if open(command_args.clone()) { println!("file {} opened", command_args[1]) } },
+            "~save" => { save(file_buffer.clone(), "nowhere"); },
+            "~show" => { show(file_buffer.clone()); },
+            "~open" => { 
+                file_path = open(command_args.clone());
+                if file_path != "" {
+                    println!("file {} opened", command_args[1]);
+                }
+            },
             "~run"  => { shell_command(command_args); },
-            "~exit" => {},
-            _       => { if command_args[0].starts_with("~") { println!("{} is an unknown command", command_args[0]); } else { write(command.as_str()); } }
+            "~exit" => { /* do nothing, because `~exit` will break the loop */},
+            _       => { 
+                if command_args[0].starts_with("~") {
+                    println!("{} is an unknown command", command_args[0]);
+                }
+                else {
+                    let to_write = command.clone();
+                    file_buffer.push(to_write);
+                }
+            }
         };
     }
 }
