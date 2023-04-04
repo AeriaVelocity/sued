@@ -23,6 +23,7 @@ fn startup_message() {
         "the text editor that doesn't care",
         "write like no one is watching, because they're not",
         "a hacker's weapon of choice",
+        "syntax? never heard of them",
     ];
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     println!("sued - {message}\ntype ~ for commands, otherwise just start typing");
