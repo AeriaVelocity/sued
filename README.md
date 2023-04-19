@@ -1,7 +1,6 @@
 # sued
 
-> :warning: sued is not ready for use. Not even a little bit. It can't even open
-> a file yet.
+> :warning: sued is not ready for use. Not even a little bit. 
 
 A text editor that ~~works~~ will work and ~~is~~ will be an editor.
 
@@ -46,7 +45,7 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 
 `show` - Display the buffer contents.
 
-`run` - Run the provided executable. Can only run executables, *not* shell builtins.
+`run` - Run the provided executable or shell builtin.
 
 `exit` - Quit sued, discarding the buffer contents.
 
