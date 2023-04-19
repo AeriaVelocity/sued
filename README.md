@@ -42,9 +42,9 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 
 `save` - Write the buffer contents to the provided file name. **Not working yet.**
 
-`open` - Find or create a file and open its contents up in sued. **Not working yet.**
+`open` - Find or create a file and open its contents up in sued.
 
-`show` - Display the buffer contents. **Not working yet.**
+`show` - Display the buffer contents.
 
 `run` - Run the provided executable. Can only run executables, *not* shell builtins.
 
