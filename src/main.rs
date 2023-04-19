@@ -24,6 +24,7 @@ fn startup_message() {
         "write like no one is watching, because they're not",
         "a hacker's weapon of choice",
         "syntax? never heard of them",
+        "what you get is what you get",
     ];
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     println!("sued - {message}\ntype ~ for commands, otherwise just start typing");
@@ -65,7 +66,10 @@ fn open(command_args: Vec<&str>) -> String {
         let file_exists = fs::read_to_string(command_args[1]);
         match file_exists {
             Ok(_) => {},
-            Err(_) => println!("file {} doesn't exist, so it will be created", command_args[1])
+            Err(_) => {
+                println!("file {} doesn't exist, so it will be created", command_args[1]);
+                fs::File::create(command_args[1]).expect("couldn't create file");
+            }
         }
         return fs::read_to_string(command_args[1]).unwrap();
     }
@@ -74,23 +78,30 @@ fn open(command_args: Vec<&str>) -> String {
 fn shell_command(mut command_args: Vec<&str>) {
     if command_args.len() <= 1 {
         println!("run what?");
-    }
-    else {
-        let cmdpath = which(command_args[1]);
+    } else {
         let command = command_args[1];
+        let shell = if cfg!(windows) { 
+            "cmd" 
+        } else { 
+            "sh" 
+        };
         match which(command) {
-            Ok(_) => println!("running {}", command),
-            Err(_) => {
-                println!("no such command");
-                return;
-            }
+            Ok(path) => println!("running {}", path.to_string_lossy()),
+            Err(_) => println!("{} wasn't found; trying to run it anyway", command)
         }
         command_args.drain(0..2);
-        Command::new(cmdpath.clone().unwrap())
-            .args(command_args.clone())
+        let cmd = Command::new(shell)
+            .arg("/c")
+            .arg(command)
+            .args(command_args)
             .status()
-            .expect("broken!");
-        println!("finished running {}", command);
+            .expect("command failed");
+        if cmd.success() {
+            println!("finished running {}", command);
+        }
+        else {
+            println!("failed to run {}", command);
+        }
     }
 }
 
@@ -118,8 +129,26 @@ fn main() {
                     println!("file {} opened", command_args[1]);
                 }
             },
+            "~sued" => {
+                loop {
+                    eprintln!("editor overflow"); 
+                    eprintln!("(a)bort, (r)etry, (f)ail?"); 
+                    let mut input = String::new();
+                    std::io::stdin().read_line(&mut input).unwrap();
+                    match input.trim().to_lowercase().as_str() {
+                        "a" => {
+                            println!("let us never speak of this again");
+                            break;
+                        },
+                        "f" => {
+                            panic!("you failed");
+                        },
+                        _ => ()
+                    }
+                }
+            }
             "~run"  => { shell_command(command_args); },
-            "~exit" => { /* do nothing, because `~exit` will break the loop */},
+            "~exit" => { /* do nothing, because `~exit` will break the loop */ },
             _       => { 
                 if command_args[0].starts_with("~") {
                     println!("{} is an unknown command", command_args[0]);
