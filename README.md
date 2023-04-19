@@ -45,7 +45,7 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 
 `show` - Display the buffer contents.
 
-`run` - Run the provided executable or shell builtin.
+`run` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.
 
 `exit` - Quit sued, discarding the buffer contents.
 
