@@ -75,8 +75,10 @@ fn show(buffer_contents: Vec<String>) {
         println!("no buffer contents");
     }
     else {
+        let mut count: i32 = 0;
         for line in buffer_contents.iter() {
-            println!("{}", line);
+            count += 1;
+            println!("{}| {}", count, line);
         }
     }
 }
