@@ -1,11 +1,11 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html lang="en">
     <head>
         <title>sued</title>
         <meta name="description" content="sued, the text editor of all time">
         <meta name="author" content="Arsalan Kazmi">
-        <meta name="date" content="2023-03-18">
-        <meta name="version" content="0.1.0">
+        <meta name="date" content="2023-07-12">
+        <meta name="version" content="1.0.0">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="manpage.css">
     </head>
@@ -22,18 +22,18 @@
         <h1>DESCRIPTION</h1>
         <p>sued is a line editor written in Rust by <a href="https://that1m8head.github.io">Arsalan Kazmi</a> in the image of the standard text editor, ed.</p>
         <p>sued is not nearly as powerful as its inspiration, but it matches it in the terseness department, while at the same time being quite a bit more user-friendly.</p>
-        <p><span style="color:red">important:</span> sued is not production-ready and it's still in the middle of being created, and it's nowhere near able to edit text.</p>
         <h1>OBTAINING</h1>
-        <p>sued is not ready for production use! It isn't ready for <strong>any</strong> use!</p>
+        <p>sued <em>technically</em> works fine for writing text to a file, or opening a file and displaying its contents.</p>
+        <p>You <em>can</em> use sued at this point if you want to, but it still needs some more time in the oven.</p>
         <p><a href="https://github.com/that1m8head/sued">Go to the GitHub page</a> if you want to check out sued for yourself, or if you want to help me work on it.</p>
         <h1>OPTIONS</h1>
         <p>None yet, lmao. Maybe in the future, but not now.</p>
         <h1>COMMANDS</h1>
         <p>All commands start with ~. Run ~ by itself to see a list of commands.</p>
-        <p><strong>save</strong> - Write the file buffer to the provided file name. <span style="color:red">Not working yet.</span></p>
-        <p><strong>open</strong> - Find or create a file and open its contents up in sued. <span style="color:red">Not working yet.</span></p>
-        <p><strong>show</strong> - Display the buffer contents. <span style="color:red">Not working yet.</span></p>
-        <p><strong>run</strong>  - Run the provided executable. Can only run executables, <strong>not</strong> shell builtins.</p>
+        <p><strong>save</strong> - Write the file buffer to the provided file name.</p>
+        <p><strong>open</strong> - Find or create a file and open its contents up in sued.</p>
+        <p><strong>show</strong> - Display the buffer contents.</p>
+        <p><strong>run</strong>  - Run the provided executable. Will prioritise real executables over shell builtins.</p>
         <p><strong>exit</strong> - Quit sued, discarding the buffer contents.</p>
         <p><strong>help</strong> - Display some information about sued onto the screen.</p>
         <h1>FAQ</h1>
@@ -68,7 +68,7 @@
         <h1>SEE ALSO</h1>
         <p><a href="https://manpage.me/?q=ed">ed(1)</a>, <a href="https://github.com/that1m8head/Streakline">streakline(1)</a></p>
         <h1>LIMITATIONS</h1>
-        <p>sued is very unfinished and currently can't edit text. Is that enough information on its limitations?</p>
+        <p>sued can't really do much in terms of "editing" text. It can write to files fine, but you can't exactly change file contents. Is that enough information on its limitations?</p>
         <h1>HISTORY</h1>
         <p>sued was, technically speaking, initially developed at the University of Hertfordshire (because I'm a student there), but practically speaking it wasn't developed under their watch or on their systems, or even for them. sued is a project by me, Arsalan Kazmi, first and foremost, no matter where it's worked on from, and UH holds no copyright over it.</p>
         <h1>BUGS</h1>
