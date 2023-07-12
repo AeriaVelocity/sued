@@ -5,7 +5,7 @@ version = "0.2.0"
 edition = "2021"
 license = "WTFPL"
 keywords = ["text", "editor", "ed"]
-categories = ["text-editor"]
+categories = ["text-editors"]
 repository = "https://github.com/that1m8head/sued/"
 homepage = "https://that1m8head.github.io/sued/"
 
