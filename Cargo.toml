@@ -1,11 +1,11 @@
 [package]
 name = "sued"
 description = "The text editor that doesn't give a damn."
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 license = "WTFPL"
 keywords = ["text", "editor", "ed"]
-categories = ["text-editors"]
+categories = ["text-editors", "command-line-utilities"]
 repository = "https://github.com/that1m8head/sued/"
 homepage = "https://that1m8head.github.io/sued/"
 
