@@ -17,6 +17,7 @@ Who the hell cares? Just shut up and edit.
 Written in Rust, because frick you, that's why.
 
 ## Questions
+
 + Why a line editor?
     1. I like ed. I find it extremely pleasant to use, despite its terseness. I
        wanted to try my hand at writing a similar text editor, just a lot less
@@ -25,18 +26,19 @@ Written in Rust, because frick you, that's why.
        not when projects like [Helix](https://github.com/helix-editor/helix)
        exist.
 + If it's ed-like, why not copy ed's syntax?
-    - sued is actually more modelled after my earlier attempt at a line editor,
+  + sued is actually more modelled after my earlier attempt at a line editor,
       [Streakline](https://github.com/that1m8head/Streakline).
-    - In Streakline, editing is straightforward. You open the editor and start
+  + In Streakline, editing is straightforward. You open the editor and start
       typing. It used commands prefixed with `~`, so sued does too.
 + What does sued stand for?
-    - It stands for "shut up editor". This can be read as "shut up and edit", "the shut up editor"
+  + It stands for "shut up editor". This can be read as "shut up and edit", "the shut up editor"
       or "Shut up, editor!"
 + How do you pronounce sued?
-    - "soo-ed". Don't pronounce it "sood". Otherwise people are going to think
+  + "soo-ed". Don't pronounce it "sood". Otherwise people are going to think
       a text editor's going to go to court(!)
 
 ## Commands
+
 All commands start with `~`. Run `~` by itself to see a list of commands.
 
 `save` - Write the buffer contents to the provided file name. **Not working yet.**

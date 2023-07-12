@@ -2,6 +2,8 @@
 
 use std::io;
 use std::fs;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 use std::path;
 use std::process::Command;
 use which::which;
@@ -12,19 +14,31 @@ fn startup_message() {
         "the editor of all time",
         "shut up and edit",
         "the nonstandard text editor",
+        "it's pronounced \"soo-ed\"",
         "sued as in editor, not as in law",
         "sued, man! ~run man sued",
         "there is no visual mode",
         "the itor fell off",
-        "the editor that edits itself",
-        "no distractions, just text",
         "the ultimate blank slate",
         "words matter; nothing else does",
-        "the text editor that doesn't care",
+        "the text editor that doesn't give a damn",
         "write like no one is watching, because they're not",
-        "a hacker's weapon of choice",
         "syntax? never heard of them",
         "what you get is what you get",
+        "what the frick is a config file",
+        "a non-extensible, uncustomisable but still free/libre editor",
+        "text is stored in the balls",
+        "want to configure? learn rust",
+        "good luck figuring out how to exit",
+        "sublime is temporary, sued is eternal",
+        "you are on your own. good luck",
+        "back in the day they charged for stuff like this",
+        "no cursor keys, no need to worry about emacs pinky",
+        "the control key is only used in emergencies",
+        "no need for an evil-mode, sued is evil enough",
+        "no config file means no config bankruptcy",
+        "if vim is evil, sued is demonic",
+        "free software, hell yeah",
     ];
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     println!("sued - {message}\ntype ~ for commands, otherwise just start typing");
@@ -85,6 +99,10 @@ fn shell_command(mut command_args: Vec<&str>) {
         } else { 
             "sh" 
         };
+        if command == "sued" {
+            editor_overflow();
+            return;
+        }
         match which(command) {
             Ok(path) => println!("running {}", path.to_string_lossy()),
             Err(_) => println!("{} wasn't found; trying to run it anyway", command)
@@ -101,6 +119,40 @@ fn shell_command(mut command_args: Vec<&str>) {
         }
         else {
             println!("failed to run {}", command);
+        }
+    }
+}
+
+fn crash(error_code: &str, hex_codes: &[u32]) {
+    let mut populated_hex_codes = [0x00000000; 4];
+    let num_values = hex_codes.len().min(4);
+    populated_hex_codes[..num_values].copy_from_slice(&hex_codes[..num_values]);
+
+    eprintln!("stop: {}: 0x{:08X} (0x{:08X},0x{:08X},0x{:08X})",
+              error_code.to_uppercase(),
+              populated_hex_codes[0],
+              populated_hex_codes[1],
+              populated_hex_codes[2],
+              populated_hex_codes[3],
+    );
+    std::process::exit(1);
+}
+
+fn editor_overflow() {
+    loop {
+        eprintln!("editor overflow"); 
+        eprintln!("(a)bort, (r)etry, (f)ail?"); 
+        let mut input = String::new();
+        std::io::stdin().read_line(&mut input).unwrap();
+        match input.trim().to_lowercase().as_str() {
+            "a" => {
+                println!("let us never speak of this again");
+                break;
+            },
+            "f" => {
+                crash("editor_overflow", &vec![0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF])
+            },
+            _ => ()
         }
     }
 }
@@ -127,27 +179,14 @@ fn main() {
                 file_path = open(command_args.clone());
                 if file_path != "" {
                     println!("file {} opened", command_args[1]);
+                    // let reader = BufReader::new(File::open(file_path));
+                    // for line in reader.lines() {
+                    //     file_buffer.push(line);
+                    // }
                 }
             },
-            "~sued" => {
-                loop {
-                    eprintln!("editor overflow"); 
-                    eprintln!("(a)bort, (r)etry, (f)ail?"); 
-                    let mut input = String::new();
-                    std::io::stdin().read_line(&mut input).unwrap();
-                    match input.trim().to_lowercase().as_str() {
-                        "a" => {
-                            println!("let us never speak of this again");
-                            break;
-                        },
-                        "f" => {
-                            panic!("you failed");
-                        },
-                        _ => ()
-                    }
-                }
-            }
             "~run"  => { shell_command(command_args); },
+            "~bsod" => { crash("USER_IS_STUPID", &vec![0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
             "~exit" => { /* do nothing, because `~exit` will break the loop */ },
             _       => { 
                 if command_args[0].starts_with("~") {

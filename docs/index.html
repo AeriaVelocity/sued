@@ -3,29 +3,18 @@
     <head>
         <title>sued</title>
         <meta name="description" content="sued, the text editor of all time">
+        <meta name="author" content="Arsalan Kazmi">
+        <meta name="date" content="2023-03-18">
+        <meta name="version" content="0.1.0">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            body {
-                font-family: "JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", monospace;
-                font-size: 16px;
-                color: #ddd;
-                background-color: black;
-                max-width: 789px;
-                margin: auto;
-            }
-            p {
-                margin-left: 40px;
-            }
-            a {
-                color: white;
-            }
-            h1, h2, h3 {
-                font-size: 16px;
-            }
-        </style>
+        <link rel="stylesheet" href="manpage.css">
     </head>
     <body>
-        <pre align="center">SUED(1)                            User Commands                            SUED(1)</pre>
+        <div class="TH">
+            <span class="L">SUED(1)</span>
+            <span>User Commands</span>
+            <span class="R">SUED(1)</span>
+        </div>
         <h1>NAME</h1>
         <p>sued - the text editor of all time, a post-classic line editor</p>
         <h1>SYNOPSIS</h1>
@@ -67,6 +56,27 @@
                 <p>It's a play on words, since Helix describes itself as "post-modern" -- sued is "post-classic".</p>
             </ul>
         </p>
-        <pre align="center">That1M8Head                         March 2023                              SUED(1)</pre>
+        <h1>DIAGNOSTICS</h1>
+        <p>When an error occurs that sued can't recover from, it will print an error message as follows and quit:</p>
+        <p>stop: ERROR_CODE: 0xXXXXXXXX (0xXXXXXXXX,0xXXXXXXXX,0xXXXXXXXX)</p>
+        <p>The currently implemented error codes are as follows:</p>
+        <ul>
+            <li><strong>USER_IS_STUPID</strong> - The user manually initiated a crash.</li>
+            <li><strong>EDITOR_OVERFLOW</strong> - The editor tried to run itself and got stuck.</li>
+        </ul>
+
+        <h1>SEE ALSO</h1>
+        <p><a href="https://manpage.me/?q=ed">ed(1)</a>, <a href="https://github.com/that1m8head/Streakline">streakline(1)</a></p>
+        <h1>LIMITATIONS</h1>
+        <p>sued is very unfinished and currently can't edit text. Is that enough information on its limitations?</p>
+        <h1>HISTORY</h1>
+        <p>sued was, technically speaking, initially developed at the University of Hertfordshire (because I'm a student there), but practically speaking it wasn't developed under their watch or on their systems, or even for them. sued is a project by me, Arsalan Kazmi, first and foremost, no matter where it's worked on from, and UH holds no copyright over it.</p>
+        <h1>BUGS</h1>
+        <p>Yes.</p>
+        <div class="TH">
+            <span class="L">That1M8Head</span>
+            <span>2023-06-18</span>
+            <span class="R">That1M8Head</span>
+        </div>
     </body>
 </html>

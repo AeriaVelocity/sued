@@ -1,0 +1,40 @@
+/* manpage.css - styles your HTML document like a man page.
+   Written by Arsalan Kazmi <sonicspeed848@gmail.com> */
+
+body {
+    font-family: "JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", monospace;
+    font-size: 16px;
+    color: #ddd;
+    background-color: black;
+    max-width: 789px;
+    margin: auto;
+}
+p {
+    margin-left: 40px;
+}
+a {
+    color: white;
+}
+h1, h2, h3 {
+    font-size: 16px;
+}
+.TH {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+}
+.TH .L {
+    margin-right: auto;
+}
+.TH .R {
+    margin-left: auto;
+}
+@media (prefers-color-scheme: light) {
+    body {
+        color: #222;
+        background-color: white;
+    }
+    a {
+        color: black;
+    }
+}
