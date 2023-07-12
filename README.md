@@ -1,8 +1,8 @@
 # sued
 
-> :warning: sued is not ready for use. Not even a little bit. 
+> :warning: sued is not ready for use. Not even a little bit.
 
-A text editor that ~~works~~ will work and ~~is~~ will be an editor.
+A text editor that works and is be an editor.
 
 sued is a line editor, similar to the venerable and standard ed text editor,
 just simpler and not nearly as powerful.

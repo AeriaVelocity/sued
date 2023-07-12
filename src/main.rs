@@ -2,9 +2,7 @@
 
 use std::io;
 use std::fs;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-use std::path;
+use std::path::PathBuf;
 use std::process::Command;
 use which::which;
 use rand::Rng;
@@ -57,7 +55,19 @@ fn extended_help() {
 }
 
 fn save(buffer_contents: Vec<String>, file_path: &str) {
-    println!("sorry, can't save yet"); // TODO the file buffer exists now, so implement saving!!
+    if buffer_contents.is_empty() {
+        println!("buffer empty - nothing to save");
+        return;
+    }
+
+    let content = buffer_contents.join("\n");
+    println!("{}", &file_path);
+    let path = PathBuf::from(file_path);
+
+    match fs::write(&path, content) {
+        Ok(_) => println!("saved to {}", &path.display()),
+        Err(error) => eprintln!("couldn't save file: {}", error),
+    }
 }
 
 fn show(buffer_contents: Vec<String>) {
@@ -71,21 +81,17 @@ fn show(buffer_contents: Vec<String>) {
     }
 }
 
-fn open(command_args: Vec<&str>) -> String {
-    if command_args.len() <= 1 {
-        println!("open what?");
-        return "".to_string();
-    }
-    else {
-        let file_exists = fs::read_to_string(command_args[1]);
-        match file_exists {
-            Ok(_) => {},
-            Err(_) => {
-                println!("file {} doesn't exist, so it will be created", command_args[1]);
-                fs::File::create(command_args[1]).expect("couldn't create file");
-            }
+fn open(file_path: &str) -> Vec<String> {
+    let file_exists = fs::read_to_string(file_path);
+    match file_exists {
+        Ok(contents) => {
+            println!("file {} opened", file_path);
+            return contents.lines().map(|line| line.to_owned()).collect();
         }
-        return fs::read_to_string(command_args[1]).unwrap();
+        Err(_) => {
+            println!("no such file {}", file_path);
+            return Vec::new();
+        }
     }
 }
 
@@ -161,7 +167,6 @@ fn main() {
     startup_message();
     let mut command: String = String::new();
     let mut file_buffer: Vec<String> = Vec::new();
-    let mut file_path: String = String::new();
     while !command.eq("~exit") {
         command.clear();
         io::stdin()
@@ -173,16 +178,21 @@ fn main() {
         let _cmdproc: () = match command_args[0] {
             "~"     => { display_help(); },
             "~help" => { extended_help(); },
-            "~save" => { save(file_buffer.clone(), "nowhere"); },
+            "~save" => {
+                if command_args.len() >= 2 {
+                    save(file_buffer.clone(), command_args[1]);
+                }
+                else {
+                    println!("save what?");
+                }
+            },
             "~show" => { show(file_buffer.clone()); },
             "~open" => { 
-                file_path = open(command_args.clone());
-                if file_path != "" {
-                    println!("file {} opened", command_args[1]);
-                    // let reader = BufReader::new(File::open(file_path));
-                    // for line in reader.lines() {
-                    //     file_buffer.push(line);
-                    // }
+                if command_args.len() >= 2 {
+                    file_buffer = open(command_args[1]);
+                }
+                else {
+                    println!("open what?");
                 }
             },
             "~run"  => { shell_command(command_args); },
