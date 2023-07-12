@@ -2,6 +2,7 @@
 
 use std::io;
 use std::fs;
+use std::env;
 use std::path::PathBuf;
 use std::process::Command;
 use which::which;
@@ -169,6 +170,10 @@ fn main() {
     startup_message();
     let mut command: String = String::new();
     let mut file_buffer: Vec<String> = Vec::new();
+    let args: Vec<String> = env::args().collect();
+    if args.len() >= 2 {
+        file_buffer = open(&args[1]);
+    }
     while !command.eq("~exit") {
         command.clear();
         io::stdin()
