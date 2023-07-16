@@ -1,7 +1,7 @@
 # sued
 
 > ⚠️ sued is in early stages of development.
-> It does *work*, but it's not really very stable.
+> It works, but it's still prone to errors in some cases.
 
 A text editor that works and is an editor.
 
@@ -46,6 +46,7 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 + `~save [filename]` - Write the buffer contents to the provided file name.
 + `~open [filename]` - Find or create a file and open its contents up in sued.
 + `~show` - Display the buffer contents, complete with line numbers.
++ `~insert [line]` - Interactively insert text into the chosen position in the buffer.
 + `~replace [line]` - Interactively replace the chosen line's contents in the buffer.
 + `~delete [line]` - Immediately remove a line from the buffer.
 + `~run [command]` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.

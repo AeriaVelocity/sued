@@ -101,8 +101,46 @@ fn open(file_path: &str) -> Vec<String> {
     }
 }
 
+fn check_if_line_in_buffer(file_buffer: &mut Vec<String>, line_number: usize) -> bool {
+    if line_number < 1 {
+        println!("invalid line {}", line_number);
+    }
+
+    else if line_number <= file_buffer.len() {
+        return true;
+    }
+
+    else if file_buffer.is_empty() {
+        println!("no buffer contents");
+    }
+
+    else {
+        println!("no line {}", line_number);
+    }
+    
+    return false;
+}
+
+fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
+    if check_if_line_in_buffer(file_buffer, line_number) {
+        println!("inserting into line {}", line_number);
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Failed to read input.");
+
+        let index = line_number - 1;
+        if !input.trim().is_empty() {
+            file_buffer.insert(index, input.trim().to_string());
+            println!("inserted");
+        }
+        else {
+            println!("insert cancelled");
+        }
+    }
+}
+
 fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
-    if line_number <= file_buffer.len() {
+    if check_if_line_in_buffer(file_buffer, line_number) {
         println!("replacing line {}", line_number);
         println!("original line is {}", file_buffer[line_number - 1]);
 
@@ -118,16 +156,12 @@ fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
         else {
             println!("replace cancelled");
         }
-    } else {
-        println!("no line {}", line_number);
     }
 }
 
 fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
-    if line_number <= file_buffer.len() {
+    if check_if_line_in_buffer(file_buffer, line_number) {
         file_buffer.remove(line_number - 1);
-    } else {
-        println!("no line {}", line_number);
     }
 }
 
@@ -225,7 +259,7 @@ fn main() {
                     save(file_buffer.clone(), &expanded_file_path.as_str());
                 }
                 else {
-                    println!("save what?");
+                    println!("save where?");
                 }
             },
             "~show" => { show(file_buffer.clone()); },
@@ -241,6 +275,14 @@ fn main() {
             },
             "~run"  => { shell_command(command_args); },
             "~bsod" => { crash("USER_IS_STUPID", &vec![0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
+            "~insert" => {
+                if command_args.len() >= 2 {
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    insert(&mut file_buffer, line_number);
+                } else {
+                    println!("insert where?");
+                }
+            },
             "~replace" => {
                 if command_args.len() >= 2 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
