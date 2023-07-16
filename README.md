@@ -12,9 +12,6 @@ Syntax highlighting? Code analysis? *Modal editing?* ***Cursor positioning??***
 
 Who the hell cares? Just shut up and edit.
 
-> ⚠️ Only use sued if you like pain. Nothing comes for granted with this
-> program.
-
 Written in Rust, because frick you, that's why.
 
 ## Questions
@@ -46,14 +43,11 @@ Written in Rust, because frick you, that's why.
 
 All commands start with `~`. Run `~` by itself to see a list of commands.
 
-`save [filename]` - Write the buffer contents to the provided file name.
-
-`open [filename]` - Find or create a file and open its contents up in sued.
-
-`show` - Display the buffer contents.
-
-`run [command]` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.
-
-`exit` - Quit sued, discarding the buffer contents.
-
-`help` - Display some information about sued.
++ `~save [filename]` - Write the buffer contents to the provided file name.
++ `~open [filename]` - Find or create a file and open its contents up in sued.
++ `~show` - Display the buffer contents, complete with line numbers.
++ `~replace [line]` - Interactively replace the chosen line's contents in the buffer.
++ `~delete [line]` - Immediately remove a line from the buffer.
++ `~run [command]` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.
++ `~exit` - Quit sued, discarding the buffer contents.
++ `~help` - Display some information about sued.

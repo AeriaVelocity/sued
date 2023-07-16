@@ -40,15 +40,18 @@ fn startup_message() {
         "free software, hell yeah",
     ];
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
-    println!("sued - {message}\ntype ~ for commands, otherwise just start typing");
+    let version = env!("CARGO_PKG_VERSION");
+    println!("sued v{version} - {message}\ntype ~ for commands, otherwise just start typing");
 }
 
 fn display_help() {
-    println!("~save, ~open, ~show, ~run, ~exit, ~help");
+    println!("~save, ~open, ~show, ~replace, ~delete, ~run, ~exit, ~help");
 }
 
 fn extended_help() {
-    println!("sued is a line editor, like ed but also not at all\n\
+    let version = env!("CARGO_PKG_VERSION");
+    println!("this is sued, v{version}\n\
+              sued is a line editor, like ed but also not at all\n\
               to write stuff, just start typing after the welcome message\n\
               editor commands are prefixed with ~ (for example ~exit to quit the editor)\n\
               there's no regex stuff or syntax highlighting or anything like that. you just write\n\
@@ -95,6 +98,36 @@ fn open(file_path: &str) -> Vec<String> {
             println!("no such file {}", file_path);
             return Vec::new();
         }
+    }
+}
+
+fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
+    if line_number <= file_buffer.len() {
+        println!("replacing line {}", line_number);
+        println!("original line is {}", file_buffer[line_number - 1]);
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Failed to read input.");
+
+        let index = line_number - 1;
+        if !input.trim().is_empty() {
+            file_buffer.insert(index, input.trim().to_string());
+            file_buffer.remove(index + 1);
+            println!("replaced");
+        }
+        else {
+            println!("replace cancelled");
+        }
+    } else {
+        println!("no line {}", line_number);
+    }
+}
+
+fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
+    if line_number <= file_buffer.len() {
+        file_buffer.remove(line_number - 1);
+    } else {
+        println!("no line {}", line_number);
     }
 }
 
@@ -204,6 +237,22 @@ fn main() {
             },
             "~run"  => { shell_command(command_args); },
             "~bsod" => { crash("USER_IS_STUPID", &vec![0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
+            "~replace" => {
+                if command_args.len() >= 2 {
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    replace(&mut file_buffer, line_number);
+                } else {
+                    println!("replace which line?");
+                }
+            },
+            "~delete" => {
+                if command_args.len() >= 2 {
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    delete(&mut file_buffer, line_number);
+                } else {
+                    println!("delete which line?");
+                }
+            }
             "~exit" => { /* do nothing, because `~exit` will break the loop */ },
             _       => { 
                 if command_args[0].starts_with("~") {
