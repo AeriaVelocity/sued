@@ -65,7 +65,6 @@ fn save(buffer_contents: Vec<String>, file_path: &str) {
     }
 
     let content = buffer_contents.join("\n");
-    println!("{}", &file_path);
     let path = PathBuf::from(file_path);
 
     match fs::write(&path, content) {
@@ -220,7 +219,8 @@ fn main() {
             "~help" => { extended_help(); },
             "~save" => {
                 if command_args.len() >= 2 {
-                    save(file_buffer.clone(), command_args[1]);
+                    let file_name = command_args[1..].join(" ");
+                    save(file_buffer.clone(), file_name.as_str());
                 }
                 else {
                     println!("save what?");
@@ -229,7 +229,8 @@ fn main() {
             "~show" => { show(file_buffer.clone()); },
             "~open" => { 
                 if command_args.len() >= 2 {
-                    file_buffer = open(command_args[1]);
+                    let file_name = command_args[1..].join(" ");
+                    file_buffer = open(file_name.as_str());
                 }
                 else {
                     println!("open what?");
