@@ -7,6 +7,7 @@ use std::path::PathBuf;
 use std::process::Command;
 use which::which;
 use rand::Rng;
+use shellexpand::tilde;
 
 fn startup_message() {
     let messages: Vec<&str> = vec![
@@ -219,8 +220,9 @@ fn main() {
             "~help" => { extended_help(); },
             "~save" => {
                 if command_args.len() >= 2 {
-                    let file_name = command_args[1..].join(" ");
-                    save(file_buffer.clone(), file_name.as_str());
+                    let file_name_with_spaces = command_args[1..].join(" ");
+                    let expanded_file_path = tilde(&file_name_with_spaces).to_string();
+                    save(file_buffer.clone(), &expanded_file_path.as_str());
                 }
                 else {
                     println!("save what?");
@@ -229,8 +231,9 @@ fn main() {
             "~show" => { show(file_buffer.clone()); },
             "~open" => { 
                 if command_args.len() >= 2 {
-                    let file_name = command_args[1..].join(" ");
-                    file_buffer = open(file_name.as_str());
+                    let file_name_with_spaces = command_args[1..].join(" ");
+                    let expanded_file_path = tilde(&file_name_with_spaces).to_string();
+                    file_buffer = open(expanded_file_path.as_str());
                 }
                 else {
                     println!("open what?");

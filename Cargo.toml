@@ -1,7 +1,7 @@
 [package]
 name = "sued"
 description = "The text editor that doesn't give a damn."
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 license = "WTFPL"
 keywords = ["text", "editor", "ed"]
@@ -14,3 +14,4 @@ homepage = "https://that1m8head.github.io/sued/"
 [dependencies]
 rand = "0.8.5"
 which = "4.4.0"
+shellexpand = "3.1.0"
