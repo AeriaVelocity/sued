@@ -8,6 +8,7 @@ use std::process::Command;
 use which::which;
 use rand::Rng;
 use shellexpand::tilde;
+use regex::Regex;
 
 /// Prints a startup message with a funny joke. I hope it's funny at least.
 /// Invoked at startup, obviously.
@@ -50,7 +51,7 @@ fn startup_message() {
 /// Displays the list of command sued supports.
 /// Invoked with the `~` command.
 fn display_help() {
-    println!("~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~run, ~exit, ~help");
+    println!("~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~substitute, ~run, ~exit, ~help");
 }
 
 /// Displays the sued version number and information about the editor itself.
@@ -61,7 +62,7 @@ fn extended_help() {
               sued is a vector-oriented line editor, like ed but also not at all\n\
               to write stuff, just start typing after the welcome message\n\
               editor commands are prefixed with ~ (for example ~exit to quit the editor)\n\
-              there's no regex stuff or syntax highlighting or anything like that. you just write\n\
+              there's no syntax highlighting or anything like that. you just write\n\
               sued written by Arsalan Kazmi (That1M8Head)");
 }
 
@@ -83,14 +84,16 @@ fn save(buffer_contents: Vec<String>, file_path: &str) {
 }
 
 /// Iterates over the `buffer_contents` and displays them one by one.
+/// If a range was specified, only iterate for that part.
 /// Used to provide functionality for the `~show` command.
-fn show(buffer_contents: Vec<String>) {
+fn show(buffer_contents: Vec<String>, start_point: usize, end_point: usize) {
     if buffer_contents.len() < 1 {
         println!("no buffer contents");
     }
     else {
-        let mut count: i32 = 0;
-        for line in buffer_contents.iter() {
+        let contents: Vec<String> = buffer_contents[start_point-1..end_point].to_vec();
+        let mut count: usize = start_point - 1;
+        for line in contents.iter() {
             count += 1;
             println!("{}| {}", count, line);
         }
@@ -202,6 +205,17 @@ fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
     }
 }
 
+/// Perform a regex `replace()` on `line_number`, with the `pattern` and `replacement`.
+/// Provides functionality for the `~substitute` command.
+fn substitute(file_buffer: &mut Vec<String>, line_number: usize, pattern: &str, replacement: &str) {
+    if check_if_line_in_buffer(file_buffer, line_number) {
+        let index = line_number - 1;
+        let line = &mut file_buffer[index];
+        let re = Regex::new(pattern).unwrap();
+        *line = re.replace(line, replacement).to_string();
+    }
+}
+
 /// Run a shell command with the OS shell, and fall back to a shell built-in if it fails.
 /// Provides functionality for the `~run` command.
 fn shell_command(mut command_args: Vec<&str>) {
@@ -307,7 +321,17 @@ fn main() {
                     println!("save where?");
                 }
             },
-            "~show" => { show(file_buffer.clone()); },
+            "~show" => {
+                let mut start_point = 1;
+                let mut end_point = file_buffer.len();
+                if command_args.len() >= 2 {
+                    start_point = command_args[1].parse::<usize>().unwrap();
+                }
+                if command_args.len() >= 3 {
+                    end_point = command_args[2].parse::<usize>().unwrap();
+                }
+                show(file_buffer.clone(), start_point, end_point);
+            },
             "~open" => { 
                 if command_args.len() >= 2 {
                     let file_name_with_spaces = command_args[1..].join(" ");
@@ -350,12 +374,29 @@ fn main() {
                     }
                 }
             },
-            "~delete" => {
+            "~del" | "~delete" => {
                 if command_args.len() >= 2 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                     delete(&mut file_buffer, line_number);
                 } else {
                     println!("delete which line?");
+                }
+            }
+            "~sub" | "~substitute" => {
+                if command_args.len() >= 4 {
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    let pattern = command_args[2];
+                    let replacement = command_args[3];
+                    substitute(&mut file_buffer, line_number, pattern, replacement);
+                }
+                else if command_args.len() >= 3 {
+                    println!("substitute {} with what?", command_args[2]);
+                }
+                else if command_args.len() >= 2 {
+                    println!("substitute what pattern?");
+                }
+                else {
+                    println!("substitute which line?");
                 }
             }
             "~exit" => { /* do nothing, because `~exit` will break the loop */ },
