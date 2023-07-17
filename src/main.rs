@@ -290,6 +290,40 @@ fn editor_overflow() {
     }
 }
 
+/// A helper function used for the ~substitute command.
+fn split_pattern_replacement<'a>(combined_args: &'a str) -> Vec<&'a str> {
+    let mut pattern_replacement = Vec::new();
+    let mut temp_str = combined_args;
+    let mut previous_char: Option<char> = None;
+
+    for (i, c) in combined_args.char_indices() {
+        if previous_char == Some('\\') {
+            // Previous character is a backslash, continue to the next character
+            previous_char = None;
+        }
+        else if c == '/' {
+            if previous_char == Some('\\') {
+                // Special case: `\/` should be treated as a single `/` and included in the first element
+                previous_char = Some(c);
+            }
+            else {
+                // Found a forward slash, push the accumulated string to the result and reset
+                pattern_replacement.push(&temp_str[..i]);
+                temp_str = &combined_args[i + 1..];
+                previous_char = Some(c);
+            }
+        } else {
+            // Any other character, update the previous character
+            previous_char = Some(c);
+        }
+    }
+    // Push the remaining string to the result
+    if !temp_str.is_empty() {
+        pattern_replacement.push(temp_str);
+    }
+    return pattern_replacement
+}
+
 /// It's the main function.
 /// I don't know what you expected.
 fn main() {
@@ -386,7 +420,7 @@ fn main() {
                 if command_args.len() >= 3 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                     let combined_args = command_args[2..].join(" ");
-                    let pattern_replacement = combined_args.splitn(2, '/').collect::<Vec<&str>>();
+                    let pattern_replacement = split_pattern_replacement(combined_args.as_str());
                     if pattern_replacement.len() >= 2 {
                         let pattern = pattern_replacement[0];
                         let replacement = pattern_replacement[1];
