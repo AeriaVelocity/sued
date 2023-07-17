@@ -51,6 +51,7 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 + `~insert [line]` - Interactively insert text into the chosen position in the buffer.
 + `~replace [line]` - Interactively replace the chosen line's contents in the buffer.
 + `~substitute [line] [pattern]/[replacement]` - Perform a regex substitution on the chosen line number, with the pattern and replacement.
++ `~search [term]` - Searches for the given term in the buffer and prints matching lines.
 + `~swap [source] [target]` - Swap two lines with each other in the buffer.
 + `~delete [line]` - Immediately remove a line from the buffer.
 + `~run [command]` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.

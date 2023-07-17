@@ -48,10 +48,10 @@ fn startup_message() {
     println!("sued v{version} - {message}\ntype ~ for commands, otherwise just start typing");
 }
 
-/// Displays the list of command sued supports.
+/// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
 fn display_help() {
-    println!("~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~substitute, ~run, ~exit, ~help");
+    println!("~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~substitute, ~search, ~run, ~exit, ~help");
 }
 
 /// Displays the sued version number and information about the editor itself.
@@ -213,6 +213,18 @@ fn substitute(file_buffer: &mut Vec<String>, line_number: usize, pattern: &str, 
         let line = &mut file_buffer[index];
         let re = Regex::new(pattern).unwrap();
         *line = re.replace(line, replacement).to_string();
+    }
+}
+
+/// Searches for the given `term` in the `file_buffer` and prints matching lines.
+/// Provides functionality for the `~search` command.
+fn search(file_buffer: Vec<String>, term: &str) {
+    let regex = Regex::new(term).unwrap();
+
+    for (line_number, line) in file_buffer.iter().enumerate() {
+        if regex.is_match(line) {
+            println!("line {}: {}", line_number + 1, line);
+        }
     }
 }
 
@@ -428,15 +440,25 @@ fn main() {
                     }
                     else {
                         println!("substitute what?");
+                        println!("try ~substitute pattern/replacement");
                     }
                 }
                 else if command_args.len() >= 2 {
                     println!("substitute what?");
+                    println!("try ~substitute pattern/replacement");
                 }
                 else {
                     println!("substitute which line?");
                 }
             }
+            "~search" => {
+                if command_args.len() >= 2 {
+                    let term = command_args[1..].join(" ");
+                    search(file_buffer.clone(), &term);
+                } else {
+                    println!("search for what?");
+                }
+            },
             "~exit" => { /* do nothing, because `~exit` will break the loop */ },
             _       => { 
                 if command_args[0].starts_with("~") {
