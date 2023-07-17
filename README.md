@@ -47,9 +47,10 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 
 + `~save [filename]` - Write the buffer contents to the provided file name.
 + `~open [filename]` - Find or create a file and open its contents up in sued.
-+ `~show` - Display the buffer contents, complete with line numbers.
++ `~show [start] [end]` - Display the buffer contents, complete with line numbers. You can specify the start and end point if you wish.
 + `~insert [line]` - Interactively insert text into the chosen position in the buffer.
 + `~replace [line]` - Interactively replace the chosen line's contents in the buffer.
++ `~substitute [line] [pattern]/[replacement]` - Perform a regex substitution on the chosen line number, with the pattern and replacement.
 + `~swap [source] [target]` - Swap two lines with each other in the buffer.
 + `~delete [line]` - Immediately remove a line from the buffer.
 + `~run [command]` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.

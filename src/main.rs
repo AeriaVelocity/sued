@@ -383,17 +383,21 @@ fn main() {
                 }
             }
             "~sub" | "~substitute" => {
-                if command_args.len() >= 4 {
+                if command_args.len() >= 3 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                    let pattern = command_args[2];
-                    let replacement = command_args[3];
-                    substitute(&mut file_buffer, line_number, pattern, replacement);
-                }
-                else if command_args.len() >= 3 {
-                    println!("substitute {} with what?", command_args[2]);
+                    let combined_args = command_args[2..].join(" ");
+                    let pattern_replacement = combined_args.splitn(2, '/').collect::<Vec<&str>>();
+                    if pattern_replacement.len() >= 2 {
+                        let pattern = pattern_replacement[0];
+                        let replacement = pattern_replacement[1];
+                        substitute(&mut file_buffer, line_number, pattern, replacement);
+                    }
+                    else {
+                        println!("substitute what?");
+                    }
                 }
                 else if command_args.len() >= 2 {
-                    println!("substitute what pattern?");
+                    println!("substitute what?");
                 }
                 else {
                     println!("substitute which line?");

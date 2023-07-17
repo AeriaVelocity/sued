@@ -32,11 +32,12 @@
         <p>All commands start with ~. Run ~ by itself to see a list of commands.</p>
         <p><strong>~save [filename]</strong> - Write the file buffer to the provided file name.</p>
         <p><strong>~open [filename]</strong> - Find or create a file and open its contents up in sued.</p>
-        <p><strong>~show</strong> - Display the buffer contents, complete with line numbers.</p>
+        <p><strong>~show [start] [end]</strong> - Display the buffer contents, complete with line numbers. You can specify the start and end point if you wish.</p>
         <p><strong>~insert [line]</strong> - Interactively insert text into the chosen position in the buffer.</p>
         <p><strong>~replace [line]</strong> - Interactively replace the chosen line's contents in the buffer.</p>
         <p><strong>~swap [source] [target]</strong> - Swap two lines with each other in the buffer.</p>
         <p><strong>~delete [line]</strong> - Immediately remove a line from the buffer.</p>
+        <p><strong>~substitute [line] [pattern]/[replacement]</strong> - Perform a regex substitution on the chosen line number, with the pattern and replacement.</p>
         <p><strong>~run [command]</strong> - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.</p>
         <p><strong>~exit</strong> - Quit sued, discarding the buffer contents.</p>
         <p><strong>~help</strong> - Display some information about sued onto the screen.</p>
