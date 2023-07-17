@@ -20,7 +20,7 @@
         <h1>SYNOPSIS</h1>
         <p>sued [file]</p>
         <h1>DESCRIPTION</h1>
-        <p>sued is a line editor written in Rust by <a href="https://that1m8head.github.io">Arsalan Kazmi</a> in the image of the standard text editor, ed.</p>
+        <p>sued is a vector-oriented line editor written in Rust by <a href="https://that1m8head.github.io">Arsalan Kazmi</a> in the image of the standard text editor, ed.</p>
         <p>sued is not nearly as powerful as its inspiration, but it matches it in the terseness department, while at the same time being quite a bit more user-friendly.</p>
         <p>It's worth noting that sued is not that fully-featured, and is still in early stages of development, however, it's still very usable!</p>
         <h1>OBTAINING</h1>
@@ -35,6 +35,7 @@
         <p><strong>~show</strong> - Display the buffer contents, complete with line numbers.</p>
         <p><strong>~insert [line]</strong> - Interactively insert text into the chosen position in the buffer.</p>
         <p><strong>~replace [line]</strong> - Interactively replace the chosen line's contents in the buffer.</p>
+        <p><strong>~swap [source] [target]</strong> - Swap two lines with each other in the buffer.</p>
         <p><strong>~delete [line]</strong> - Immediately remove a line from the buffer.</p>
         <p><strong>~run [command]</strong> - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.</p>
         <p><strong>~exit</strong> - Quit sued, discarding the buffer contents.</p>

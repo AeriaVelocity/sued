@@ -9,6 +9,8 @@ use which::which;
 use rand::Rng;
 use shellexpand::tilde;
 
+/// Prints a startup message with a funny joke. I hope it's funny at least.
+/// Invoked at startup, obviously.
 fn startup_message() {
     let messages: Vec<&str> = vec![
         "the editor of all time",
@@ -45,20 +47,26 @@ fn startup_message() {
     println!("sued v{version} - {message}\ntype ~ for commands, otherwise just start typing");
 }
 
+/// Displays the list of command sued supports.
+/// Invoked with the `~` command.
 fn display_help() {
-    println!("~save, ~open, ~show, ~replace, ~delete, ~run, ~exit, ~help");
+    println!("~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~run, ~exit, ~help");
 }
 
+/// Displays the sued version number and information about the editor itself.
+/// Invoked with the `~help` command.
 fn extended_help() {
     let version = env!("CARGO_PKG_VERSION");
     println!("this is sued, v{version}\n\
-              sued is a line editor, like ed but also not at all\n\
+              sued is a vector-oriented line editor, like ed but also not at all\n\
               to write stuff, just start typing after the welcome message\n\
               editor commands are prefixed with ~ (for example ~exit to quit the editor)\n\
               there's no regex stuff or syntax highlighting or anything like that. you just write\n\
               sued written by Arsalan Kazmi (That1M8Head)");
 }
 
+/// Writes the `buffer_contents` to the `file_path`, if there are any contents.
+/// Used to provide functionality for the `~save` command.
 fn save(buffer_contents: Vec<String>, file_path: &str) {
     if buffer_contents.is_empty() {
         println!("buffer empty - nothing to save");
@@ -74,6 +82,8 @@ fn save(buffer_contents: Vec<String>, file_path: &str) {
     }
 }
 
+/// Iterates over the `buffer_contents` and displays them one by one.
+/// Used to provide functionality for the `~show` command.
 fn show(buffer_contents: Vec<String>) {
     if buffer_contents.len() < 1 {
         println!("no buffer contents");
@@ -87,6 +97,8 @@ fn show(buffer_contents: Vec<String>) {
     }
 }
 
+/// Verifies the `file_path`'s file existence, then returns the file contents as a `String` vector.
+/// Used for the `~open` command.
 fn open(file_path: &str) -> Vec<String> {
     let file_exists = fs::read_to_string(file_path);
     match file_exists {
@@ -101,6 +113,8 @@ fn open(file_path: &str) -> Vec<String> {
     }
 }
 
+/// Checks if a given `line_number` is in the `file_buffer`.
+/// Used by `insert`, `replace`, `swap` and `delete`.
 fn check_if_line_in_buffer(file_buffer: &mut Vec<String>, line_number: usize) -> bool {
     if line_number < 1 {
         println!("invalid line {}", line_number);
@@ -121,6 +135,8 @@ fn check_if_line_in_buffer(file_buffer: &mut Vec<String>, line_number: usize) ->
     return false;
 }
 
+/// Interactively insert a line at `line_number` in the `file_buffer`.
+/// Provides functionality for the `~insert` command.
 fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
     if check_if_line_in_buffer(file_buffer, line_number) {
         println!("inserting into line {}", line_number);
@@ -139,6 +155,8 @@ fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
     }
 }
 
+/// Interactively replace the line at `line_number` in the `file_buffer`.
+/// Provides functionality for the `~replace` command.
 fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
     if check_if_line_in_buffer(file_buffer, line_number) {
         println!("replacing line {}", line_number);
@@ -159,12 +177,33 @@ fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
     }
 }
 
+/// Swap the `source_line` with the `target_line` in the `file_buffer`.
+/// Provides functionality for the `~swap` command.
+fn swap(file_buffer: &mut Vec<String>, source_line: usize, target_line: usize) {
+    if check_if_line_in_buffer(file_buffer, source_line) && check_if_line_in_buffer(file_buffer, target_line) {
+        if source_line == target_line {
+            println!("lines are the same");
+            return;
+        }
+
+        let source_index = source_line - 1;
+        let target_index = target_line - 1;
+
+        let line = file_buffer.remove(source_index);
+        file_buffer.insert(target_index, line);
+    }
+}
+
+/// Remove the `line_number` from the `file_buffer`.
+/// Provides functionality for the `~delete` command.
 fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
     if check_if_line_in_buffer(file_buffer, line_number) {
         file_buffer.remove(line_number - 1);
     }
 }
 
+/// Run a shell command with the OS shell, and fall back to a shell built-in if it fails.
+/// Provides functionality for the `~run` command.
 fn shell_command(mut command_args: Vec<&str>) {
     if command_args.len() <= 1 {
         println!("run what?");
@@ -199,6 +238,8 @@ fn shell_command(mut command_args: Vec<&str>) {
     }
 }
 
+/// Displays a Blue Screen of Death-like error message.
+/// Technically I don't need it, but it's funny.
 fn crash(error_code: &str, hex_codes: &[u32]) {
     let mut populated_hex_codes = [0x00000000; 4];
     let num_values = hex_codes.len().min(4);
@@ -214,6 +255,8 @@ fn crash(error_code: &str, hex_codes: &[u32]) {
     std::process::exit(1);
 }
 
+/// A joke function that simulates an "editor overflow" error.
+/// Invoked with `~run sued`.
 fn editor_overflow() {
     loop {
         eprintln!("editor overflow"); 
@@ -233,6 +276,8 @@ fn editor_overflow() {
     }
 }
 
+/// It's the main function.
+/// I don't know what you expected.
 fn main() {
     startup_message();
     let mut command: String = String::new();
@@ -289,6 +334,20 @@ fn main() {
                     replace(&mut file_buffer, line_number);
                 } else {
                     println!("replace which line?");
+                }
+            },
+            "~swap" => {
+                if command_args.len() >= 3 {
+                    let source_line = command_args[1].parse::<usize>().unwrap_or(0);
+                    let target_line = command_args[2].parse::<usize>().unwrap_or(0);
+                    swap(&mut file_buffer, source_line, target_line);
+                } else {
+                    if command_args.len() >= 2 {
+                        println!("swap line {} with what?", command_args[1]);
+                    }
+                    else {
+                        println!("swap which lines?")
+                    }
                 }
             },
             "~delete" => {

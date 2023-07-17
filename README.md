@@ -5,8 +5,10 @@
 
 A text editor that works and is an editor.
 
-sued is a line editor, similar to the venerable and standard ed text editor,
-just simpler and not nearly as powerful.
+sued is a vector-oriented line editor, kind of similar to the venerable and
+standard ed text editor, just simpler and not nearly as powerful.
+
+~~Yes, I know ed doesn't use vectors, shut up~~
 
 Syntax highlighting? Code analysis? *Modal editing?* ***Cursor positioning??***
 
@@ -48,6 +50,7 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 + `~show` - Display the buffer contents, complete with line numbers.
 + `~insert [line]` - Interactively insert text into the chosen position in the buffer.
 + `~replace [line]` - Interactively replace the chosen line's contents in the buffer.
++ `~swap [source] [target]` - Swap two lines with each other in the buffer.
 + `~delete [line]` - Immediately remove a line from the buffer.
 + `~run [command]` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.
 + `~exit` - Quit sued, discarding the buffer contents.
