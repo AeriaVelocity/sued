@@ -50,13 +50,31 @@ fn startup_message() {
 
 /// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
-fn display_help() {
-    println!("~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~substitute, ~search, ~run, ~exit, ~help");
+fn command_list() {
+    println!("~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~substitute, ~search, ~run, ~exit, ~help, ~about");
+}
+
+/// Displays a list of available commands and their descriptions.
+/// Invoked with the `~help` command.
+fn extended_command_list() {
+    println!("~save [filename] - save buffer to file");
+    println!("~open [filename] - load file into buffer.");
+    println!("~show [start] [end] - Display the contents of the buffer.");
+    println!("~insert [line] - insert text at specified line (interactive)");
+    println!("~replace [line] - replace specified line (interactive)");
+    println!("~swap [source] [target] - swap two lines");
+    println!("~delete [line] - immediately delete specified line");
+    println!("~substitute [line] [pattern]/[replacement] - perform regex substitution on specified line");
+    println!("~search [term] - perform regex search in whole buffer");
+    println!("~run [command] - run executable or shell builtin");
+    println!("~exit - exit sued");
+    println!("~help - display this list");
+    println!("~about - display about text");
 }
 
 /// Displays the sued version number and information about the editor itself.
-/// Invoked with the `~help` command.
-fn extended_help() {
+/// Invoked with the `~about` command.
+fn about_sued() {
     let version = env!("CARGO_PKG_VERSION");
     println!("this is sued, v{version}\n\
               sued is a vector-oriented line editor, like ed but also not at all\n\
@@ -355,8 +373,9 @@ fn main() {
         command.truncate(len);
         let command_args = command.split(" ").collect::<Vec<&str>>();
         let _cmdproc: () = match command_args[0] {
-            "~"     => { display_help(); },
-            "~help" => { extended_help(); },
+            "~"     => { command_list(); },
+            "~help"     => { extended_command_list(); },
+            "~about" => { about_sued(); },
             "~save" => {
                 if command_args.len() >= 2 {
                     let file_name_with_spaces = command_args[1..].join(" ");
