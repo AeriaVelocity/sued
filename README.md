@@ -56,4 +56,5 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 + `~delete [line]` - Immediately remove a line from the buffer.
 + `~run [command]` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.
 + `~exit` - Quit sued, discarding the buffer contents.
-+ `~help` - Display some information about sued.
++ `~help` - Display the list of commands with descriptions.
++ `~about` - Display some information about sued.
