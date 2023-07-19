@@ -19,27 +19,25 @@ Written in Rust, because frick you, that's why.
 ## Questions
 
 + Why a line editor?
-    1. I like ed. I find it extremely pleasant to use, despite its terseness. I
-      wanted to try my hand at writing a similar text editor, just a lot less
+    1. I like ed. It's really nice, and the minimalism is really what sells it.
+      I wanted to try my hand at writing a similar text editor, just a lot less
       complex.
     2. I don't want to go insane trying to develop a Vim-like editor. Especially
       not when projects like [Helix](https://github.com/helix-editor/helix)
       exist.
 + If it's ed-like, why not copy ed's syntax?
   + sued is actually more modelled after my earlier attempt at a line editor,
-    [Streakline](https://github.com/That1M8Head/Streakline).
-  + In Streakline, editing is straightforward. You open the editor and start
-    typing. It used commands prefixed with `~`, so sued does too.
+    [Streakline](https://github.com/That1M8Head/Streakline). It used commands
+    prefixed with `~`, so sued does too.
 + What does sued stand for?
-  + It stands for "shut up editor". This can be read as "shut up and edit", "the shut up editor"
-    or "Shut up, editor!"
+  + It stands for "shut up editor," which alludes to how not-in-your-way it is.
 + How do you pronounce sued?
-  + "soo-ed". Don't pronounce it "sood". Otherwise people are going to think
-    a text editor's going to go to court(!)
+  + "soo-ed". Don't pronounce it "sood," it's not a law thing, and has nothing
+    to do with GitHub Copilot. (The context behind that statement is weird.)
 + Now that you're working on [QVSED](https://github.com/That1M8Head/QVSED),
   will sued be forgotten about?
   + Pfft. No. QVSED is a *graphical* editor with a completely different paradigm,
-    and it isn't a sued replacement.
+    and it isn't a sued replacement. It's just another project.
 
 ## Commands
 
