@@ -113,7 +113,7 @@ fn show(buffer_contents: Vec<String>, start_point: usize, end_point: usize) {
         let mut count: usize = start_point - 1;
         for line in contents.iter() {
             count += 1;
-            println!("{}| {}", count, line);
+            println!("{}|{}", count, line);
         }
     }
 }
@@ -282,6 +282,30 @@ fn shell_command(mut command_args: Vec<&str>) {
     }
 }
 
+/// Indent the line at `line_number` by `indentation` spaces.
+/// Used for the `~indent` command.
+fn indent(file_buffer: &mut Vec<String>, line_number: usize, indentation: isize) {
+    if check_if_line_in_buffer(file_buffer, line_number) {
+        if indentation > 0 {
+            let index = line_number - 1;
+            let line = &mut file_buffer[index];
+            let indented_line = format!("{:indent$}{}", "", line, indent = indentation as usize);
+            *line = indented_line;
+        }
+        else if indentation < 0 {
+            let index = line_number - 1;
+            let line = &mut file_buffer[index];
+            let line_len = line.len() as isize;
+            let new_len = (line_len + indentation).max(0) as usize;
+            let indented_line = format!("{:indent$}", &line[line_len as usize - new_len..], indent = new_len);
+            *line = indented_line;
+        }
+        else {
+            println!("invalid indent level");
+        }
+    }
+}
+
 /// Displays a Blue Screen of Death-like error message.
 /// Technically I don't need it, but it's funny.
 fn crash(error_code: &str, hex_codes: &[u32]) {
@@ -376,6 +400,7 @@ fn main() {
             "~"     => { command_list(); },
             "~help"     => { extended_command_list(); },
             "~about" => { about_sued(); },
+            "~clear" => { file_buffer.clear(); },
             "~save" => {
                 if command_args.len() >= 2 {
                     let file_name_with_spaces = command_args[1..].join(" ");
@@ -476,6 +501,21 @@ fn main() {
                     search(file_buffer.clone(), &term);
                 } else {
                     println!("search for what?");
+                }
+            },
+            "~indent" => {
+                if command_args.len() >= 2 {
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    if command_args.len() >= 3 {
+                        let indentation: isize = command_args[2].parse().unwrap_or(0);
+                        indent(&mut file_buffer, line_number, indentation);
+                    }
+                    else {
+                        println!("indent line {} how?", line_number);
+                    }
+                }
+                else {
+                    println!("indent which line?");
                 }
             },
             "~exit" => { /* do nothing, because `~exit` will break the loop */ },
