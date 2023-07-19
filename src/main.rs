@@ -51,12 +51,13 @@ fn startup_message() {
 /// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
 fn command_list() {
-    println!("~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~substitute, ~search, ~run, ~exit, ~help, ~about");
+    println!("~clear, ~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~substitute, ~search, ~indent, ~run, ~exit, ~help, ~about");
 }
 
 /// Displays a list of available commands and their descriptions.
 /// Invoked with the `~help` command.
 fn extended_command_list() {
+    println!("~clear - clear buffer");
     println!("~save [filename] - save buffer to file");
     println!("~open [filename] - load file into buffer.");
     println!("~show [start] [end] - Display the contents of the buffer.");
@@ -66,6 +67,7 @@ fn extended_command_list() {
     println!("~delete [line] - immediately delete specified line");
     println!("~substitute [line] [pattern]/[replacement] - perform regex substitution on specified line");
     println!("~search [term] - perform regex search in whole buffer");
+    println!("~indent [line] [level] - indent a line, negative level will outdent");
     println!("~run [command] - run executable or shell builtin");
     println!("~exit - exit sued");
     println!("~help - display this list");
