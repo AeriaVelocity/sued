@@ -1,4 +1,6 @@
-// main.rs - sued, the text editor that doesn't give a damn, short for Shut Up Editor
+/// sued - a vector-oriented line editor that doesn't give a damn
+/// to understand sued, read `README.md` or `that1m8head.github.io/sued`
+/// sued is free software licensed under the WTFPL
 
 use std::io;
 use std::fs;
