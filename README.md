@@ -53,7 +53,7 @@ All commands start with `~`. Run `~` by itself to see a list of commands.
 + `~replace [line]` - Interactively replace the chosen line's contents in the buffer.
 + `~substitute [line] [pattern]/[replacement]` - Perform a regex substitution on the chosen line number, with the pattern and replacement.
 + `~search [term]` - Searches for the given term in the buffer and prints matching lines.
-+ `~indent [line] [level]` - Indent the specified line by a number of spaces.
++ `~indent [line] [level]` - Indent the specified line by a number of spaces. A negative level will outdent.
 + `~swap [source] [target]` - Swap two lines with each other in the buffer.
 + `~delete [line]` - Immediately remove a line from the buffer.
 + `~run [command]` - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.
