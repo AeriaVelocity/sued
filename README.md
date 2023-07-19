@@ -1,12 +1,6 @@
-# sued
+# sued - shut up editor
 
-> ⚠️ sued is in early stages of development.
-> It works, but it's still prone to errors in some cases.
-
-A text editor that works and is an editor.
-
-sued is a vector-oriented line editor, kind of similar to the venerable and
-standard ed text editor, just simpler and not nearly as powerful.
+sued is a vector-oriented line editor, kind of similar to the venerable and standard ed text editor, just simpler and not nearly as powerful.
 
 ~~Yes, I know ed doesn't use vectors, shut up~~
 
@@ -16,19 +10,27 @@ Who the hell cares? Just shut up and edit.
 
 Written in Rust, because frick you, that's why.
 
+## Obtaining
+
+```bash
+cargo install sued
+```
+
+and make sure that `~/.cargo/bin/` is in your PATH or you won't be able to run it until it is.
+
 ## Questions
 
 + Why a line editor?
     1. I like ed. It's really nice, and the minimalism is really what sells it.
-      I wanted to try my hand at writing a similar text editor, just a lot less
-      complex.
+       I wanted to try my hand at writing a similar text editor, just a lot less
+       complex.
     2. I don't want to go insane trying to develop a Vim-like editor. Especially
-      not when projects like [Helix](https://github.com/helix-editor/helix)
-      exist.
+       not when projects like [Helix](https://github.com/helix-editor/helix)
+       exist.
 + If it's ed-like, why not copy ed's syntax?
-  + sued is actually more modelled after my earlier attempt at a line editor,
-    [Streakline](https://github.com/That1M8Head/Streakline). It used commands
-    prefixed with `~`, so sued does too.
+  + ed has a lot of commands, and like I said, I want sued to be more user-friendly.
+  + Furthermore, sued inherits its command prefix (~) from my earlier project,
+    [Streakline](https://github.com/That1M8Head/Streakline).
 + What does sued stand for?
   + It stands for "shut up editor," which alludes to how not-in-your-way it is.
 + How do you pronounce sued?
