@@ -268,7 +268,7 @@ fn shell_command(mut command_args: Vec<&str>) {
         }
         else { 
             "-c"
-        }
+        };
         if command == "sued" {
             editor_overflow();
             return;
@@ -279,7 +279,7 @@ fn shell_command(mut command_args: Vec<&str>) {
         }
         command_args.drain(0..2);
         let cmd = Command::new(shell)
-            .arg("/c")
+            .arg(arg)
             .arg(command)
             .args(command_args)
             .status()
