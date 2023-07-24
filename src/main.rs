@@ -258,10 +258,17 @@ fn shell_command(mut command_args: Vec<&str>) {
     } else {
         let command = command_args[1];
         let shell = if cfg!(windows) { 
-            "cmd" 
-        } else { 
+            "cmd"
+        }
+        else { 
             "sh" 
         };
+        let arg = if cfg!(windows) {
+            "/c"
+        }
+        else { 
+            "-c"
+        }
         if command == "sued" {
             editor_overflow();
             return;
