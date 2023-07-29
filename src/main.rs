@@ -11,6 +11,7 @@ use which::which;
 use rand::Rng;
 use shellexpand::tilde;
 use regex::Regex;
+use copypasta::{ClipboardContext, ClipboardProvider};
 
 /// Prints a startup message with a funny joke. I hope it's funny at least.
 /// Invoked at startup, obviously.
@@ -226,6 +227,23 @@ fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
     if check_if_line_in_buffer(file_buffer, line_number) {
         file_buffer.remove(line_number - 1);
     }
+}
+
+/// Copy the provided `line_number` to the system clipboard.
+/// If no `line_number` is specified (it's not in the buffer), copy the whole buffer.
+/// Provides functionality for the `~copy` command.
+fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
+    let mut clipboard_context = ClipboardContext::new().unwrap();
+    let file_contents = file_buffer.join("\n");
+    let mut to_copy = file_contents;
+    if check_if_line_in_buffer(file_buffer, line_number) {
+        to_copy = file_buffer[line_number - 1].clone();
+        println!("copied line {}", line_number);
+    }
+    else {
+        println!("copied whole buffer");
+    }
+    clipboard_context.set_contents(to_copy).unwrap();
 }
 
 /// Perform a regex `replace()` on `line_number`, with the `pattern` and `replacement`.
@@ -480,8 +498,18 @@ fn main() {
                 if command_args.len() >= 2 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                     delete(&mut file_buffer, line_number);
-                } else {
+                }
+                else {
                     println!("delete which line?");
+                }
+            }
+            "~copy" => {
+                if command_args.len() >= 2 {
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    copy(&mut file_buffer, line_number);
+                }
+                else {
+                    copy(&mut file_buffer, 0);
                 }
             }
             "~sub" | "~substitute" => {
