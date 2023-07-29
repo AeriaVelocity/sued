@@ -117,7 +117,7 @@ fn show(buffer_contents: Vec<String>, start_point: usize, end_point: usize) {
         let mut count: usize = start_point - 1;
         for line in contents.iter() {
             count += 1;
-            println!("{}|{}", count, line);
+            println!("{}│{}", count, line);
         }
     }
 }
