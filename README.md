@@ -4,6 +4,8 @@ sued is a vector-oriented line editor, kind of similar to the venerable and stan
 
 ~~Yes, I know ed doesn't use vectors, shut up~~
 
+![Screenshot](screenshot.png)
+
 Syntax highlighting? Code analysis? *Modal editing?* ***Cursor positioning??***
 
 Who the hell cares? Just shut up and edit.
