@@ -142,30 +142,35 @@ fn open(file_path: &str) -> Vec<String> {
 
 /// Checks if a given `line_number` is in the `file_buffer`.
 /// Used by `insert`, `replace`, `swap` and `delete`.
-fn check_if_line_in_buffer(file_buffer: &mut Vec<String>, line_number: usize) -> bool {
+fn check_if_line_in_buffer(file_buffer: &Vec<String>, line_number: usize, verbose: bool) -> bool {
     if line_number < 1 {
-        println!("invalid line {}", line_number);
+        if verbose {
+            println!("invalid line {}", line_number);
+        }
+        return false;
     }
 
-    else if file_buffer.is_empty() {
+    if file_buffer.is_empty() {
+        // We ignore verbose, since this is a non-optional error
         println!("no buffer contents");
+        return false;
     }
 
-    else if line_number <= file_buffer.len() {
+    if line_number <= file_buffer.len() {
         return true;
     }
 
-    else {
+    if verbose {
         println!("no line {}", line_number);
     }
-    
-    return false;
+
+    false
 }
 
 /// Interactively insert a line at `line_number` in the `file_buffer`.
 /// Provides functionality for the `~insert` command.
 fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
-    if check_if_line_in_buffer(file_buffer, line_number) {
+    if check_if_line_in_buffer(file_buffer, line_number, true) {
         println!("inserting into line {}", line_number);
 
         let mut input = String::new();
@@ -185,7 +190,7 @@ fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
 /// Interactively replace the line at `line_number` in the `file_buffer`.
 /// Provides functionality for the `~replace` command.
 fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
-    if check_if_line_in_buffer(file_buffer, line_number) {
+    if check_if_line_in_buffer(file_buffer, line_number, true) {
         println!("replacing line {}", line_number);
         println!("original line is {}", file_buffer[line_number - 1]);
 
@@ -207,7 +212,7 @@ fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
 /// Swap the `source_line` with the `target_line` in the `file_buffer`.
 /// Provides functionality for the `~swap` command.
 fn swap(file_buffer: &mut Vec<String>, source_line: usize, target_line: usize) {
-    if check_if_line_in_buffer(file_buffer, source_line) && check_if_line_in_buffer(file_buffer, target_line) {
+    if check_if_line_in_buffer(file_buffer, source_line, true) && check_if_line_in_buffer(file_buffer, target_line, true) {
         if source_line == target_line {
             println!("lines are the same");
             return;
@@ -224,34 +229,40 @@ fn swap(file_buffer: &mut Vec<String>, source_line: usize, target_line: usize) {
 /// Remove the `line_number` from the `file_buffer`.
 /// Provides functionality for the `~delete` command.
 fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
-    if check_if_line_in_buffer(file_buffer, line_number) {
+    if check_if_line_in_buffer(file_buffer, line_number, true) {
         file_buffer.remove(line_number - 1);
     }
 }
 
 /// Copy the provided `line_number` to the system clipboard.
 /// If no `line_number` is specified (it's not in the buffer), copy the whole buffer.
-/// If it fails for whatever reason, it'll print the error message.
 /// Provides functionality for the `~copy` command.
 fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
+    if file_buffer.is_empty() {
+        println!("no buffer contents");
+        return;
+    }
+    #[cfg(any(target_os = "android", target_os = "ios"))] {
+        println!("~copy doesn't work on your device yet");
+        return;
+    }
     let mut clipboard_context = ClipboardContext::new().unwrap();
     let file_contents = file_buffer.join("\n");
     let mut to_copy = file_contents;
-    let mut copy_message = "copied whole buffer".to_string();
-    if check_if_line_in_buffer(file_buffer, line_number) {
+    // I say "trying to" because it might not even work at all but it always returns Ok :))))))))))))
+    let mut copy_message = "trying to copy whole buffer".to_string();
+    if check_if_line_in_buffer(file_buffer, line_number, false) {
         to_copy = file_buffer[line_number - 1].clone();
-        copy_message = format!("copied line {}", line_number);
+        copy_message = format!("trying to copy line {}", line_number);
     }
-    match clipboard_context.set_contents(to_copy) {
-        Ok(_) => println!("{}", copy_message),
-        Err(error) => println!("failed to copy; {}", error.to_string().to_lowercase()),
-    }
+    println!("{}", copy_message);
+    clipboard_context.set_contents(to_copy).unwrap();
 }
 
 /// Perform a regex `replace()` on `line_number`, with the `pattern` and `replacement`.
 /// Provides functionality for the `~substitute` command.
 fn substitute(file_buffer: &mut Vec<String>, line_number: usize, pattern: &str, replacement: &str) {
-    if check_if_line_in_buffer(file_buffer, line_number) {
+    if check_if_line_in_buffer(file_buffer, line_number, true) {
         let index = line_number - 1;
         let line = &mut file_buffer[index];
         let re = Regex::new(pattern).unwrap();
@@ -317,7 +328,7 @@ fn shell_command(mut command_args: Vec<&str>) {
 /// Indent the line at `line_number` by `indentation` spaces.
 /// Used for the `~indent` command.
 fn indent(file_buffer: &mut Vec<String>, line_number: usize, indentation: isize) {
-    if check_if_line_in_buffer(file_buffer, line_number) {
+    if check_if_line_in_buffer(file_buffer, line_number, true) {
         if indentation > 0 {
             let index = line_number - 1;
             let line = &mut file_buffer[index];
