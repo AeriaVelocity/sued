@@ -147,12 +147,12 @@ fn check_if_line_in_buffer(file_buffer: &mut Vec<String>, line_number: usize) ->
         println!("invalid line {}", line_number);
     }
 
-    else if line_number <= file_buffer.len() {
-        return true;
-    }
-
     else if file_buffer.is_empty() {
         println!("no buffer contents");
+    }
+
+    else if line_number <= file_buffer.len() {
+        return true;
     }
 
     else {
