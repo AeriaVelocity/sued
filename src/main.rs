@@ -229,43 +229,23 @@ fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
     }
 }
 
-/// Used to check if X11 or Wayland is present on Linux.
-/// A helper function.
-/// Not required for macOS or Windows.
-fn is_x11_or_wayland() -> bool {
-    match (env::var("DISPLAY"), env::var("WAYLAND_DISPLAY")) {
-        // X11
-        (Ok(display), _) if !display.is_empty() => true,
-
-        // Wayland
-        (_, Ok(wayland_display)) if !wayland_display.is_empty() => true,
-
-        // Neither
-        _ => false,
-    }
-}
-
 /// Copy the provided `line_number` to the system clipboard.
 /// If no `line_number` is specified (it's not in the buffer), copy the whole buffer.
+/// If it fails for whatever reason, it'll print the error message.
 /// Provides functionality for the `~copy` command.
 fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
-    #[cfg(target_os = "linux")]
-    if !is_x11_or_wayland() {
-        println!("no graphical environment found");
-        return;
-    }
-
     let mut clipboard_context = ClipboardContext::new().unwrap();
     let file_contents = file_buffer.join("\n");
     let mut to_copy = file_contents;
+    let mut copy_message = "copied whole buffer".to_string();
     if check_if_line_in_buffer(file_buffer, line_number) {
         to_copy = file_buffer[line_number - 1].clone();
-        println!("copied line {}", line_number);
+        copy_message = format!("copied line {}", line_number);
     }
-    else {
-        println!("copied whole buffer");
+    match clipboard_context.set_contents(to_copy) {
+        Ok(_) => println!("{}", copy_message),
+        Err(error) => println!("failed to copy; {}", error.to_string().to_lowercase()),
     }
-    clipboard_context.set_contents(to_copy).unwrap();
 }
 
 /// Perform a regex `replace()` on `line_number`, with the `pattern` and `replacement`.
