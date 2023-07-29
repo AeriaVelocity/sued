@@ -229,10 +229,32 @@ fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
     }
 }
 
+/// Used to check if X11 or Wayland is present on Linux.
+/// A helper function.
+/// Not required for macOS or Windows.
+fn is_x11_or_wayland() -> bool {
+    match (env::var("DISPLAY"), env::var("WAYLAND_DISPLAY")) {
+        // X11
+        (Ok(display), _) if !display.is_empty() => true,
+
+        // Wayland
+        (_, Ok(wayland_display)) if !wayland_display.is_empty() => true,
+
+        // Neither
+        _ => false,
+    }
+}
+
 /// Copy the provided `line_number` to the system clipboard.
 /// If no `line_number` is specified (it's not in the buffer), copy the whole buffer.
 /// Provides functionality for the `~copy` command.
 fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
+    #[cfg(target_os = "linux")]
+    if !is_x11_or_wayland() {
+        println!("no graphical environment found");
+        return;
+    }
+
     let mut clipboard_context = ClipboardContext::new().unwrap();
     let file_contents = file_buffer.join("\n");
     let mut to_copy = file_contents;
