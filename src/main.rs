@@ -113,11 +113,12 @@ fn show(buffer_contents: Vec<String>, start_point: usize, end_point: usize) {
         println!("no buffer contents");
     }
     else {
-        let contents: Vec<String> = buffer_contents[start_point-1..end_point].to_vec();
-        let mut count: usize = start_point - 1;
-        for line in contents.iter() {
-            count += 1;
-            println!("{}│{}", count, line);
+        let contents: Vec<String> = buffer_contents[start_point - 1..end_point].to_vec();
+        let max_count_length: usize = (start_point + contents.len() - 1).to_string().len();
+        for (index, line) in contents.iter().enumerate() {
+            let count: usize = start_point + index;
+            let count_padded: String = format!("{:width$}", count, width = max_count_length);
+            println!("{}│{}", count_padded, line);
         }
     }
 }
