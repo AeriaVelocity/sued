@@ -7,7 +7,8 @@ body {
     color: #ddd;
     background-color: black;
     max-width: 789px;
-    margin: auto 15px;
+    margin: auto;
+    padding: 15px;
 }
 p {
     margin-left: 40px;
