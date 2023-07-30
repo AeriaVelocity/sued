@@ -56,27 +56,28 @@ fn startup_message() {
 /// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
 fn command_list() {
-    println!("~clear, ~save, ~open, ~show, ~insert, ~replace, ~swap, ~delete, ~substitute, ~search, ~indent, ~run, ~exit, ~help, ~about");
+    println!("~about, ~clear, ~copy, ~delete, ~exit, ~help, ~indent, ~insert, ~open, ~replace, ~run, ~save, ~search, ~show, ~substitute, ~swap");
 }
 
 /// Displays a list of available commands and their descriptions.
 /// Invoked with the `~help` command.
 fn extended_command_list() {
+    println!("~about - display about text");
     println!("~clear - clear buffer");
-    println!("~save [filename] - save buffer to file");
-    println!("~open [filename] - load file into buffer.");
-    println!("~show [start] [end] - Display the contents of the buffer.");
-    println!("~insert [line] - insert text at specified line (interactive)");
-    println!("~replace [line] - replace specified line (interactive)");
-    println!("~swap [source] [target] - swap two lines");
+    println!("~copy [line] - copy line or whole buffer to clipboard");
     println!("~delete [line] - immediately delete specified line");
-    println!("~substitute [line] [pattern]/[replacement] - perform regex substitution on specified line");
-    println!("~search [term] - perform regex search in whole buffer");
-    println!("~indent [line] [level] - indent a line, negative level will outdent");
-    println!("~run [command] - run executable or shell builtin");
     println!("~exit - exit sued");
     println!("~help - display this list");
-    println!("~about - display about text");
+    println!("~indent [line] [level] - indent a line, negative level will outdent");
+    println!("~insert [line] - insert text at specified line (interactive)");
+    println!("~open [filename] - load file into buffer.");
+    println!("~replace [line] - replace specified line (interactive)");
+    println!("~run [command] - run executable or shell builtin");
+    println!("~save [filename] - save buffer to file");
+    println!("~search [term] - perform regex search in whole buffer");
+    println!("~show [start] [end] - Display the contents of the buffer.");
+    println!("~substitute [line] [pattern]/[replacement] - perform regex substitution on specified line");
+    println!("~swap [source] [target] - swap two lines");
 }
 
 /// Displays the sued version number and information about the editor itself.
@@ -153,8 +154,9 @@ fn check_if_line_in_buffer(file_buffer: &Vec<String>, line_number: usize, verbos
     }
 
     if file_buffer.is_empty() {
-        // We ignore verbose, since this is a non-optional error
-        println!("no buffer contents");
+        if verbose {
+            println!("no buffer contents");
+        }
         return false;
     }
 
@@ -331,16 +333,14 @@ fn shell_command(mut command_args: Vec<&str>) {
 /// Used for the `~indent` command.
 fn indent(file_buffer: &mut Vec<String>, line_number: usize, indentation: isize) {
     if check_if_line_in_buffer(file_buffer, line_number, true) {
+        let index = line_number - 1;
+        let line = &mut file_buffer[index];
         match indentation.cmp(&0) {
             Ordering::Greater => {
-                let index = line_number - 1;
-                let line = &mut file_buffer[index];
                 let indented_line = format!("{:indent$}{}", "", line, indent = indentation as usize);
                 *line = indented_line;
             }
             Ordering::Less => {
-                let index = line_number - 1;
-                let line = &mut file_buffer[index];
                 let line_len = line.len() as isize;
                 let new_len = (line_len + indentation).max(0) as usize;
                 let indented_line = format!("{:indent$}", &line[line_len as usize - new_len..], indent = new_len);
@@ -441,30 +441,53 @@ fn main() {
         command = command.clone().trim_end().to_string();
         let command_args = command.split(' ').collect::<Vec<&str>>();
         match command_args[0] {
+            // Help commands
             "~"     => { command_list(); },
-            "~help" => { extended_command_list(); },
             "~about" => { about_sued(); },
+            "~help" => { extended_command_list(); },
+
+            // Buffer manipulation
             "~clear" => { file_buffer.clear(); },
-            "~save" => {
+            "~copy" => {
                 if command_args.len() >= 2 {
-                    let file_name_with_spaces = command_args[1..].join(" ");
-                    let expanded_file_path = tilde(&file_name_with_spaces).to_string();
-                    save(file_buffer.clone(), expanded_file_path.as_str());
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    copy(&mut file_buffer, line_number);
                 }
                 else {
-                    println!("save where?");
+                    copy(&mut file_buffer, 0);
+                }
+            }
+            "~del" | "~delete" => {
+                if command_args.len() >= 2 {
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    delete(&mut file_buffer, line_number);
+                }
+                else {
+                    println!("delete which line?");
+                }
+            }
+            "~indent" => {
+                if command_args.len() >= 2 {
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    if command_args.len() >= 3 {
+                        let indentation: isize = command_args[2].parse().unwrap_or(0);
+                        indent(&mut file_buffer, line_number, indentation);
+                    }
+                    else {
+                        println!("indent line {} how?", line_number);
+                    }
+                }
+                else {
+                    println!("indent which line?");
                 }
             },
-            "~show" => {
-                let mut start_point = 1;
-                let mut end_point = file_buffer.len();
+            "~insert" => {
                 if command_args.len() >= 2 {
-                    start_point = command_args[1].parse::<usize>().unwrap();
+                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                    insert(&mut file_buffer, line_number);
+                } else {
+                    println!("insert where?");
                 }
-                if command_args.len() >= 3 {
-                    end_point = command_args[2].parse::<usize>().unwrap();
-                }
-                show(file_buffer.clone(), start_point, end_point);
             },
             "~open" => { 
                 if command_args.len() >= 2 {
@@ -476,16 +499,6 @@ fn main() {
                     println!("open what?");
                 }
             },
-            "~run"  => { shell_command(command_args); },
-            "~bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
-            "~insert" => {
-                if command_args.len() >= 2 {
-                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                    insert(&mut file_buffer, line_number);
-                } else {
-                    println!("insert where?");
-                }
-            },
             "~replace" => {
                 if command_args.len() >= 2 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
@@ -494,37 +507,16 @@ fn main() {
                     println!("replace which line?");
                 }
             },
-            "~swap" => {
-                if command_args.len() >= 3 {
-                    let source_line = command_args[1].parse::<usize>().unwrap_or(0);
-                    let target_line = command_args[2].parse::<usize>().unwrap_or(0);
-                    swap(&mut file_buffer, source_line, target_line);
-                }
-                else if command_args.len() >= 2 {
-                    println!("swap line {} with what?", command_args[1]);
+            "~save" => {
+                if command_args.len() >= 2 {
+                    let file_name_with_spaces = command_args[1..].join(" ");
+                    let expanded_file_path = tilde(&file_name_with_spaces).to_string();
+                    save(file_buffer.clone(), expanded_file_path.as_str());
                 }
                 else {
-                    println!("swap which lines?");
+                    println!("save where?");
                 }
             },
-            "~del" | "~delete" => {
-                if command_args.len() >= 2 {
-                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                    delete(&mut file_buffer, line_number);
-                }
-                else {
-                    println!("delete which line?");
-                }
-            }
-            "~copy" => {
-                if command_args.len() >= 2 {
-                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                    copy(&mut file_buffer, line_number);
-                }
-                else {
-                    copy(&mut file_buffer, 0);
-                }
-            }
             "~sub" | "~substitute" => {
                 if command_args.len() >= 3 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
@@ -548,6 +540,21 @@ fn main() {
                     println!("substitute which line?");
                 }
             }
+            "~swap" => {
+                if command_args.len() >= 3 {
+                    let source_line = command_args[1].parse::<usize>().unwrap_or(0);
+                    let target_line = command_args[2].parse::<usize>().unwrap_or(0);
+                    swap(&mut file_buffer, source_line, target_line);
+                }
+                else if command_args.len() >= 2 {
+                    println!("swap line {} with what?", command_args[1]);
+                }
+                else {
+                    println!("swap which lines?");
+                }
+            },
+
+            // Informational commands
             "~search" => {
                 if command_args.len() >= 2 {
                     let term = command_args[1..].join(" ");
@@ -556,21 +563,23 @@ fn main() {
                     println!("search for what?");
                 }
             },
-            "~indent" => {
+            "~show" => {
+                let mut start_point = 1;
+                let mut end_point = file_buffer.len();
                 if command_args.len() >= 2 {
-                    let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                    if command_args.len() >= 3 {
-                        let indentation: isize = command_args[2].parse().unwrap_or(0);
-                        indent(&mut file_buffer, line_number, indentation);
-                    }
-                    else {
-                        println!("indent line {} how?", line_number);
-                    }
+                    start_point = command_args[1].parse::<usize>().unwrap();
                 }
-                else {
-                    println!("indent which line?");
+                if command_args.len() >= 3 {
+                    end_point = command_args[2].parse::<usize>().unwrap();
                 }
+                show(file_buffer.clone(), start_point, end_point);
             },
+            
+            // Miscellaneous commands
+            "~bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
+            "~run"  => { shell_command(command_args); },
+
+            // Exit command
             "~exit" => { /* do nothing, because `~exit` will break the loop */ },
             _       => { 
                 if command_args[0].starts_with('~') {
