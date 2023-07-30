@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <title>sued</title>
-        <meta name="description" content="sued, the text editor of all time">
+        <meta name="description" content="sued, the text editor that doesn't give a damn">
         <meta name="author" content="Arsalan Kazmi">
         <meta name="date" content="2023-07-12">
         <meta name="version" content="1.0.0">
@@ -30,21 +30,22 @@
         <p>None yet, lmao. Maybe in the future, but not now.</p>
         <h1>COMMANDS</h1>
         <p>All commands start with ~. Run ~ by itself to see a list of commands.</p>
-        <p><strong>~clear</strong> - Clear the buffer contents.</p>
-        <p><strong>~save [filename]</strong> - Write the file buffer to the provided file name.</p>
-        <p><strong>~open [filename]</strong> - Find or create a file and open its contents up in sued.</p>
-        <p><strong>~show [start] [end]</strong> - Display the buffer contents, complete with line numbers. You can specify the start and end point if you wish.</p>
-        <p><strong>~insert [line]</strong> - Interactively insert text into the chosen position in the buffer.</p>
-        <p><strong>~replace [line]</strong> - Interactively replace the chosen line's contents in the buffer.</p>
-        <p><strong>~swap [source] [target]</strong> - Swap two lines with each other in the buffer.</p>
-        <p><strong>~delete [line]</strong> - Immediately remove a line from the buffer.</p>
-        <p><strong>~substitute [line] [pattern]/[replacement]</strong> - Perform a regex substitution on the chosen line number, with the pattern and replacement.</p>
-        <p><strong>~search [term]</strong> - Searches for the given term in the buffer and prints matching lines.</p>
-        <p><strong>~indent [line] [level]</strong> - Indent the specified line by a number of spaces. A negative level will outdent.</p>
-        <p><strong>~run [command]</strong> - Run the provided executable or shell builtin. Real executables will be prioritised over shell builtins.</p>
-        <p><strong>~exit</strong> - Quit sued, discarding the buffer contents.</p>
-        <p><strong>~help</strong> - Display the list of commands with descriptions.</p>
-        <p><strong>~about</strong> - Display some information about sued onto the screen.</p>
+        <p><strong>~about</strong> - display about text</p>
+        <p><strong>~clear</strong> - clear buffer</p>
+        <p><strong>~copy [line]</strong> - copy line or whole buffer to clipboard</p>
+        <p><strong>~delete [line]</strong> - immediately delete specified line</p>
+        <p><strong>~exit</strong> - exit sued</p>
+        <p><strong>~help</strong> - display this list</p>
+        <p><strong>~indent [line] [level]</strong> - indent a line, negative level will outdent</p>
+        <p><strong>~insert [line]</strong> - insert text at specified line (interactive)</p>
+        <p><strong>~open [filename]</strong> - load file into buffer</p>
+        <p><strong>~replace [line]</strong> - replace specified line (interactive)</p>
+        <p><strong>~run [command]</strong> - run executable or shell builtin</p>
+        <p><strong>~save [filename]</strong> - save buffer to file</p>
+        <p><strong>~search [term]</strong> - perform regex search in the whole buffer</p>
+        <p><strong>~show [start] [end]</strong> - display the contents of the buffer</p>
+        <p><strong>~substitute [line] [pattern]/[replacement]</strong> - perform regex substitution on the specified line</p>
+        <p><strong>~swap [source] [target]</strong> - swap two lines</p>
         <h1>FAQ</h1>
         <p>
             <ul>
@@ -77,9 +78,7 @@
         <h1>SEE ALSO</h1>
         <p><a href="https://manpage.me/?q=ed">ed(1)</a>, <a href="https://github.com/that1m8head/Streakline">streakline(1)</a></p>
         <h1>LIMITATIONS</h1>
-        <p>sued can edit text just fine, but there's still quite a bit of functionality left to be implemented.</p>
-        <h1>HISTORY</h1>
-        <p>sued was, technically speaking, initially developed at the University of Hertfordshire (because I'm a student there), but practically speaking it wasn't developed under their watch or on their systems, or even for them. sued is a project by me, Arsalan Kazmi, first and foremost, no matter where it's worked on from, and UH holds no copyright over it.</p>
+        <p>sued is still 0.x software and probably isn't going to replace VS Code anytime soon.</p>
         <h1>BUGS</h1>
         <p>Yes.</p>
         <div class="TH">
