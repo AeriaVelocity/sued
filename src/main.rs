@@ -5,6 +5,7 @@
 use std::io;
 use std::fs;
 use std::env;
+use std::cmp::Ordering;
 use std::path::PathBuf;
 use std::process::Command;
 use which::which;
@@ -49,6 +50,7 @@ fn startup_message() {
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     let version = env!("CARGO_PKG_VERSION");
     println!("sued v{version} - {message}\ntype ~ for commands, otherwise just start typing");
+    
 }
 
 /// Displays the list of commands that sued supports.
@@ -110,7 +112,7 @@ fn save(buffer_contents: Vec<String>, file_path: &str) {
 /// If a range was specified, only iterate for that part.
 /// Used to provide functionality for the `~show` command.
 fn show(buffer_contents: Vec<String>, start_point: usize, end_point: usize) {
-    if buffer_contents.len() < 1 {
+    if buffer_contents.is_empty() {
         println!("no buffer contents");
     }
     else {
@@ -135,9 +137,9 @@ fn open(file_path: &str) -> Vec<String> {
         }
         Err(_) => {
             println!("no such file {}", file_path);
-            return Vec::new();
         }
     }
+    Vec::new()
 }
 
 /// Checks if a given `line_number` is in the `file_buffer`.
@@ -329,22 +331,22 @@ fn shell_command(mut command_args: Vec<&str>) {
 /// Used for the `~indent` command.
 fn indent(file_buffer: &mut Vec<String>, line_number: usize, indentation: isize) {
     if check_if_line_in_buffer(file_buffer, line_number, true) {
-        if indentation > 0 {
-            let index = line_number - 1;
-            let line = &mut file_buffer[index];
-            let indented_line = format!("{:indent$}{}", "", line, indent = indentation as usize);
-            *line = indented_line;
-        }
-        else if indentation < 0 {
-            let index = line_number - 1;
-            let line = &mut file_buffer[index];
-            let line_len = line.len() as isize;
-            let new_len = (line_len + indentation).max(0) as usize;
-            let indented_line = format!("{:indent$}", &line[line_len as usize - new_len..], indent = new_len);
-            *line = indented_line;
-        }
-        else {
-            println!("invalid indent level");
+        match indentation.cmp(&0) {
+            Ordering::Greater => {
+                let index = line_number - 1;
+                let line = &mut file_buffer[index];
+                let indented_line = format!("{:indent$}{}", "", line, indent = indentation as usize);
+                *line = indented_line;
+            }
+            Ordering::Less => {
+                let index = line_number - 1;
+                let line = &mut file_buffer[index];
+                let line_len = line.len() as isize;
+                let new_len = (line_len + indentation).max(0) as usize;
+                let indented_line = format!("{:indent$}", &line[line_len as usize - new_len..], indent = new_len);
+                *line = indented_line;
+            }
+            _ => println!("invalid indent level"),
         }
     }
 }
@@ -380,7 +382,7 @@ fn editor_overflow() {
                 break;
             },
             "f" => {
-                crash("editor_overflow", &vec![0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF])
+                crash("editor_overflow", &[0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF])
             },
             _ => ()
         }
@@ -388,7 +390,7 @@ fn editor_overflow() {
 }
 
 /// A helper function used for the ~substitute command.
-fn split_pattern_replacement<'a>(combined_args: &'a str) -> Vec<&'a str> {
+fn split_pattern_replacement(combined_args: &str) -> Vec<&str> {
     let mut pattern_replacement = Vec::new();
     let mut temp_str = combined_args;
     let mut previous_char: Option<char> = None;
@@ -418,7 +420,7 @@ fn split_pattern_replacement<'a>(combined_args: &'a str) -> Vec<&'a str> {
     if !temp_str.is_empty() {
         pattern_replacement.push(temp_str);
     }
-    return pattern_replacement
+    pattern_replacement
 }
 
 /// It's the main function.
@@ -438,8 +440,8 @@ fn main() {
             .expect("can't read command");
         let len: usize = command.trim_end_matches(&['\r', '\n'][..]).len();
         command.truncate(len);
-        let command_args = command.split(" ").collect::<Vec<&str>>();
-        let _cmdproc: () = match command_args[0] {
+        let command_args = command.split(' ').collect::<Vec<&str>>();
+        match command_args[0] {
             "~"     => { command_list(); },
             "~help"     => { extended_command_list(); },
             "~about" => { about_sued(); },
@@ -448,7 +450,7 @@ fn main() {
                 if command_args.len() >= 2 {
                     let file_name_with_spaces = command_args[1..].join(" ");
                     let expanded_file_path = tilde(&file_name_with_spaces).to_string();
-                    save(file_buffer.clone(), &expanded_file_path.as_str());
+                    save(file_buffer.clone(), expanded_file_path.as_str());
                 }
                 else {
                     println!("save where?");
@@ -476,7 +478,7 @@ fn main() {
                 }
             },
             "~run"  => { shell_command(command_args); },
-            "~bsod" => { crash("USER_IS_STUPID", &vec![0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
+            "~bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
             "~insert" => {
                 if command_args.len() >= 2 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
@@ -498,13 +500,12 @@ fn main() {
                     let source_line = command_args[1].parse::<usize>().unwrap_or(0);
                     let target_line = command_args[2].parse::<usize>().unwrap_or(0);
                     swap(&mut file_buffer, source_line, target_line);
-                } else {
-                    if command_args.len() >= 2 {
-                        println!("swap line {} with what?", command_args[1]);
-                    }
-                    else {
-                        println!("swap which lines?")
-                    }
+                }
+                else if command_args.len() >= 2 {
+                    println!("swap line {} with what?", command_args[1]);
+                }
+                else {
+                    println!("swap which lines?");
                 }
             },
             "~del" | "~delete" => {
@@ -573,7 +574,7 @@ fn main() {
             },
             "~exit" => { /* do nothing, because `~exit` will break the loop */ },
             _       => { 
-                if command_args[0].starts_with("~") {
+                if command_args[0].starts_with('~') {
                     println!("{} is an unknown command", command_args[0]);
                 }
                 else {
