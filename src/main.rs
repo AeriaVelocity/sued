@@ -438,12 +438,11 @@ fn main() {
         io::stdin()
             .read_line(&mut command)
             .expect("can't read command");
-        let len: usize = command.trim_end_matches(&['\r', '\n'][..]).len();
-        command.truncate(len);
+        command = command.trim_end().to_string();
         let command_args = command.split(' ').collect::<Vec<&str>>();
         match command_args[0] {
             "~"     => { command_list(); },
-            "~help"     => { extended_command_list(); },
+            "~help" => { extended_command_list(); },
             "~about" => { about_sued(); },
             "~clear" => { file_buffer.clear(); },
             "~save" => {
