@@ -7,7 +7,7 @@ body {
     color: #ddd;
     background-color: black;
     max-width: 789px;
-    margin: auto;
+    margin: auto 15px;
 }
 p {
     margin-left: 40px;
