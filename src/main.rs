@@ -438,7 +438,7 @@ fn main() {
         io::stdin()
             .read_line(&mut command)
             .expect("can't read command");
-        command = command.trim_end().to_string();
+        command = command.clone().trim_end().to_string();
         let command_args = command.split(' ').collect::<Vec<&str>>();
         match command_args[0] {
             "~"     => { command_list(); },
