@@ -389,6 +389,16 @@ fn editor_overflow() {
     }
 }
 
+/// A nothing function that does nothing.
+/// Used to provide functionality for the `~nothing` command.
+fn nothing(file_buffer: &Vec<String>) {
+    if file_buffer.is_empty() {
+        println!("no buffer contents");
+    }
+    let buffer_contents: String = file_buffer.join("; ");
+    println!("doing nothing with {}", buffer_contents);
+}
+
 /// A helper function used for the ~substitute command.
 fn split_pattern_replacement(combined_args: &str) -> Vec<&str> {
     let mut pattern_replacement = Vec::new();
@@ -578,6 +588,7 @@ fn main() {
             // Miscellaneous commands
             "~bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
             "~run"  => { shell_command(command_args); },
+            "~nothing" => { nothing(&file_buffer); },
 
             // Exit command
             "~exit" => { /* do nothing, because `~exit` will break the loop */ },
