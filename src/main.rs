@@ -70,7 +70,7 @@ fn extended_command_list() {
     println!("~help - display this list");
     println!("~indent [line] [level] - indent a line, negative level will outdent");
     println!("~insert [line] - insert text at specified line (interactive)");
-    println!("~open [filename] - load file into buffer.");
+    println!("~open [filename] - load file into buffer");
     println!("~replace [line] - replace specified line (interactive)");
     println!("~run [command] - run executable or shell builtin");
     println!("~save [filename] - save buffer to file");
@@ -94,7 +94,7 @@ fn about_sued() {
 
 /// Writes the `buffer_contents` to the `file_path`, if there are any contents.
 /// Used to provide functionality for the `~save` command.
-fn save(buffer_contents: Vec<String>, file_path: &str) {
+fn save(buffer_contents: &Vec<String>, file_path: &str) {
     if buffer_contents.is_empty() {
         println!("buffer empty - nothing to save");
         return;
@@ -112,7 +112,7 @@ fn save(buffer_contents: Vec<String>, file_path: &str) {
 /// Iterates over the `buffer_contents` and displays them one by one.
 /// If a range was specified, only iterate for that part.
 /// Used to provide functionality for the `~show` command.
-fn show(buffer_contents: Vec<String>, start_point: usize, end_point: usize) {
+fn show(buffer_contents: &Vec<String>, start_point: usize, end_point: usize) {
     if buffer_contents.is_empty() {
         println!("no buffer contents");
     }
@@ -276,7 +276,7 @@ fn substitute(file_buffer: &mut Vec<String>, line_number: usize, pattern: &str, 
 
 /// Searches for the given `term` in the `file_buffer` and prints matching lines.
 /// Provides functionality for the `~search` command.
-fn search(file_buffer: Vec<String>, term: &str) {
+fn search(file_buffer: &Vec<String>, term: &str) {
     let regex = Regex::new(term).unwrap();
 
     for (line_number, line) in file_buffer.iter().enumerate() {
@@ -521,7 +521,7 @@ fn main() {
                 if command_args.len() >= 2 {
                     let file_name_with_spaces = command_args[1..].join(" ");
                     let expanded_file_path = tilde(&file_name_with_spaces).to_string();
-                    save(file_buffer.clone(), expanded_file_path.as_str());
+                    save(&file_buffer, expanded_file_path.as_str());
                 }
                 else {
                     println!("save where?");
@@ -568,7 +568,7 @@ fn main() {
             "~search" => {
                 if command_args.len() >= 2 {
                     let term = command_args[1..].join(" ");
-                    search(file_buffer.clone(), &term);
+                    search(&file_buffer, &term);
                 } else {
                     println!("search for what?");
                 }
@@ -582,12 +582,12 @@ fn main() {
                 if command_args.len() >= 3 {
                     end_point = command_args[2].parse::<usize>().unwrap();
                 }
-                show(file_buffer.clone(), start_point, end_point);
+                show(&file_buffer, start_point, end_point);
             },
             
             // Miscellaneous commands
             "~bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
-            "~run"  => { shell_command(command_args); },
+            "~run"  => { shell_command(command_args.clone()); },
             "~nothing" => { nothing(&file_buffer); },
 
             // Exit command
