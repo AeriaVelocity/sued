@@ -56,7 +56,7 @@ fn startup_message() {
 /// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
 fn command_list() {
-    println!("~about, ~clear, ~copy, ~delete, ~exit, ~help, ~indent, ~insert, ~open, ~replace, ~run, ~save, ~search, ~show, ~substitute, ~swap");
+    println!("~about, ~clear, ~copy, ~correct, ~delete, ~exit, ~help, ~indent, ~insert, ~open, ~replace, ~run, ~save, ~search, ~show, ~substitute, ~swap, ~write");
 }
 
 /// Displays a list of available commands and their descriptions.
@@ -65,6 +65,7 @@ fn extended_command_list() {
     println!("~about - display about text");
     println!("~clear - clear buffer");
     println!("~copy [line] - copy line or whole buffer to clipboard");
+    println!("~correct - replace most recent line (interactive)");
     println!("~delete [line] - immediately delete specified line");
     println!("~exit - exit sued");
     println!("~help - display this list");
@@ -78,6 +79,7 @@ fn extended_command_list() {
     println!("~show [start] [end] - Display the contents of the buffer.");
     println!("~substitute [line] [pattern]/[replacement] - perform regex substitution on specified line");
     println!("~swap [source] [target] - swap two lines");
+    println!("~write [filename] - write buffer to file without storing filename");
 }
 
 /// Displays the sued version number and information about the editor itself.
@@ -105,7 +107,7 @@ fn save(buffer_contents: &Vec<String>, file_path: &str) {
 
     match fs::write(&path, content) {
         Ok(_) => println!("saved to {}", &path.display()),
-        Err(error) => eprintln!("couldn't save file: {}", error),
+        Err(error) => eprintln!("couldn't save file to {}: {}", file_path, error),
     }
 }
 
@@ -129,11 +131,12 @@ fn show(buffer_contents: &Vec<String>, start_point: usize, end_point: usize) {
 
 /// Verifies the `file_path`'s file existence, then returns the file contents as a `String` vector.
 /// Used for the `~open` command.
-fn open(file_path: &str) -> Vec<String> {
+fn open(file_path: &str, current_file_path: &mut Option<String>) -> Vec<String> {
     let file_exists = fs::read_to_string(file_path);
     match file_exists {
         Ok(contents) => {
             println!("file {} opened", file_path);
+            *current_file_path = Some(file_path.to_string());
             return contents.lines().map(|line| line.to_owned()).collect();
         }
         Err(_) => {
@@ -439,9 +442,10 @@ fn main() {
     startup_message();
     let mut command: String = String::new();
     let mut file_buffer: Vec<String> = Vec::new();
+    let mut file_path: Option<String> = None;
     let args: Vec<String> = env::args().collect();
     if args.len() >= 2 {
-        file_buffer = open(&args[1]);
+        file_buffer = open(&args[1], &mut file_path);
     }
     while !command.eq("~exit") {
         command.clear();
@@ -457,7 +461,10 @@ fn main() {
             "~help" => { extended_command_list(); },
 
             // Buffer manipulation
-            "~clear" => { file_buffer.clear(); },
+            "~clear" => { 
+                file_buffer.clear();
+                file_path = None;
+            },
             "~copy" => {
                 if command_args.len() >= 2 {
                     let line_number = command_args[1].parse::<usize>().unwrap_or(0);
@@ -466,6 +473,10 @@ fn main() {
                 else {
                     copy(&mut file_buffer, 0);
                 }
+            }
+            "~correct" => {
+                let line_number = file_buffer.len();
+                replace(&mut file_buffer, line_number);
             }
             "~del" | "~delete" => {
                 if command_args.len() >= 2 {
@@ -503,7 +514,7 @@ fn main() {
                 if command_args.len() >= 2 {
                     let file_name_with_spaces = command_args[1..].join(" ");
                     let expanded_file_path = tilde(&file_name_with_spaces).to_string();
-                    file_buffer = open(expanded_file_path.as_str());
+                    file_buffer = open(expanded_file_path.as_str(), &mut file_path);
                 }
                 else {
                     println!("open what?");
@@ -518,10 +529,17 @@ fn main() {
                 }
             },
             "~save" => {
+                let mut destination: String = file_path.clone().unwrap_or_default();
+
                 if command_args.len() >= 2 {
-                    let file_name_with_spaces = command_args[1..].join(" ");
-                    let expanded_file_path = tilde(&file_name_with_spaces).to_string();
+                    destination = String::from(command_args[1..].join(" "));
+                }
+
+                let expanded_file_path: String = tilde(&destination).to_string();
+
+                if !expanded_file_path.trim().is_empty() {
                     save(&file_buffer, expanded_file_path.as_str());
+                    file_path = Some(destination);
                 }
                 else {
                     println!("save where?");
@@ -561,6 +579,22 @@ fn main() {
                 }
                 else {
                     println!("swap which lines?");
+                }
+            },
+            "~write" => {
+                let mut destination: String = file_path.clone().unwrap_or_default();
+
+                if command_args.len() >= 2 {
+                    destination = String::from(command_args[1..].join(" "));
+                }
+
+                let expanded_file_path: String = tilde(&destination).to_string();
+
+                if !expanded_file_path.trim().is_empty() {
+                    save(&file_buffer, expanded_file_path.as_str());
+                }
+                else {
+                    println!("write where?");
                 }
             },
 
