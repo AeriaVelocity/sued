@@ -611,10 +611,20 @@ fn main() {
                 let mut start_point = 1;
                 let mut end_point = file_buffer.len();
                 if command_args.len() >= 2 {
-                    start_point = command_args[1].parse::<usize>().unwrap();
+                    if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
+                        start_point = start_from_arg;
+                    }
+                    else {
+                        println!("invalid start range");
+                    }
                 }
                 if command_args.len() >= 3 {
-                    end_point = command_args[2].parse::<usize>().unwrap();
+                    if let Ok(end_from_arg) = command_args[2].parse::<usize>() {
+                        end_point = end_from_arg;
+                    }
+                    else {
+                        println!("Invalid end range");
+                    }
                 }
                 show(&file_buffer, start_point, end_point);
             },
