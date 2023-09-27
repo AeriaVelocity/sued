@@ -623,7 +623,7 @@ fn main() {
                         end_point = end_from_arg;
                     }
                     else {
-                        println!("Invalid end range");
+                        println!("invalid end range");
                     }
                 }
                 show(&file_buffer, start_point, end_point);
