@@ -256,7 +256,9 @@ fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
     let mut clipboard_context = ClipboardContext::new().unwrap();
     let file_contents = file_buffer.join("\n");
     let mut to_copy = file_contents;
-    // I say "trying to" because it might not even work at all but it always returns Ok :))))))))))))
+    // I say "trying to" because the `clipboard` library this function relies on might not even work at all,
+    // but it always returns Ok, even if it fails :D
+    // Here's a little tip - when you're writing a library that can fail, FRICKING MAKE IT RETURN Err
     let mut copy_message = "trying to copy whole buffer".to_string();
     if check_if_line_in_buffer(file_buffer, line_number, false) {
         to_copy = file_buffer[line_number - 1].clone();
@@ -272,8 +274,22 @@ fn substitute(file_buffer: &mut Vec<String>, line_number: usize, pattern: &str, 
     if check_if_line_in_buffer(file_buffer, line_number, true) {
         let index = line_number - 1;
         let line = &mut file_buffer[index];
-        let re = Regex::new(pattern).unwrap();
-        *line = re.replace(line, replacement).to_string();
+        match Regex::new(pattern) {
+            Ok(re) => {
+                let replaced_line = re.replace(line, replacement).to_string();
+                *line = replaced_line;
+            },
+            Err(e) => {
+                let error_message = e.to_string();
+                let lines: Vec<String> = error_message.lines().map(String::from).collect();
+
+                if let Some(error) = lines.last() {
+                    println!("substitute failed, because {}", error.to_lowercase().replace("error: ", ""));
+                } else {
+                    println!("substitute failed, for some reason");
+                }
+            },
+        }
     }
 }
 
@@ -559,12 +575,12 @@ fn main() {
                     }
                     else {
                         println!("substitute what?");
-                        println!("try ~substitute pattern/replacement");
+                        println!("try ~substitute line pattern/replacement");
                     }
                 }
                 else if command_args.len() >= 2 {
                     println!("substitute what?");
-                    println!("try ~substitute pattern/replacement");
+                    println!("try ~substitute line pattern/replacement");
                 }
                 else {
                     println!("substitute which line?");
