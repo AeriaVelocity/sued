@@ -1,6 +1,6 @@
 /// sued - a vector-oriented line editor that doesn't give a damn
 /// to understand sued, read `README.md` or `that1m8head.github.io/sued`
-/// sued is free software licensed under the WTFPL (SPDX-License-Identifier: WTFPL)
+/// sued is free software licensed under the WTFPL
 
 use std::io;
 use std::fs;
@@ -12,7 +12,7 @@ use which::which;
 use rand::Rng;
 use shellexpand::tilde;
 use regex::Regex;
-use arboard::Clipboard;
+use copypasta::{ClipboardContext, ClipboardProvider};
 
 /// Prints a startup message with a funny joke. I hope it's funny at least.
 /// Invoked at startup, obviously.
@@ -250,23 +250,21 @@ fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
         return;
     }
 
-    let mut clipboard = Clipboard::new().unwrap();
+    let mut clipboard_context = ClipboardContext::new().unwrap();
     let file_contents = file_buffer.join("\n");
     let mut to_copy = file_contents;
 
-    match clipboard.get_text() {
+    match clipboard_context.get_contents() {
         Ok(_) => {
-            let mut copy_message = String::from("copying whole buffer");
-
+            let mut copy_message = "copying whole buffer".to_string();
             if check_if_line_in_buffer(file_buffer, line_number, false) {
                 to_copy = file_buffer[line_number - 1].clone();
                 copy_message = format!("copying line {}", line_number);
             }
-
             println!("{}", copy_message);
-            clipboard.set_text(to_copy).unwrap();
-        },
-        Err(e) => println!("failed to copy, because {}", e),
+            clipboard_context.set_contents(to_copy).unwrap();
+        }
+        Err(e) => println!("copy failed, because {}", e),
     }
 }
 
