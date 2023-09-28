@@ -249,7 +249,10 @@ fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
         println!("no buffer contents");
         return;
     }
-
+    #[cfg(any(target_os = "android", target_os = "ios"))] {
+        println!("~copy is unsupported on your device, sorry");
+        return;
+    }
     let mut clipboard_context = ClipboardContext::new().unwrap();
     let file_contents = file_buffer.join("\n");
     let mut to_copy = file_contents;
