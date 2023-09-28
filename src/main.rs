@@ -1,6 +1,6 @@
 /// sued - a vector-oriented line editor that doesn't give a damn
 /// to understand sued, read `README.md` or `that1m8head.github.io/sued`
-/// sued is free software licensed under the WTFPL
+/// sued is free software licensed under the WTFPL (SPDX-License-Identifier: WTFPL)
 
 use std::io;
 use std::fs;
@@ -12,7 +12,7 @@ use which::which;
 use rand::Rng;
 use shellexpand::tilde;
 use regex::Regex;
-use copypasta::{ClipboardContext, ClipboardProvider};
+use arboard::Clipboard;
 
 /// Prints a startup message with a funny joke. I hope it's funny at least.
 /// Invoked at startup, obviously.
@@ -249,23 +249,25 @@ fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
         println!("no buffer contents");
         return;
     }
-    #[cfg(any(target_os = "android", target_os = "ios"))] {
-        println!("~copy doesn't work on your device yet");
-        return;
-    }
-    let mut clipboard_context = ClipboardContext::new().unwrap();
+
+    let mut clipboard = Clipboard::new().unwrap();
     let file_contents = file_buffer.join("\n");
     let mut to_copy = file_contents;
-    // I say "trying to" because the `clipboard` library this function relies on might not even work at all,
-    // but it always returns Ok, even if it fails :D
-    // Here's a little tip - when you're writing a library that can fail, FRICKING MAKE IT RETURN Err
-    let mut copy_message = "trying to copy whole buffer".to_string();
-    if check_if_line_in_buffer(file_buffer, line_number, false) {
-        to_copy = file_buffer[line_number - 1].clone();
-        copy_message = format!("trying to copy line {}", line_number);
+
+    match clipboard.get_text() {
+        Ok(_) => {
+            let mut copy_message = String::from("copying whole buffer");
+
+            if check_if_line_in_buffer(file_buffer, line_number, false) {
+                to_copy = file_buffer[line_number - 1].clone();
+                copy_message = format!("copying line {}", line_number);
+            }
+
+            println!("{}", copy_message);
+            clipboard.set_text(to_copy).unwrap();
+        },
+        Err(e) => println!("failed to copy, because {}", e),
     }
-    println!("{}", copy_message);
-    clipboard_context.set_contents(to_copy).unwrap();
 }
 
 /// Perform a regex `replace()` on `line_number`, with the `pattern` and `replacement`.
