@@ -280,7 +280,9 @@ fn substitute(file_buffer: &mut Vec<String>, line_number: usize, pattern: &str, 
 /// Searches for the given `term` in the `file_buffer` and prints matching lines.
 /// Provides functionality for the `~search` command.
 fn search(file_buffer: &Vec<String>, term: &str) {
-    let regex = Regex::new(term).unwrap();
+    let escaped_term = regex::escape(term);
+
+    let regex = Regex::new(escaped_term.as_str()).unwrap();
 
     for (line_number, line) in file_buffer.iter().enumerate() {
         if regex.is_match(line) {
