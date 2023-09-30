@@ -470,6 +470,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() >= 2 {
         file_buffer = open(&args[1], &mut file_path);
+        file_path = Some(args[1].clone());
     }
     while let ReadResult::Input(line) = interface.read_line().unwrap() {
         let command = line.trim_end().to_string();
