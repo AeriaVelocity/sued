@@ -65,6 +65,7 @@ fn command_list() {
 /// Displays a list of available commands and their descriptions.
 /// Invoked with the `~help` command.
 fn extended_command_list() {
+    println!("press up and down to navigate through command history");
     println!("~about - display about text");
     println!("~clear - clear buffer");
     println!("~copy [line] - copy line or whole buffer to clipboard");
@@ -90,11 +91,10 @@ fn extended_command_list() {
 fn about_sued() {
     let version = env!("CARGO_PKG_VERSION");
     println!("this is sued, v{version}\n\
-              sued is a vector-oriented line editor, like ed but also not at all\n\
-              to write stuff, just start typing after the welcome message\n\
-              editor commands are prefixed with ~ (for example ~exit to quit the editor)\n\
-              there's no syntax highlighting or anything like that. you just write\n\
-              sued written by Arsalan Kazmi (That1M8Head)");
+              sued is a vector-oriented line editor, heavily inspired by the ed editor\n\
+              you can write text simply by typing, and use sued's extensive command set for editing\n\
+              editor commands are prefixed with ~, type ~help for a full list\n\
+              sued written by Arsalan \"Velocity\" Kazmi <sonicspeed848@gmail.com>");
 }
 
 /// Writes the `buffer_contents` to the `file_path`, if there are any contents.
