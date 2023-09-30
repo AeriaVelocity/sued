@@ -47,6 +47,8 @@ fn startup_message() {
         "no config file means no config bankruptcy",
         "if vim is evil, sued is demonic",
         "free software, hell yeah",
+        "put that mouse away",
+        "command history is the only nicety you get",
     ];
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     let version = env!("CARGO_PKG_VERSION");
