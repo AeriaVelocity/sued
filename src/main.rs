@@ -13,6 +13,7 @@ use rand::Rng;
 use shellexpand::tilde;
 use regex::Regex;
 use copypasta::{ClipboardContext, ClipboardProvider};
+use linefeed::{Interface, ReadResult};
 
 /// Prints a startup message with a funny joke. I hope it's funny at least.
 /// Invoked at startup, obviously.
@@ -461,19 +462,16 @@ fn split_pattern_replacement(combined_args: &str) -> Vec<&str> {
 /// I don't know what you expected.
 fn main() {
     startup_message();
-    let mut command: String = String::new();
+    let interface = Interface::new("sued").unwrap();
     let mut file_buffer: Vec<String> = Vec::new();
     let mut file_path: Option<String> = None;
     let args: Vec<String> = env::args().collect();
     if args.len() >= 2 {
         file_buffer = open(&args[1], &mut file_path);
     }
-    while !command.eq("~exit") {
-        command.clear();
-        io::stdin()
-            .read_line(&mut command)
-            .expect("can't read command");
-        command = command.clone().trim_end().to_string();
+    while let ReadResult::Input(line) = interface.read_line().unwrap() {
+        let command = line.trim_end().to_string();
+        interface.add_history_unique(command.clone());
         let command_args = command.split(' ').collect::<Vec<&str>>();
         match command_args[0].to_lowercase().as_str() {
             // Help commands
@@ -656,7 +654,9 @@ fn main() {
             "~nothing" => { nothing(&file_buffer); },
 
             // Exit command
-            "~exit" => { /* do nothing, because `~exit` will break the loop */ },
+            "~exit" => break,
+
+            // Fallback
             _       => { 
                 if command_args[0].starts_with('~') {
                     println!("{} is an unknown command", command_args[0]);
