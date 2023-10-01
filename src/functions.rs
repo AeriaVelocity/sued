@@ -107,6 +107,15 @@ pub fn save(buffer_contents: &Vec<String>, file_path: &str) {
 pub fn show(buffer_contents: &Vec<String>, start_point: usize, end_point: usize) {
     if buffer_contents.is_empty() {
         println!("no buffer contents");
+        return;
+    }
+    else if !check_if_line_in_buffer(buffer_contents, start_point, false) {
+        println!("invalid start point {}", start_point);
+        return;
+    }
+    else if !check_if_line_in_buffer(buffer_contents, end_point, false) {
+        println!("invalid end point {}", end_point);
+        return;
     }
     else {
         let contents: Vec<String> = buffer_contents[start_point - 1..end_point].to_vec();

@@ -203,22 +203,25 @@ fn main() {
             "~show" => {
                 let mut start_point = 1;
                 let mut end_point = buffer.contents.len();
+
                 if command_args.len() >= 2 {
                     if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
                         start_point = start_from_arg;
                     }
-                    else {
-                        println!("invalid start range");
-                    }
                 }
+
                 if command_args.len() >= 3 {
                     if let Ok(end_from_arg) = command_args[2].parse::<usize>() {
                         end_point = end_from_arg;
                     }
-                    else {
-                        println!("invalid end range");
+                }
+
+                if command_args.len() == 2 {
+                    if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
+                        end_point = start_from_arg;
                     }
                 }
+
                 show(&buffer.contents, start_point, end_point);
             },
             
