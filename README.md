@@ -1,6 +1,6 @@
 # sued - shut up editor
 
-sued is a vector-oriented line editor, kind of similar to the venerable and standard ed text editor, just simpler and not nearly as powerful.
+sued is a vector-oriented line editor, kind of similar to the venerable and standard ed text editor, just with a different command syntax and set, to provide a unique editing experience.
 
 ~~Yes, I know ed doesn't use vectors, shut up~~
 
