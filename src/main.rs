@@ -1,6 +1,8 @@
-//! sued - a vector-oriented line editor that doesn't give a damn
-//! to understand sued, read `README.md` or `that1m8head.github.io/sued`
-//! sued is free software licensed under the WTFPL
+//! sued - shut up editor, a vector-oriented line editor.
+//! 
+//! to understand sued, read `README.md` or `that1m8head.github.io/sued`.
+//! 
+//! sued is free software licensed under the WTFPL.
 
 use std::env;
 use shellexpand::tilde;

@@ -1,4 +1,7 @@
+//! Contains every function used by sued, including editing commands and helper functions.
+//! 
 //! This file is part of sued.
+//! 
 //! Visit `main.rs` for context and usage.
 
 use std::io;
@@ -15,41 +18,29 @@ use copypasta::{ClipboardContext, ClipboardProvider};
 /// Invoked at startup, obviously.
 pub fn startup_message() {
     let messages: Vec<&str> = vec![
-        "the editor of all time",
-        "shut up and edit",
-        "the nonstandard text editor",
+        "the shut up editor",
+        "the not standard text editor",
         "it's pronounced \"soo-ed\"",
         "sued as in editor, not as in law",
         "sued, man! ~run man sued",
+        "probably more powerful than it looks",
         "there is no visual mode",
-        "the itor fell off",
-        "the ultimate blank slate",
-        "words matter; nothing else does",
+        "sued: the itor fell off",
         "the text editor that doesn't give a damn",
-        "write like no one is watching, because they're not",
-        "syntax? never heard of them",
         "what you get is what you get",
         "what the frick is a config file",
-        "a non-extensible, uncustomisable but still free/libre editor",
-        "text is stored in the balls",
-        "want to configure? learn rust",
+        "an inextensible, uncustomisable, free/libre text editor - and less",
         "good luck figuring out how to exit",
-        "sublime is temporary, sued is eternal",
         "you are on your own. good luck",
-        "back in the day they charged for stuff like this",
-        "no cursor keys, no need to worry about emacs pinky",
-        "the control key is only used in emergencies",
-        "no need for an evil-mode, sued is evil enough",
         "no config file means no config bankruptcy",
-        "if vim is evil, sued is demonic",
         "free software, hell yeah",
-        "put that mouse away",
+        "put that mouse AWAY",
         "command history is the only nicety you get",
+        "it looks like you're editing text, would you like help?",
     ];
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     let version = env!("CARGO_PKG_VERSION");
     println!("sued v{version} - {message}\ntype ~ for commands, otherwise just start typing");
-    
 }
 
 /// Displays the list of commands that sued supports.
