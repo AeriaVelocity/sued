@@ -316,39 +316,45 @@ pub fn shell_command(mut command_args: Vec<&str>) {
     if command_args.len() <= 1 {
         println!("run what?");
     } else {
-        let command = command_args[1];
         let shell = if cfg!(windows) { 
             "cmd"
         }
         else { 
             "sh" 
         };
+
         let arg = if cfg!(windows) {
             "/c"
         }
         else { 
             "-c"
         };
+
+        let command = command_args[1];
+
         if command == "sued" {
             editor_overflow();
             return;
         }
-        match which(command) {
+
+        match which(&command) {
             Ok(path) => println!("running {}", path.to_string_lossy()),
-            Err(_) => println!("{} wasn't found; trying to run it anyway", command)
+            Err(_) => println!("{} wasn't found; trying to run it anyway", &command)
         }
-        command_args.drain(0..2);
+
+        command_args.drain(0..1);
+
         let cmd = Command::new(shell)
             .arg(arg)
-            .arg(command)
-            .args(command_args)
+            .arg(command_args.join(" "))
             .status()
             .expect("command failed");
+
         if cmd.success() {
-            println!("finished running {}", command);
+            println!("finished running {}", &command);
         }
         else {
-            println!("failed to run {}", command);
+            println!("failed to run {}", &command);
         }
     }
 }
@@ -386,8 +392,6 @@ pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &
         if let Ok(new_contents) = fs::read_to_string(&file_name) {
             *buffer_contents = new_contents.lines().map(String::from).collect();
         }
-
-        println!("{}", fs::read_to_string(&file_name).unwrap());
 
         fs::remove_file(&file_name).unwrap_or_default();
     }
