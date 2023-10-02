@@ -369,13 +369,13 @@ pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &
 
         let file_name: String = format!("{}.temp", hex_string);
 
-        if fs::write(&file_name, buffer_contents.join("\n")).is_err() {
-            println!("couldn't write temporary file");
+        if command_args.len() <= 1 {
+            println!("run what?");
             return;
         }
 
-        if command_args.len() <= 1 {
-            println!("run what?");
+        if fs::write(&file_name, buffer_contents.join("\n")).is_err() {
+            println!("couldn't write temporary file");
             return;
         }
 
