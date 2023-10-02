@@ -46,7 +46,7 @@ pub fn startup_message() {
 /// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
 pub fn command_list() {
-    println!("~about, ~clear, ~copy, ~correct, ~delete, ~exit, ~help, ~indent, ~insert, ~open, ~replace, ~run, ~save, ~search, ~show, ~substitute, ~swap, ~write");
+    println!("~about, ~clear, ~copy, ~correct, ~delete, ~exit, ~help, ~indent, ~insert, ~open, ~replace, ~run, ~runhere, ~save, ~search, ~show, ~substitute, ~swap, ~write");
 }
 
 /// Displays a list of available commands and their descriptions.
@@ -65,6 +65,7 @@ pub fn extended_command_list() {
     println!("~open [filename] - load file into buffer");
     println!("~replace [line] - replace specified line (interactive)");
     println!("~run [command] - run executable or shell builtin");
+    println!("~runhere [command] - run executable or shell builtin on file contents");
     println!("~save [filename] - save buffer to file");
     println!("~search [term] - perform regex search in whole buffer");
     println!("~show [start] [end] - Display the contents of the buffer.");
@@ -349,6 +350,46 @@ pub fn shell_command(mut command_args: Vec<&str>) {
         else {
             println!("failed to run {}", command);
         }
+    }
+}
+
+/// Passes the current `buffer_contents` to `shell_command`.
+/// Provides functionality for the `~runhere` command.
+pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &mut Vec<String>) {
+    if buffer_contents.is_empty() {
+        println!("no buffer contents");
+    } else {
+        /* Do we need a random hex string? No. Is it cool anyway? YES. */
+        let hex_string: String = (0..8)
+            .map(|_| {
+                let random_digit = rand::thread_rng().gen_range(0..16);
+                format!("{:x}", random_digit)
+            })
+            .collect();
+
+        let file_name: String = format!("{}.temp", hex_string);
+
+        if fs::write(&file_name, buffer_contents.join("\n")).is_err() {
+            println!("couldn't write temporary file");
+            return;
+        }
+
+        if command_args.len() <= 1 {
+            println!("run what?");
+            return;
+        }
+
+        command_args.push(file_name.clone());
+
+        shell_command(command_args.iter().map(|s| s.as_str()).collect());
+
+        if let Ok(new_contents) = fs::read_to_string(&file_name) {
+            *buffer_contents = new_contents.lines().map(String::from).collect();
+        }
+
+        println!("{}", fs::read_to_string(&file_name).unwrap());
+
+        fs::remove_file(&file_name).unwrap_or_default();
     }
 }
 

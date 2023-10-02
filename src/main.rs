@@ -228,6 +228,10 @@ fn main() {
             // Miscellaneous commands
             "~bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
             "~run"  => { shell_command(command_args.clone()); },
+            "~runhere" => { 
+                let command_args_string = command_args.iter().map(|&s| s.to_string()).collect();
+                shell_command_with_file(command_args_string, &mut buffer.contents); 
+            }
             "~nothing" => { nothing(&buffer.contents); },
 
             // Exit command
