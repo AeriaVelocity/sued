@@ -189,7 +189,7 @@ pub fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
             println!("inserted");
         }
         else {
-            file_buffer.insert(index, String::from("\n"));
+            file_buffer.insert(index, String::new());
             println!("inserted newline");
         }
     }
