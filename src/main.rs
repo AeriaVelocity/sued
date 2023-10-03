@@ -235,10 +235,10 @@ fn main() {
             "~nothing" => { nothing(&buffer.contents); },
 
             // Exit command
-            "~exit" => break,
+            "~exit" | "~quit" => break,
 
             // Fallback
-            _       => { 
+            _ => { 
                 if command_args[0].starts_with('~') {
                     println!("{} is an unknown command", command_args[0]);
                 }
