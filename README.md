@@ -6,7 +6,34 @@ To be clear, it's a text editor that works on Rust's `Vec` type. To be clearer, 
 
 ~~Yes, I know ed doesn't use vectors, shut up~~
 
-![Screenshot](sued-screenshot.png)
+```sued
+sued v0.13.2 - put that mouse AWAY
+type ~ for commands, otherwise just start typing
+sued can even run inside a readme!
+jk this is just a copied-and-pasted terminal session
+~show
+1│sued can even run inside a readme!
+2│jk this is just a copied-and-pasted terminal session
+~sub 2 jk/just kidding
+~show
+1│sued can even run inside a readme!
+2│just kidding this is just a copied-and-pasted terminal session
+~clear
+print("sued is fricking awesome " * 5)
+~runhere python
+running C:\Users\sonic\AppData\Local\Programs\Python\Python311\python.exe
+sued is fricking awesome sued is fricking awesome sued is fricking awesome sued is fricking awesome sued is fricking awesome 
+finished running python
+# I didn't even need to save the file to do that
+~show
+1│print("sued is fricking awesome " * 5)
+2│# I didn't even need to save the file to do that
+~search save
+line 2: # I didn't even need to save the file to do that
+~save damn-thats-cool.py
+saved to damn-thats-cool.py
+~exit
+```
 
 Syntax highlighting? Code analysis? *Modal editing?* ***Cursor positioning??***
 
