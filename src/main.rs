@@ -240,7 +240,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer) {
         "~nothing" => { nothing(&buffer.contents); },
 
         // Exit command
-        "~exit" | "~quit" => break,
+        "~exit" | "~quit" => return,
 
         // Fallback
         _ => { 
@@ -248,7 +248,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer) {
                 println!("{} is an unknown command", command_args[0]);
             }
             else {
-                let to_write = command.clone();
+                let to_write = command_args[0].clone().to_owned();
                 buffer.contents.push(to_write);
             }
         }
