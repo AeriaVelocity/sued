@@ -55,28 +55,56 @@ and make sure that `~/.cargo/bin/` is in your PATH or you won't be able to run i
 
 ## Documentation
 
-sued's documentation is present [online](https://that1m8head.github.io/sued) in the form of a man page-like website. You can also just read the source code yourself.
+sued's documentation is present [online](https://that1m8head.github.io/sued) in the form of a man page-like website.
+
+You can also just read the source code yourself.
 
 ## Accelerated
 
-sued is written in pure, idiomatic Rust. Its speed, as a compiled line editor, is pretty damn fast. The time between opening it up and getting some text edited is negligently small. You can even run a compiler or an interpreter with a simple `~runhere`, without even the need to save your file. And it doesn't even take a second. As it should be.
+sued is written in pure, idiomatic Rust.
+
+Its speed, as a compiled line editor, is pretty damn fast. The time between opening it up and getting some text edited is negligently small. 
+
+You can even run a compiler or an interpreter with a simple `~runhere`, without even the need to save your file.
+
+And it doesn't even take a second. As it should be.
 
 ## Uncomplicated
 
-sued is much more user-friendly than ed - it's a modeless editor, so there's no complicated mode switching to keep in your head. It also uses a simple command syntax, with whole words, like `~save`, `~show` and `~open`, not single letters.
+sued is much more user-friendly than ed - it's a modeless editor, so there's no complicated mode switching to keep in your head.
+
+It also uses a simple command syntax, with whole words, like `~save`, `~show` and `~open`, not single letters.
 
 ## Efficient
 
-sued looks basic on the offset, but under the hood, it has support for regex replacements, file searching, pretty-looking line numbers, and some other stuff. It's obviously not going to be very useful for people who aren't used to this editing model, but it's still powerful nonetheless.
+sued looks basic on the offset, but under the hood, it has support for regex replacements, file searching, pretty-looking line numbers, and some other stuff.
+
+sued's command set consists of `~about`, `~clear`, `~copy`, `~correct`, `~delete`, `~exit`, `~help`, `~indent`, `~insert`, `~open`, `~replace`, `~run`, `~runhere`, `~save`, `~search`, `~show`, `~substitute`, `~swap` and `~write`.
+
+For information on what these commands do, run `~help` inside sued or check out the [documentation](https://that1m8head.github.io/sued).
+
+It's obviously not going to be very useful for people who aren't used to this editing model, but it's still powerful nonetheless.
 
 ## No-nonsense
 
-sued is designed to not get in your way. Error messages are useful but brief. They're not ed levels of brief, but they're still pretty brief. And there's no auto-save feature - your file is only saved when you enter the `~save` command.
+sued is designed to not get in your way. Error messages are useful but brief.
+
+They're not ed levels of brief, but they're still pretty brief.
+
+And there's no auto-save feature - your file is only saved when you enter the `~save` command.
 
 ## Ubiquitous
 
-Being a CLI app, you can run sued anywhere! In your terminal, in VS Code, in Emacs, even inside Vim! And sued doesn't care what OS it runs under. Windows, macOS, GNU/Linux, BusyBox/Linux, other kinds of Linux, BSD, ChromeOS, Android, probably Xbox if you really wanted. If it has a terminal, it can run sued. It's been tested on Windows, Fedora and Android, and works great under all three (except that Android doesn't support `~copy`, but that's not sued's fault)
+Being a CLI app, you can run sued anywhere!
+
+In your terminal, in VS Code, in Emacs, even inside Vim! And sued doesn't care what OS it runs under. Windows, macOS, GNU/Linux, BusyBox/Linux, other kinds of Linux, BSD, ChromeOS, Android, probably Xbox if you really wanted.
+
+If it has a terminal, it can run sued.
+
+It's been tested on Windows, Fedora and Android, and works great under all three (except that Android doesn't support `~copy`, but that's not sued's fault)
 
 ## Free/Libre
 
-sued is free. You can get it for free, but it's also free. It's released under the Do What The F-ck You Want Public License (WTFPL) which means you can do bloody anything with it. I don't care, and sued certainly doesn't.
+sued is free. You can get it for free, but it's also free.
+
+It's released under the Do What The F-ck You Want Public License (WTFPL) which means you can do bloody anything with it. I don't care, and sued certainly doesn't.
