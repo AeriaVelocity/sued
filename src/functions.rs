@@ -189,7 +189,8 @@ pub fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
             println!("inserted");
         }
         else {
-            println!("insert cancelled");
+            file_buffer.insert(index, String::from("\n"));
+            println!("inserted newline");
         }
     }
 }
@@ -211,7 +212,7 @@ pub fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
             println!("replaced");
         }
         else {
-            println!("replace cancelled");
+            println!("replace cancelled; try ~delete if you wanted that instead");
         }
     }
 }

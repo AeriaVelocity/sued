@@ -63,7 +63,7 @@ You can also just read the source code yourself.
 
 sued is written in pure, idiomatic Rust.
 
-Its speed, as a compiled line editor, is pretty damn fast. The time between opening it up and getting some text edited is negligently small. 
+Its speed, as a compiled line editor, is pretty damn fast. The time between opening it up and getting some text edited is negligently small.
 
 You can even run a compiler or an interpreter with a simple `~runhere`, without even the need to save your file.
 
