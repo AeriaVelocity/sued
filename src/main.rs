@@ -261,7 +261,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         "~run"  => { shell_command(command_args.clone()); },
         "~runhere" => { 
             let command_args_string = command_args.iter().map(|&s| s.to_string()).collect();
-            shell_command_with_file(command_args_string, &mut buffer.contents); 
+            shell_command_with_file(command_args_string, &mut buffer.contents, buffer.file_path.clone());
         }
         "~nothing" => { nothing(&buffer.contents); },
 

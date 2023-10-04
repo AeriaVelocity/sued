@@ -377,10 +377,14 @@ pub fn shell_command(mut command_args: Vec<&str>) {
 
 /// Passes the current `buffer_contents` to `shell_command`.
 /// Provides functionality for the `~runhere` command.
-pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &mut Vec<String>) {
+pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &mut Vec<String>, file_name: Option<String>) {
     if buffer_contents.is_empty() {
         println!("no buffer contents");
     } else {
+        let temporary_file_name: String = if file_name.is_some() {
+            format!("{}", file_name.unwrap().replace(".", "-temp."))
+        }
+        else {
         /* Do we need a random hex string? No. Is it cool anyway? YES. */
         let hex_string: String = (0..8)
             .map(|_| {
@@ -389,27 +393,28 @@ pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &
             })
             .collect();
 
-        let file_name: String = format!("{}.temp", hex_string);
+            format!("{}.temp", hex_string)
+        };
 
         if command_args.len() <= 1 {
             println!("run what?");
             return;
         }
 
-        if fs::write(&file_name, buffer_contents.join("\n")).is_err() {
+        if fs::write(&temporary_file_name, buffer_contents.join("\n")).is_err() {
             println!("couldn't write temporary file");
             return;
         }
 
-        command_args.push(file_name.clone());
+        command_args.push(temporary_file_name.clone());
 
         shell_command(command_args.iter().map(|s| s.as_str()).collect());
 
-        if let Ok(new_contents) = fs::read_to_string(&file_name) {
+        if let Ok(new_contents) = fs::read_to_string(&temporary_file_name) {
             *buffer_contents = new_contents.lines().map(String::from).collect();
         }
 
-        fs::remove_file(&file_name).unwrap_or_default();
+        fs::remove_file(&temporary_file_name).unwrap_or_default();
     }
 }
 
