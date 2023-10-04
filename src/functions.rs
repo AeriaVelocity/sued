@@ -22,21 +22,19 @@ pub fn startup_message() {
         "the not standard text editor",
         "it's pronounced \"soo-ed\"",
         "sued as in editor, not as in law",
-        "sued, man! ~run man sued",
         "probably more powerful than it looks",
         "there is no visual mode",
-        "sued: the itor fell off",
         "the text editor that doesn't give a damn",
         "what you get is what you get",
         "what the frick is a config file",
-        "an inextensible, uncustomisable, free/libre text editor - and less",
-        "good luck figuring out how to exit",
-        "you are on your own. good luck",
+        "less is more, much more",
         "no config file means no config bankruptcy",
         "free software, hell yeah",
         "put that mouse AWAY",
-        "command history is the only nicety you get",
         "it looks like you're editing text, would you like help?",
+        "who needs to save scripts to run them?",
+        "startup_messages.push_str(&funny);",
+        "there's no scripting language, if you were wondering",
     ];
     let message: &str = messages[rand::thread_rng().gen_range(0..messages.len())];
     let version = env!("CARGO_PKG_VERSION");
@@ -385,13 +383,13 @@ pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &
             format!("{}", file_name.unwrap().replace(".", "-temp."))
         }
         else {
-        /* Do we need a random hex string? No. Is it cool anyway? YES. */
-        let hex_string: String = (0..8)
-            .map(|_| {
-                let random_digit = rand::thread_rng().gen_range(0..16);
-                format!("{:x}", random_digit)
-            })
-            .collect();
+            /* Do we need a random hex string? No. Is it cool anyway? YES. */
+            let hex_string: String = (0..8)
+                .map(|_| {
+                    let random_digit = rand::thread_rng().gen_range(0..16);
+                    format!("{:x}", random_digit)
+                })
+                .collect();
 
             format!("{}.temp", hex_string)
         };
