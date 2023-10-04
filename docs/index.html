@@ -41,6 +41,56 @@
         <script async id="asciicast-hCue12yNkc6PYUMcC6jSVUplS" src="https://asciinema.org/a/hCue12yNkc6PYUMcC6jSVUplS.js" data-autoplay="true" data-rows="28" data-cols="85"></script>
         </p>
 
+        <h1>USAGE</h1>
+        <p>To run sued, simply run <code>sued</code> at the command line.</p>
+        <p>Upon starting sued, you'll be greeted by the startup message.</p>
+        <blockquote><p>
+            $ sued <br>
+            sued v0.16.0 - it's pronounced "soo-ed" <br>
+            type ~ for commands, otherwise just start typing <br>
+        </p></blockquote>
+        <p>Once you're here, you can just begin typing up your text file.</p>
+        <p>sued will automatically be pushing it onto the file buffer vector.</p>
+        <blockquote><p>
+            This text is <br>
+            getting pushed <br>
+            onto the file buffer! <br>
+        </p></blockquote>
+        <p>If you want to look at your work so far, use the <code>~show</code> command.</p>
+        <p>Commands in sued are, by default, prefixed with ~. (though you can change that)</p>
+        <blockquote><p>
+            ~show <br>
+            1│This text is <br>
+            2│getting pushed <br>
+            3│onto the file buffer! <br>
+        </p></blockquote>
+        <p>Saving is straightforward too. You just enter <code>~save filename</code>.</p>
+        <blockquote><p>
+            ~save sued-test.txt <br>
+            saved to sued-text.txt <br>
+        </p></blockquote>
+        <p>Don't like how your commands are on the same line as the outputs? You can always set a <code>~prompt</code>.</p>
+        <blockquote><p>
+            ~prompt sued> <br>
+            sued> ~show <br>
+            1│This text is <br>
+            2│getting pushed <br>
+            3│onto the file buffer! <br>
+        </p></blockquote>
+        <p>Let's see if we can make a correction. We'll use the <code>~replace</code> command.</p>
+        <blockquote><p>
+            sued> ~replace 3 <br>
+            replacing line 3 <br>
+            original line is onto the file buffer! <br>
+            into the file buffer vector! <br>
+            replaced <br>
+            sued> ~show <br>
+            1│This text is <br>
+            2│getting pushed <br>
+            3│into the file buffer vector! <br>
+        </p></blockquote>
+        <p>And that's all for this quick overview. Give sued a go and try it out yourself. The full command set awaits you down below.</p>
+
         <h1>COMMANDS</h1>
         <p>sued supports command history. Use ↑ and ↓ to navigate through it.</p>
         <p>All commands start with ~. Run ~ by itself to see a list of commands.</p>
