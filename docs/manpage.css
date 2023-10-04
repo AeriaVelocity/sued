@@ -1,7 +1,7 @@
 /* manpage.css - styles your HTML document like a man page.
-   Written by Arsalan Kazmi <sonicspeed848@gmail.com> */
+   Written by Arsalan "Velocity" Kazmi <sonicspeed848@gmail.com> */
 
-body {
+body, pre {
     font-family: "JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", monospace;
     font-size: 16px;
     color: #ddd;

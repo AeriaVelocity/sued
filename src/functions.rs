@@ -44,33 +44,36 @@ pub fn startup_message() {
 /// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
 pub fn command_list() {
-    println!("~about, ~clear, ~copy, ~correct, ~delete, ~exit, ~help, ~indent, ~insert, ~open, ~prompt, ~replace, ~run, ~runhere, ~save, ~search, ~show, ~substitute, ~swap, ~write");
+    println!("about, clear, copy, correct, delete, exit, help, indent, insert, open, prompt, replace, run, runhere, save, search, show, substitute, swap, write");
 }
 
 /// Displays a list of available commands and their descriptions.
 /// Invoked with the `~help` command.
 pub fn extended_command_list() {
     println!("press up and down to navigate through command history");
+    println!("~ represents your prefix, if you changed the prefix use that instead");
+    println!("key: ~command arg1/alt_arg1 arg2 [optional_arg] - what the command does");
     println!("~about - display about text");
     println!("~clear - clear buffer");
     println!("~copy [line] - copy line or whole buffer to clipboard");
     println!("~correct - replace most recent line (interactive)");
-    println!("~delete [line/start] <end> - immediately delete specified line or range of lines");
+    println!("~delete line/start [end] - immediately delete specified line or range of lines");
     println!("~exit - exit sued");
     println!("~help - display this list");
-    println!("~indent [line] [level] - indent a line, negative level will outdent");
-    println!("~insert [line] - insert text at specified line (interactive)");
+    println!("~indent line level - indent a line, negative level will outdent");
+    println!("~insert line - insert text at specified line (interactive)");
     println!("~open [filename] - load file into buffer");
+    println!("~prefix [prefix]");
     println!("~prompt [prompt] - set an input prompt");
-    println!("~replace [line] - replace specified line (interactive)");
-    println!("~run [command] - run executable or shell builtin");
-    println!("~runhere [command] - run executable or shell builtin on file contents");
+    println!("~replace line - replace specified line (interactive)");
+    println!("~run command - run executable or shell builtin");
+    println!("~runhere command - run executable or shell builtin on file contents");
     println!("~save [filename] - save buffer to file");
-    println!("~search [term] - perform regex search in whole buffer");
+    println!("~search term - perform regex search in whole buffer");
     println!("~show [start] [end] - Display the contents of the buffer.");
-    println!("~substitute [line] [pattern]/[replacement] - perform regex substitution on specified line");
-    println!("~swap [source] [target] - swap two lines");
-    println!("~write [filename] - write buffer to file without storing filename");
+    println!("~substitute line pattern/replacement - perform regex substitution on specified line");
+    println!("~swap source target - swap two lines");
+    println!("~write filename - write buffer to file without storing filename");
 }
 
 /// Displays the sued version number and information about the editor itself.
@@ -80,7 +83,7 @@ pub fn about_sued() {
     println!("this is sued, v{version}\n\
               sued is a vector-oriented line editor, heavily inspired by the ed editor\n\
               you can write text simply by typing, and use sued's extensive command set for editing\n\
-              editor commands are prefixed with ~, type ~help for a full list\n\
+              editor commands are prefixed with a default prefix of ~, type ~help for a full list\n\
               sued written by Arsalan \"Velocity\" Kazmi <sonicspeed848@gmail.com>");
 }
 

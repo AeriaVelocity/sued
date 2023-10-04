@@ -43,6 +43,7 @@ fn main() {
     };
 
     let mut prompt = String::new();
+    let mut prefix = String::from("~");
 
     let args: Vec<String> = env::args().collect();
     if args.len() >= 2 {
@@ -54,27 +55,34 @@ fn main() {
         let command = line.trim_end().to_string();
         interface.add_history_unique(command.clone());
         let command_args = command.split(' ').collect::<Vec<&str>>();
-        match process_command(command_args, &mut buffer, &mut prompt) {
-            ExitStatus::Success => (),
-            ExitStatus::Failure => break,
+        if command_args[0] == prefix {
+            command_list();
+        }
+        else if command.starts_with(&prefix) {
+            if let ExitStatus::Failure = process_command(command_args, &mut buffer, &mut prompt, &mut prefix){
+                break;
+            }
+        }
+        else {
+            let to_write = command_args.clone().join(" ");
+            buffer.contents.push(to_write);
         }
         interface.set_prompt(&prompt).unwrap_or_default();
     }
 }
 
-fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mut String) -> ExitStatus {
-    match command_args[0].to_lowercase().as_str() {
+fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mut String, prefix: &mut String) -> ExitStatus {
+    match command_args[0].to_lowercase().replace(prefix.as_str(), "").as_str() {
         // Help commands
-        "~"     => { command_list(); },
-        "~about" => { about_sued(); },
-        "~help" => { extended_command_list(); },
+        "about" => { about_sued(); },
+        "help" => { extended_command_list(); },
 
         // Buffer manipulation
-        "~clear" => { 
+        "clear" => { 
             buffer.contents.clear();
             buffer.file_path = None;
         },
-        "~copy" => {
+        "copy" => {
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 copy(&mut buffer.contents, line_number);
@@ -83,11 +91,11 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 copy(&mut buffer.contents, 0);
             }
         }
-        "~correct" => {
+        "correct" => {
             let line_number = buffer.contents.len();
             replace(&mut buffer.contents, line_number);
         }
-        "~del" | "~delete" => {
+        "del" | "delete" => {
             if command_args.len() >= 3 {
                 let start = command_args[1].parse::<usize>().unwrap_or_default();
                 let end = command_args[2].parse::<usize>().unwrap_or_default();
@@ -101,7 +109,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("delete which line?");
             }
         }
-        "~indent" => {
+        "indent" => {
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 if command_args.len() >= 3 {
@@ -116,7 +124,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("indent which line?");
             }
         },
-        "~insert" => {
+        "insert" => {
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 insert(&mut buffer.contents, line_number);
@@ -124,7 +132,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("insert where?");
             }
         },
-        "~open" => { 
+        "open" => { 
             if command_args.len() >= 2 {
                 let file_name_with_spaces = command_args[1..].join(" ");
                 let expanded_file_path = tilde(&file_name_with_spaces).to_string();
@@ -134,7 +142,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("open what?");
             }
         },
-        "~replace" => {
+        "replace" => {
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 replace(&mut buffer.contents, line_number);
@@ -142,7 +150,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("replace which line?");
             }
         },
-        "~save" => {
+        "save" => {
             let mut destination: String = buffer.file_path.clone().unwrap_or_default();
 
             if command_args.len() >= 2 {
@@ -159,7 +167,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("save where?");
             }
         },
-        "~sub" | "~substitute" => {
+        "sub" | "substitute" => {
             if command_args.len() >= 3 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 let combined_args = command_args[2..].join(" ");
@@ -171,18 +179,18 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 }
                 else {
                     println!("substitute what?");
-                    println!("try ~substitute line pattern/replacement");
+                    println!("try substitute line pattern/replacement");
                 }
             }
             else if command_args.len() >= 2 {
                 println!("substitute what?");
-                println!("try ~substitute line pattern/replacement");
+                println!("try substitute line pattern/replacement");
             }
             else {
                 println!("substitute which line?");
             }
         }
-        "~swap" => {
+        "swap" => {
             if command_args.len() >= 3 {
                 let source_line = command_args[1].parse::<usize>().unwrap_or(0);
                 let target_line = command_args[2].parse::<usize>().unwrap_or(0);
@@ -195,7 +203,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("swap which lines?");
             }
         },
-        "~write" => {
+        "write" => {
             let mut destination: String = buffer.file_path.clone().unwrap_or_default();
 
             if command_args.len() >= 2 {
@@ -213,7 +221,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         },
 
         // Informational commands
-        "~search" => {
+        "search" => {
             if command_args.len() >= 2 {
                 let term = command_args[1..].join(" ");
                 search(&buffer.contents, &term);
@@ -221,7 +229,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("search for what?");
             }
         },
-        "~show" => {
+        "show" => {
             let mut start_point = 1;
             let mut end_point = buffer.contents.len();
 
@@ -247,36 +255,41 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         },
         
         // Miscellaneous commands
-        "~bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
-        "~prompt" => {
+        "bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
+        "prefix" => {
+            prefix.clear();
+            if command_args.len() < 2 {
+                prefix.push_str("~");
+                println!("prefix reset to ~, try passing a prompt if you wanted that instead");
+            }
+            else {
+                let new_prefix = command_args[1];
+                prefix.push_str(new_prefix);
+            }
+        }
+        "prompt" => {
             prompt.clear();
             if command_args.len() < 2 {
-                println!("prompt reset; try passing a prompt if you wanted that instead");
+                println!("prompt reset, try passing a prompt if you wanted that instead");
             }
             else {
                 let new_prompt = format!("{} ", command_args[1..].join(" "));
                 prompt.push_str(&new_prompt);
             }
         }
-        "~run"  => { shell_command(command_args.clone()); },
-        "~runhere" => { 
+        "run"  => { shell_command(command_args.clone()); },
+        "runhere" => { 
             let command_args_string = command_args.iter().map(|&s| s.to_string()).collect();
             shell_command_with_file(command_args_string, &mut buffer.contents, buffer.file_path.clone());
         }
-        "~nothing" => { nothing(&buffer.contents); },
+        "nothing" => { nothing(&buffer.contents); },
 
         // Exit command
-        "~exit" | "~quit" => return ExitStatus::Failure,
+        "exit" | "quit" => return ExitStatus::Failure,
 
         // Fallback
         _ => { 
-            if command_args[0].starts_with('~') {
-                println!("{} is an unknown command", command_args[0]);
-            }
-            else {
-                let to_write = command_args.clone().join(" ");
-                buffer.contents.push(to_write);
-            }
+            println!("{} is an unknown command", command_args[0].replace(prefix.as_str(), ""));
         }
     };
     ExitStatus::Success

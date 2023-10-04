@@ -77,9 +77,9 @@ Its error messages, despite being communicated concisely, are still informative 
 
 sued looks basic on the offset, but under the hood, it has support for regex replacements, file searching, pretty-looking line numbers, and some other stuff.
 
-sued's command set consists of `~about`, `~clear`, `~copy`, `~correct`, `~delete`, `~exit`, `~help`, `~indent`, `~insert`, `~open`, `~prompt`, `~replace`, `~run`, `~runhere`, `~save`, `~search`, `~show`, `~substitute`, `~swap` and `~write`.
+sued's command set consists of stuff like `delete`, `indent`, `insert`, `open`, `run`, `runhere`, `save`, `search`, `show`, `substitute`, `swap`, and so on.
 
-For information on what these commands do, run `~help` inside sued or check out the [documentation](https://that1m8head.github.io/sued).
+For the rest of the commands, as well as information on what these commands do, run `~help` inside sued or check out the [documentation](https://that1m8head.github.io/sued).
 
 And sued leverages [linefeed](https://github.com/murarth/linefeed) for its command line input. Meaning it supports GNU Readline commands and functionality. You can do some Emacs-style line navigation, like `C-a`, `C-e`, `C-f`, `C-b`, whatever you want, it'll work. Probably.
 

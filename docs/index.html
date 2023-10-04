@@ -4,55 +4,74 @@
         <title>sued</title>
         <meta name="description" content="sued, the text editor that doesn't give a damn">
         <meta name="author" content="Arsalan 'Velocity' Kazmi">
-        <meta name="date" content="2023-07-30">
+        <meta name="date" content="2023-10-04">
         <meta name="version" content="1.0.0">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="manpage.css">
     </head>
     <body>
+        <!-- This website resembles a man page - It's not even vaguely valid HTML! -->
+
         <div class="TH">
             <span class="L">SUED(1)</span>
             <span>User Commands</span>
             <span class="R">SUED(1)</span>
         </div>
+
         <h1>NAME</h1>
-        <p>sued - the text editor of all time, a post-classic line editor</p>
+        <p>sued - the shut up editor</p>
+
         <h1>SYNOPSIS</h1>
         <p>sued [file]</p>
+
         <h1>DESCRIPTION</h1>
-        <p>sued is a vector-oriented line editor written in Rust by <a href="https://that1m8head.github.io">Arsalan "Velocity" Kazmi</a> in the image of the standard text editor, ed.</p>
-        <p>sued is not nearly as powerful as its inspiration, but aims to match it in the terseness department, while at the same time being quite a bit more user-friendly.</p>
+        <p>sued is a vector-oriented line editor, kind of similar to the venerable and standard ed text editor, just with a different command syntax and set, to provide a unique editing experience.</p>
+        <p>To be clear, it's a text editor that works on Rust's <code>Vec</code> type. To be clearer, it's a text editor that works on lines and isn't graphical, like you're probably used to.</p>
+
         <h1>OBTAINING</h1>
         <p>sued is available on <a href="https://crates.io/crates/sued">crates.io</a> - you can get it with <strong>cargo install sued</strong>.</p>
         <p><a href="https://github.com/that1m8head/sued">Go to the GitHub page</a> if you want to check out sued for yourself, or if you want to help me work on it.</p>
+        
+        <h1>OPTIONS</h1>
+        <p>The following options are available:</p>
+        <p><em>file</em> - Specify the name of a file to read. If set, sued will store the file name.</p>
+        
         <h1>DEMO</h1>
         <p>Here's an asciinema demo showing sued in action:</p>
         <script async id="asciicast-hCue12yNkc6PYUMcC6jSVUplS" src="https://asciinema.org/a/hCue12yNkc6PYUMcC6jSVUplS.js" data-autoplay="true" data-rows="28" data-cols="85"></script>
         </p>
+
         <h1>COMMANDS</h1>
         <p>sued supports command history. Use ↑ and ↓ to navigate through it.</p>
         <p>All commands start with ~. Run ~ by itself to see a list of commands.</p>
+        <p>You can change sued's command prefix with <strong>~prefix [prefix]</strong>. Replace ~ with your chosen prefix in this case.</p>
+        <blockquote>
+            <p><strong>KEY:</strong></p>
+            <p><strong>~command arg1/alt_arg2 [optional_arg]</strong> - what the command does</p>
+        </blockquote>
         <p><strong>~about</strong> - display about text</p>
         <p><strong>~clear</strong> - clear buffer</p>
         <p><strong>~copy [line]</strong> - copy line or whole buffer to clipboard</p>
         <p><strong>~correct</strong> - replace most recent line (interactive)</p>
-        <p><strong>~delete [line/start] &lt;end&gt;</strong> - immediately delete specified line or range of lines</p>
+        <p><strong>~delete line/start [end]</strong> - immediately delete specified line or range of lines</p>
         <p><strong>~exit</strong> - exit sued</p>
         <p><strong>~help</strong> - display this list</p>
-        <p><strong>~indent [line] [level]</strong> - indent a line, negative level will outdent</p>
-        <p><strong>~insert [line]</strong> - insert text at specified line (interactive)</p>
+        <p><strong>~indent line level</strong> - indent a line, negative level will outdent</p>
+        <p><strong>~insert line</strong> - insert text at specified line (interactive)</p>
         <p><strong>~nothing</strong> - do nothing with the buffer contents</p>
         <p><strong>~open [filename]</strong> - load file into buffer</p>
-        <p><strong>~prompt [prompt]</strong> - set an input prompt</p>
-        <p><strong>~replace [line]</strong> - replace specified line (interactive)</p>
-        <p><strong>~run [command]</strong> - run executable or shell builtin</p>
-        <p><strong>~runhere [command]</strong> - run executable or shell builtin on file contents</p>
+        <p><strong>~prefix [prefix]</strong> - set command prefix</p>
+        <p><strong>~prompt [prompt]</strong> - set input prompt</p>
+        <p><strong>~replace line</strong> - replace specified line (interactive)</p>
+        <p><strong>~run command</strong> - run executable or shell builtin</p>
+        <p><strong>~runhere command</strong> - run executable or shell builtin on file contents</p>
         <p><strong>~save [filename]</strong> - save buffer to file</p>
-        <p><strong>~search [term]</strong> - perform regex search in the whole buffer</p>
+        <p><strong>~search term</strong> - perform regex search in the whole buffer</p>
         <p><strong>~show [start] [end]</strong> - display the contents of the buffer</p>
-        <p><strong>~substitute [line] [pattern]/[replacement]</strong> - perform regex substitution on the specified line</p>
-        <p><strong>~swap [source] [target]</strong> - swap two lines</p>
-        <p><strong>~write [filename]</strong> - write buffer to file without storing filename</p>
+        <p><strong>~substitute line pattern/replacement</strong> - perform regex substitution on the specified line</p>
+        <p><strong>~swap source target</strong> - swap two lines</p>
+        <p><strong>~write filename</strong> - write buffer to file without storing filename</p>
+
         <h1>FAQ</h1>
         <p>
             <ul>
@@ -70,19 +89,14 @@
                 <p>Pfft. No. QVSED is a <em>graphical</em> editor with a completely different paradigm, and it isn't a sued replacement. It's just another project.</p>
             </ul>
         </p>
-        <h1>DIAGNOSTICS</h1>
-        <p>When an error occurs that sued can't recover from, it will print an error message as follows and quit:</p>
-        <p>stop: ERROR_CODE: 0xXXXXXXXX (0xXXXXXXXX,0xXXXXXXXX,0xXXXXXXXX)</p>
-        <p>The currently implemented error codes are as follows:</p>
-        <ul>
-            <li><strong>USER_IS_STUPID</strong> - The user manually initiated a crash.</li>
-            <li><strong>EDITOR_OVERFLOW</strong> - The editor tried to run itself and got stuck.</li>
-        </ul>
 
         <h1>SEE ALSO</h1>
         <p><a href="https://manpage.me/?q=ed">ed(1)</a>, <a href="https://github.com/that1m8head/Streakline">streakline(1)</a></p>
+
         <h1>LIMITATIONS</h1>
         <p>sued is still 0.x software and probably isn't going to replace VS Code anytime soon.</p>
+        <p>Plus, it's a line editor. If a text editor nowadays isn't kitted with a visual editing pane, thousands of keyboard shortcuts, an LSP client, auto-completion, syntax highlighting, code folding, and everything else VS Code users take for granted, it's deemed as "unusable" and "outdated" by novice programmers. In which case, sued probably isn't for them.</p>
+        <p>sued isn't a modern code editor, and it isn't trying to be. It's trying to be an unconventional line editor, and it doesn't give a damn if you're not comfortable with that.</p>
         <h1>BUGS</h1>
         <p>Yes.</p>
         <div class="TH">
