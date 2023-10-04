@@ -10,6 +10,10 @@ body, pre {
     margin: auto;
     padding: 15px;
 }
+code {
+    font-family: "JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", monospace;
+    font-weight: bold;
+}
 p {
     margin-left: 40px;
 }
