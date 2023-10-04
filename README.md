@@ -35,10 +35,6 @@ saved to damn-thats-cool.py
 ~exit
 ```
 
-Syntax highlighting? Code analysis? *Modal editing?* ***Cursor positioning??***
-
-Who the hell cares? Just shut up and edit.
-
 Written in Rust, because frick you, that's why.
 
 ## Obtaining
@@ -75,15 +71,19 @@ sued is much more user-friendly than ed - it's a modeless editor, so there's no 
 
 It also uses a simple command syntax, with whole words, like `~save`, `~show` and `~open`, not single letters.
 
+Its error messages, despite being communicated concisely, are still informative and use colloquial language, so they're pretty easy to understand.
+
 ## Efficient
 
 sued looks basic on the offset, but under the hood, it has support for regex replacements, file searching, pretty-looking line numbers, and some other stuff.
 
-sued's command set consists of `~about`, `~clear`, `~copy`, `~correct`, `~delete`, `~exit`, `~help`, `~indent`, `~insert`, `~open`, `~replace`, `~run`, `~runhere`, `~save`, `~search`, `~show`, `~substitute`, `~swap` and `~write`.
+sued's command set consists of `~about`, `~clear`, `~copy`, `~correct`, `~delete`, `~exit`, `~help`, `~indent`, `~insert`, `~open`, `~prompt`, `~replace`, `~run`, `~runhere`, `~save`, `~search`, `~show`, `~substitute`, `~swap` and `~write`.
 
 For information on what these commands do, run `~help` inside sued or check out the [documentation](https://that1m8head.github.io/sued).
 
-It's obviously not going to be very useful for people who aren't used to this editing model, but it's still powerful nonetheless.
+And sued leverages [linefeed](https://github.com/murarth/linefeed) for its command line input. Meaning it supports GNU Readline commands and functionality. You can do some Emacs-style line navigation, like `C-a`, `C-e`, `C-f`, `C-b`, whatever you want, it'll work. Probably.
+
+Remember how in the example above, I used `~runhere` to run Python without even needing to specify the file name, let alone save it? The `~runhere` command will have sued create a temporary file and run the chosen command with that temporary file as an argument. That's pretty damn efficient.
 
 ## No-nonsense
 

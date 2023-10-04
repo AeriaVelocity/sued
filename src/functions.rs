@@ -46,7 +46,7 @@ pub fn startup_message() {
 /// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
 pub fn command_list() {
-    println!("~about, ~clear, ~copy, ~correct, ~delete, ~exit, ~help, ~indent, ~insert, ~open, ~replace, ~run, ~runhere, ~save, ~search, ~show, ~substitute, ~swap, ~write");
+    println!("~about, ~clear, ~copy, ~correct, ~delete, ~exit, ~help, ~indent, ~insert, ~open, ~prompt, ~replace, ~run, ~runhere, ~save, ~search, ~show, ~substitute, ~swap, ~write");
 }
 
 /// Displays a list of available commands and their descriptions.
@@ -63,6 +63,7 @@ pub fn extended_command_list() {
     println!("~indent [line] [level] - indent a line, negative level will outdent");
     println!("~insert [line] - insert text at specified line (interactive)");
     println!("~open [filename] - load file into buffer");
+    println!("~prompt [prompt] - set an input prompt");
     println!("~replace [line] - replace specified line (interactive)");
     println!("~run [command] - run executable or shell builtin");
     println!("~runhere [command] - run executable or shell builtin on file contents");
