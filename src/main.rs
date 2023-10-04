@@ -26,6 +26,11 @@ impl std::fmt::Display for FileBuffer {
     }
 }
 
+enum ExitStatus {
+    Success,
+    Failure,
+}
+
 /// It's the main function.
 /// I don't know what you expected.
 fn main() {
@@ -47,11 +52,14 @@ fn main() {
         let command = line.trim_end().to_string();
         interface.add_history_unique(command.clone());
         let command_args = command.split(' ').collect::<Vec<&str>>();
-        process_command(command_args, &mut buffer);
+        match process_command(command_args, &mut buffer) {
+            ExitStatus::Success => (),
+            ExitStatus::Failure => break,
+        }
     }
 }
 
-fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer) {
+fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer) -> ExitStatus {
     match command_args[0].to_lowercase().as_str() {
         // Help commands
         "~"     => { command_list(); },
@@ -240,7 +248,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer) {
         "~nothing" => { nothing(&buffer.contents); },
 
         // Exit command
-        "~exit" | "~quit" => return,
+        "~exit" | "~quit" => return ExitStatus::Failure,
 
         // Fallback
         _ => { 
@@ -248,9 +256,10 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer) {
                 println!("{} is an unknown command", command_args[0]);
             }
             else {
-                let to_write = command_args[0].clone().to_owned();
+                let to_write = command_args.clone().join(" ");
                 buffer.contents.push(to_write);
             }
         }
     };
+    return ExitStatus::Success;
 }
