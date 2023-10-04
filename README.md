@@ -2,6 +2,8 @@
 
 sued is a vector-oriented line editor, kind of similar to the venerable and standard ed text editor, just with a different command syntax and set, to provide a unique editing experience.
 
+No, it's not "super user editor", or an editor that will sue you. It's "soo-ed", "shut up editor".
+
 To be clear, it's a text editor that works on Rust's `Vec` type. To be clearer, it's a text editor that works on lines and isn't graphical, like you're probably used to.
 
 ~~Yes, I know ed doesn't use vectors, shut up~~
