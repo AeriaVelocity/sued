@@ -57,7 +57,7 @@ pub fn extended_command_list() {
     println!("~clear - clear buffer");
     println!("~copy [line] - copy line or whole buffer to clipboard");
     println!("~correct - replace most recent line (interactive)");
-    println!("~delete [line] - immediately delete specified line");
+    println!("~delete [line/start] <end> - immediately delete specified line or range of lines");
     println!("~exit - exit sued");
     println!("~help - display this list");
     println!("~indent [line] [level] - indent a line, negative level will outdent");
@@ -240,6 +240,20 @@ pub fn swap(file_buffer: &mut Vec<String>, source_line: usize, target_line: usiz
 pub fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
     if check_if_line_in_buffer(file_buffer, line_number, true) {
         file_buffer.remove(line_number - 1);
+    }
+}
+
+/// Remove the range of `start` and `end` from the `file_buffer`.
+/// Provides functionality for the `~delete` command if more than one line number was specified.
+pub fn delete_range(file_buffer: &mut Vec<String>, start: usize, end: usize) {
+    let range_exists = 
+        check_if_line_in_buffer(file_buffer, start, true) && 
+        check_if_line_in_buffer(file_buffer, end, true);
+
+    if range_exists {
+        for line in (start..=end).rev() {
+            file_buffer.remove(line - 1);
+        }
     }
 }
 
