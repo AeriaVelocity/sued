@@ -42,6 +42,8 @@ fn main() {
         file_path: None,
     };
 
+    let mut prompt = String::new();
+
     let args: Vec<String> = env::args().collect();
     if args.len() >= 2 {
         buffer.contents = open(&args[1], &mut buffer.file_path);
@@ -52,14 +54,15 @@ fn main() {
         let command = line.trim_end().to_string();
         interface.add_history_unique(command.clone());
         let command_args = command.split(' ').collect::<Vec<&str>>();
-        match process_command(command_args, &mut buffer) {
+        match process_command(command_args, &mut buffer, &mut prompt) {
             ExitStatus::Success => (),
             ExitStatus::Failure => break,
         }
+        interface.set_prompt(&prompt).unwrap_or_default();
     }
 }
 
-fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer) -> ExitStatus {
+fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mut String) -> ExitStatus {
     match command_args[0].to_lowercase().as_str() {
         // Help commands
         "~"     => { command_list(); },
@@ -240,6 +243,16 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer) -> ExitStat
         
         // Miscellaneous commands
         "~bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
+        "~prompt" => {
+            prompt.clear();
+            if command_args.len() < 2 {
+                println!("prompt reset; try passing a prompt if you wanted that instead");
+            }
+            else {
+                let new_prompt = format!("{} ", command_args[1..].join(" "));
+                prompt.push_str(&new_prompt);
+            }
+        }
         "~run"  => { shell_command(command_args.clone()); },
         "~runhere" => { 
             let command_args_string = command_args.iter().map(|&s| s.to_string()).collect();
