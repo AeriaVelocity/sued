@@ -89,7 +89,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         }
         "~del" | "~delete" => {
             if command_args.len() >= 2 {
-                let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                let line_number = command_args[1].parse::<usize>().unwrap_or_default();
                 delete(&mut buffer.contents, line_number);
             }
             else {
@@ -274,5 +274,5 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             }
         }
     };
-    return ExitStatus::Success;
+    ExitStatus::Success
 }

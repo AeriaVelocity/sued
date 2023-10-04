@@ -261,7 +261,7 @@ pub fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
 
     match clipboard_context.get_contents() {
         Ok(_) => {
-            let mut copy_message = "copying whole buffer".to_string();
+            let mut copy_message = String::from("copying whole buffer");
             if check_if_line_in_buffer(file_buffer, line_number, false) {
                 to_copy = file_buffer[line_number - 1].clone();
                 copy_message = format!("copying line {}", line_number);
@@ -339,7 +339,7 @@ pub fn shell_command(mut command_args: Vec<&str>) {
             return;
         }
 
-        match which(&command) {
+        match which(command) {
             Ok(path) => println!("running {}", path.to_string_lossy()),
             Err(_) => println!("{} wasn't found; trying to run it anyway", &command)
         }
