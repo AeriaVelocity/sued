@@ -334,19 +334,18 @@ pub fn shell_command(mut command_args: Vec<&str>) {
         println!("run what?");
     } else {
         let shell = if cfg!(windows) { 
-            "cmd"
+            if which("pwsh").is_ok() {
+                "pwsh"
+            }
+            else {
+                "powershell"
+            }
         }
         else { 
             "sh" 
         };
 
-        let arg = if cfg!(windows) {
-            "/c"
-        }
-        else { 
-            "-c"
-        };
-
+        let arg = "-c";
         let command = command_args[1];
 
         if command == "sued" {
