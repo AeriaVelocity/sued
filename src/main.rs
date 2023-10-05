@@ -71,6 +71,9 @@ fn main() {
     }
 }
 
+/// Process an editing command passed from `command_args`.
+/// Requires mutable access to `buffer`, `prompt` and `prefix`, since this function will need to modify these.
+/// Related functions are available in `functions.rs`.
 fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mut String, prefix: &mut String) -> ExitStatus {
     match command_args[0].to_lowercase().replace(prefix.as_str(), "").as_str() {
         // Help commands
