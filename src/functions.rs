@@ -212,7 +212,7 @@ fn count_leading_spaces(input_str: &str) -> usize {
 }
 
 /// Interactively replace the line at `line_number` in the `file_buffer`.
-/// Provides functionality for the `~replace` command.
+/// Provides functionality for the `~replace` and `~correct` commands.
 pub fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
     if check_if_line_in_buffer(file_buffer, line_number, true) {
         let original_line = file_buffer[line_number - 1].clone();
@@ -220,7 +220,12 @@ pub fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
         let leading_spaces = count_leading_spaces(&original_line);
 
         println!("replacing line {}", line_number);
-        println!("original line is '{}' (indented by {} spaces)", trimmed_line, leading_spaces);
+
+        match leading_spaces {
+            n if n >= 2 => println!("original line is '{}' (indented by {} spaces)", trimmed_line, n),
+            1 => println!("original line is '{}' (indented by 1 space)", trimmed_line),
+            _ => println!("original line is '{}'", trimmed_line),
+        }
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed to read input.");
