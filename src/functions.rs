@@ -187,7 +187,7 @@ pub fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
 
         let index = line_number - 1;
         if !input.trim().is_empty() {
-            file_buffer.insert(index, input.trim().to_string());
+            file_buffer.insert(index, input.trim_end_matches('\n').to_string());
             println!("inserted");
         }
         else {
@@ -197,19 +197,37 @@ pub fn insert(file_buffer: &mut Vec<String>, line_number: usize) {
     }
 }
 
+/// A helper function for the `~replace` command.
+/// Returns the number of leading spaces in the `input_str`.
+fn count_leading_spaces(input_str: &str) -> usize {
+    let mut count = 0;
+    for c in input_str.chars() {
+        if c == ' ' {
+            count += 1;
+        } else {
+            break; // Exit the loop when a non-space character is encountered.
+        }
+    }
+    count
+}
+
 /// Interactively replace the line at `line_number` in the `file_buffer`.
 /// Provides functionality for the `~replace` command.
 pub fn replace(file_buffer: &mut Vec<String>, line_number: usize) {
     if check_if_line_in_buffer(file_buffer, line_number, true) {
+        let original_line = file_buffer[line_number - 1].clone();
+        let trimmed_line = original_line.trim();
+        let leading_spaces = count_leading_spaces(&original_line);
+
         println!("replacing line {}", line_number);
-        println!("original line is {}", file_buffer[line_number - 1]);
+        println!("original line is '{}' (indented by {} spaces)", trimmed_line, leading_spaces);
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed to read input.");
 
         let index = line_number - 1;
         if !input.trim().is_empty() {
-            file_buffer.insert(index, input.trim().to_string());
+            file_buffer.insert(index, input.trim_end_matches('\n').to_string());
             file_buffer.remove(index + 1);
             println!("replaced");
         }
