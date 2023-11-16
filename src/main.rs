@@ -51,6 +51,11 @@ fn main() {
         buffer.file_path = Some(args[1].clone());
     }
 
+    ctrlc::set_handler(|| {
+        println!("use ~exit to exit sued");
+    })
+    .expect("Error setting Ctrl-C handler");
+
     while let ReadResult::Input(line) = interface.read_line().unwrap() {
         let command = line.trim_end().to_string();
         interface.add_history_unique(command.clone());
