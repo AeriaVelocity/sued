@@ -399,7 +399,7 @@ pub fn shell_command(mut command_args: Vec<&str>) {
             println!("finished running {}", &command);
         }
         else {
-            println!("failed to run {}", &command);
+            println!("finished running {} with errors", &command);
         }
     }
 }
