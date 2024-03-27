@@ -237,6 +237,30 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("search for what?");
             }
         },
+        "print" => {
+            let mut start_point = 1;
+            let mut end_point = buffer.contents.len();
+
+            if command_args.len() >= 2 {
+                if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
+                    start_point = start_from_arg;
+                }
+            }
+
+            if command_args.len() >= 3 {
+                if let Ok(end_from_arg) = command_args[2].parse::<usize>() {
+                    end_point = end_from_arg;
+                }
+            }
+
+            if command_args.len() == 2 {
+                if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
+                    end_point = start_from_arg;
+                }
+            }
+
+            show(&buffer.contents, start_point, end_point, false);
+        },
         "show" => {
             let mut start_point = 1;
             let mut end_point = buffer.contents.len();
@@ -259,7 +283,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 }
             }
 
-            show(&buffer.contents, start_point, end_point);
+            show(&buffer.contents, start_point, end_point, true);
         },
         
         // Miscellaneous commands
@@ -268,7 +292,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             prefix.clear();
             if command_args.len() < 2 {
                 prefix.push_str("~");
-                println!("prefix reset to ~, try passing a prompt if you wanted that instead");
+                println!("prefix reset to ~, try passing a prefix if you wanted that instead");
             }
             else {
                 let new_prefix = command_args[1];

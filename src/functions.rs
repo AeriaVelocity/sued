@@ -44,7 +44,7 @@ pub fn startup_message() {
 /// Displays the list of commands that sued supports.
 /// Invoked with the `~` command.
 pub fn command_list() {
-    println!("about, clear, copy, correct, delete, exit, help, indent, insert, open, prompt, replace, run, runhere, save, search, show, substitute, swap, write");
+    println!("about, clear, copy, correct, delete, exit, help, indent, insert, open, prefix, print, prompt, replace, run, runhere, save, search, show, substitute, swap, write");
 }
 
 /// Displays a list of available commands and their descriptions.
@@ -64,13 +64,14 @@ pub fn extended_command_list() {
     println!("~insert line - insert text at specified line (interactive)");
     println!("~open [filename] - load file into buffer");
     println!("~prefix [prefix]");
+    println!("~print [start] [end] - display the contents of the buffer without line numbers");
     println!("~prompt [prompt] - set an input prompt");
     println!("~replace line - replace specified line (interactive)");
     println!("~run command - run executable or shell builtin");
     println!("~runhere command - run executable or shell builtin on file contents");
     println!("~save [filename] - save buffer to file");
     println!("~search term - perform regex search in whole buffer");
-    println!("~show [start] [end] - Display the contents of the buffer.");
+    println!("~show [start] [end] - display the contents of the buffer with line numbers");
     println!("~substitute line pattern/replacement - perform regex substitution on specified line");
     println!("~swap source target - swap two lines");
     println!("~write filename - write buffer to file without storing filename");
@@ -107,7 +108,7 @@ pub fn save(buffer_contents: &Vec<String>, file_path: &str) {
 /// Iterates over the `buffer_contents` and displays them one by one.
 /// If a range was specified, only iterate for that part.
 /// Used to provide functionality for the `~show` command.
-pub fn show(buffer_contents: &Vec<String>, start_point: usize, end_point: usize) {
+pub fn show(buffer_contents: &Vec<String>, start_point: usize, end_point: usize, line_numbers: bool) {
     if buffer_contents.is_empty() {
         println!("no buffer contents");
         return;
@@ -124,9 +125,14 @@ pub fn show(buffer_contents: &Vec<String>, start_point: usize, end_point: usize)
         let contents: Vec<String> = buffer_contents[start_point - 1..end_point].to_vec();
         let max_count_length: usize = (start_point + contents.len() - 1).to_string().len();
         for (index, line) in contents.iter().enumerate() {
-            let count: usize = start_point + index;
-            let count_padded: String = format!("{:width$}", count, width = max_count_length);
-            println!("{}│{}", count_padded, line);
+            if line_numbers {
+                let count: usize = start_point + index;
+                let count_padded: String = format!("{:width$}", count, width = max_count_length);
+                println!("{}│{}", count_padded, line);
+            }
+            else {
+                println!("{}", line);
+            }
         }
     }
 }
