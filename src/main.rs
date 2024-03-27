@@ -125,7 +125,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                     indent(&mut buffer.contents, line_number, indentation);
                 }
                 else {
-                    println!("indent line {} how?", line_number);
+                    println!("indent line {} by how many spaces?", line_number);
                 }
             }
             else {
