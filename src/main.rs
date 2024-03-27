@@ -136,7 +136,8 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 insert(&mut buffer.contents, line_number);
-            } else {
+            }
+            else {
                 println!("insert where?");
             }
         },
@@ -154,7 +155,8 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 replace(&mut buffer.contents, line_number);
-            } else {
+            }
+            else {
                 println!("replace which line?");
             }
         },
@@ -233,7 +235,8 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             if command_args.len() >= 2 {
                 let term = command_args[1..].join(" ");
                 search(&buffer.contents, &term);
-            } else {
+            }
+            else {
                 println!("search for what?");
             }
         },

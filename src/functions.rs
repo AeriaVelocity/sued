@@ -334,7 +334,8 @@ pub fn substitute(file_buffer: &mut Vec<String>, line_number: usize, pattern: &s
 
                 if let Some(error) = lines.last() {
                     println!("substitute failed, because {}", error.to_lowercase().replace("error: ", ""));
-                } else {
+                }
+                else {
                     println!("substitute failed, for some reason");
                 }
             },
@@ -361,7 +362,8 @@ pub fn search(file_buffer: &[String], term: &str) {
 pub fn shell_command(mut command_args: Vec<&str>) {
     if command_args.len() <= 1 {
         println!("run what?");
-    } else {
+    }
+    else {
         let shell = if cfg!(windows) { 
             if which("pwsh").is_ok() {
                 "pwsh"
@@ -409,7 +411,8 @@ pub fn shell_command(mut command_args: Vec<&str>) {
 pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &mut Vec<String>, file_name: Option<String>) {
     if buffer_contents.is_empty() {
         println!("no buffer contents");
-    } else {
+    }
+    else {
         let temporary_file_name: String = if file_name.is_some() {
             format!("{}", file_name.unwrap().replace(".", "-temp."))
         }
@@ -539,7 +542,8 @@ pub fn split_pattern_replacement(combined_args: &str) -> Vec<&str> {
                 temp_str = &combined_args[i + 1..];
                 previous_char = Some(c);
             }
-        } else {
+        }
+        else {
             // Any other character, update the previous character
             previous_char = Some(c);
         }
