@@ -81,7 +81,7 @@ sued looks basic on the offset, but under the hood, it has support for regex rep
 
 sued's command set consists of stuff like `delete`, `indent`, `insert`, `open`, `run`, `runhere`, `save`, `search`, `show`, `substitute`, `swap`, and so on.
 
-For the rest of the commands, as well as information on what these commands do, run `~help` inside sued or check out the [documentation](https://that1m8head.github.io/sued).
+For the rest of the commands, as well as information on what these commands do, run `~help` inside sued or check out the [documentation](https://aeriavelocity.github.io/sued).
 
 And sued leverages [linefeed](https://github.com/murarth/linefeed) for its command line input. Meaning it supports GNU Readline commands and functionality. You can do some Emacs-style line navigation, like `C-a`, `C-e`, `C-f`, `C-b`, whatever you want, it'll work. Probably.
 

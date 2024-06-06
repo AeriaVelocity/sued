@@ -1,6 +1,6 @@
-//! sued - shut up editor, a vector-oriented line editor.
+//! sued - shut up editor, a vector-oriented line editor by Arsalan "Aeria" Kazmi
 //! 
-//! to understand sued, read `README.md` or `that1m8head.github.io/sued`.
+//! to understand sued, read `README.md` or `https://aeriavelocity.github.io/sued`.
 //! 
 //! sued is free software licensed under the WTFPL.
 

@@ -6,8 +6,8 @@ edition = "2021"
 license = "WTFPL"
 keywords = ["text", "editor", "ed"]
 categories = ["text-editors", "command-line-utilities"]
-repository = "https://github.com/that1m8head/sued/"
-homepage = "https://that1m8head.github.io/sued/"
+repository = "https://github.com/AeriaVelocity/sued/"
+homepage = "https://aeriavelocity.github.io/sued/"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
