@@ -10,7 +10,7 @@ use linefeed::{Interface, ReadResult};
 
 // Please see the corresponding `functions.rs` file for those definitions.
 mod functions;
-use functions::*;
+use functions as suedfn;
 
 /// This struct is used to represent the file buffer.
 /// `contents` will contain the text contents of the file as a Vec,
@@ -34,7 +34,7 @@ enum ExitStatus {
 /// It's the main function.
 /// I don't know what you expected.
 fn main() {
-    startup_message();
+    suedfn::startup_message();
 
     let interface = Interface::new("sued").unwrap();
     let mut buffer = FileBuffer {
@@ -47,7 +47,7 @@ fn main() {
 
     let args: Vec<String> = env::args().collect();
     if args.len() >= 2 {
-        buffer.contents = open(&args[1], &mut buffer.file_path);
+        buffer.contents = suedfn::open(&args[1], &mut buffer.file_path);
         buffer.file_path = Some(args[1].clone());
     }
 
@@ -61,7 +61,7 @@ fn main() {
         interface.add_history_unique(command.clone());
         let command_args = command.split(' ').collect::<Vec<&str>>();
         if command_args[0] == prefix {
-            command_list();
+            suedfn::command_list();
         }
         else if command.starts_with(&prefix) {
             if let ExitStatus::Failure = process_command(command_args, &mut buffer, &mut prompt, &mut prefix){
@@ -82,8 +82,8 @@ fn main() {
 fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mut String, prefix: &mut String) -> ExitStatus {
     match command_args[0].to_lowercase().replace(prefix.as_str(), "").as_str() {
         // Help commands
-        "about" => { about_sued(); },
-        "help" => { extended_command_list(); },
+        "about" => { suedfn::about_sued(); },
+        "help" => { suedfn::extended_command_list(); },
 
         // Buffer manipulation
         "clear" => { 
@@ -93,25 +93,25 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         "copy" => {
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                copy(&mut buffer.contents, line_number);
+                suedfn::copy(&mut buffer.contents, line_number);
             }
             else {
-                copy(&mut buffer.contents, 0);
+                suedfn::copy(&mut buffer.contents, 0);
             }
         }
         "correct" => {
             let line_number = buffer.contents.len();
-            replace(&mut buffer.contents, line_number);
+            suedfn::replace(&mut buffer.contents, line_number);
         }
         "del" | "delete" => {
             if command_args.len() >= 3 {
                 let start = command_args[1].parse::<usize>().unwrap_or_default();
                 let end = command_args[2].parse::<usize>().unwrap_or_default();
-                delete_range(&mut buffer.contents, start, end);
+                suedfn::delete_range(&mut buffer.contents, start, end);
             }
             else if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or_default();
-                delete(&mut buffer.contents, line_number);
+                suedfn::delete(&mut buffer.contents, line_number);
             }
             else {
                 println!("delete which line?");
@@ -122,7 +122,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 if command_args.len() >= 3 {
                     let indentation: isize = command_args[2].parse().unwrap_or(0);
-                    indent(&mut buffer.contents, line_number, indentation);
+                    suedfn::indent(&mut buffer.contents, line_number, indentation);
                 }
                 else {
                     println!("indent line {} by how many spaces?", line_number);
@@ -135,7 +135,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         "insert" => {
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                insert(&mut buffer.contents, line_number);
+                suedfn::insert(&mut buffer.contents, line_number);
             }
             else {
                 println!("insert where?");
@@ -145,7 +145,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             if command_args.len() >= 2 {
                 let file_name_with_spaces = command_args[1..].join(" ");
                 let expanded_file_path = tilde(&file_name_with_spaces).to_string();
-                buffer.contents = open(expanded_file_path.as_str(), &mut buffer.file_path);
+                buffer.contents = suedfn::open(expanded_file_path.as_str(), &mut buffer.file_path);
             }
             else {
                 println!("open what?");
@@ -154,7 +154,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         "replace" => {
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                replace(&mut buffer.contents, line_number);
+                suedfn::replace(&mut buffer.contents, line_number);
             }
             else {
                 println!("replace which line?");
@@ -170,7 +170,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             let expanded_file_path: String = tilde(&destination).to_string();
 
             if !expanded_file_path.trim().is_empty() {
-                save(&buffer.contents, expanded_file_path.as_str());
+                suedfn::save(&buffer.contents, expanded_file_path.as_str());
                 buffer.file_path = Some(destination);
             }
             else {
@@ -181,11 +181,11 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             if command_args.len() >= 3 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
                 let combined_args = command_args[2..].join(" ");
-                let pattern_replacement = split_pattern_replacement(combined_args.as_str());
+                let pattern_replacement = suedfn::split_pattern_replacement(combined_args.as_str());
                 if pattern_replacement.len() >= 2 {
                     let pattern = pattern_replacement[0];
                     let replacement = pattern_replacement[1];
-                    substitute(&mut buffer.contents, line_number, pattern, replacement);
+                    suedfn::substitute(&mut buffer.contents, line_number, pattern, replacement);
                 }
                 else {
                     println!("substitute what?");
@@ -204,7 +204,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             if command_args.len() >= 3 {
                 let source_line = command_args[1].parse::<usize>().unwrap_or(0);
                 let target_line = command_args[2].parse::<usize>().unwrap_or(0);
-                swap(&mut buffer.contents, source_line, target_line);
+                suedfn::swap(&mut buffer.contents, source_line, target_line);
             }
             else if command_args.len() >= 2 {
                 println!("swap line {} with what?", command_args[1]);
@@ -223,7 +223,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             let expanded_file_path: String = tilde(&destination).to_string();
 
             if !expanded_file_path.trim().is_empty() {
-                save(&buffer.contents, expanded_file_path.as_str());
+                suedfn::save(&buffer.contents, expanded_file_path.as_str());
             }
             else {
                 println!("write where?");
@@ -234,7 +234,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         "search" => {
             if command_args.len() >= 2 {
                 let term = command_args[1..].join(" ");
-                search(&buffer.contents, &term);
+                suedfn::search(&buffer.contents, &term);
             }
             else {
                 println!("search for what?");
@@ -262,7 +262,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 }
             }
 
-            show(&buffer.contents, start_point, end_point, false);
+            suedfn::show(&buffer.contents, start_point, end_point, false);
         },
         "show" => {
             let mut start_point = 1;
@@ -286,11 +286,11 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 }
             }
 
-            show(&buffer.contents, start_point, end_point, true);
+            suedfn::show(&buffer.contents, start_point, end_point, true);
         },
         
         // Miscellaneous commands
-        "bsod" => { crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
+        "bsod" => { suedfn::crash("USER_IS_STUPID", &[0x0000DEAD, 0x00000101, 0xFFFFFFFF, 56]); },
         "prefix" => {
             prefix.clear();
             if command_args.len() < 2 {
@@ -312,12 +312,12 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 prompt.push_str(&new_prompt);
             }
         }
-        "run"  => { shell_command(command_args.clone()); },
+        "run"  => { suedfn::shell_command(command_args.clone()); },
         "runhere" => { 
             let command_args_string = command_args.iter().map(|&s| s.to_string()).collect();
-            shell_command_with_file(command_args_string, &mut buffer.contents, buffer.file_path.clone());
+            suedfn::shell_command_with_file(command_args_string, &mut buffer.contents, buffer.file_path.clone());
         }
-        "nothing" => { nothing(&buffer.contents); },
+        "nothing" => { suedfn::nothing(&buffer.contents); },
 
         // Exit command
         "exit" | "quit" => return ExitStatus::Failure,
