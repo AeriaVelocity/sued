@@ -83,7 +83,7 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
     match command_args[0].to_lowercase().replace(prefix.as_str(), "").as_str() {
         // Help commands
         "about" => { suedfn::about_sued(); },
-        "help" => { suedfn::extended_command_list(); },
+        "help" => { suedfn::extended_command_list(&prefix); },
 
         // Buffer manipulation
         "clear" => { 

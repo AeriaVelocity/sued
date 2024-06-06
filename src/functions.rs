@@ -41,40 +41,65 @@ pub fn startup_message() {
     println!("sued v{version} - {message}\ntype ~ for commands, otherwise just start typing");
 }
 
-/// Displays the list of commands that sued supports.
+/// Displays and returns the list of commands that sued supports.
 /// Invoked with the `~` command.
-pub fn command_list() {
-    println!("about, clear, copy, correct, delete, exit, help, indent, insert, open, prefix, print, prompt, replace, run, runhere, save, search, show, substitute, swap, write");
+pub fn command_list() -> Vec<String> {
+    let commands = vec![
+        "about",
+        "clear",
+        "copy",
+        "correct",
+        "delete",
+        "exit",
+        "help",
+        "indent",
+        "insert",
+        "open",
+        "prefix",
+        "print",
+        "prompt",
+        "replace",
+        "run",
+        "runhere",
+        "save",
+        "search",
+        "show",
+        "substitute",
+        "swap",
+        "write"
+    ];
+    println!("{}", commands.join(", "));
+    commands.into_iter().map(|s| s.to_string()).collect()
 }
 
 /// Displays a list of available commands and their descriptions.
 /// Invoked with the `~help` command.
-pub fn extended_command_list() {
-    println!("press up and down to navigate through command history");
-    println!("~ represents your prefix, if you changed the prefix use that instead");
-    println!("key: ~command arg1/alt_arg1 arg2 [optional_arg] - what the command does");
-    println!("~about - display about text");
-    println!("~clear - clear buffer");
-    println!("~copy [line] - copy line or whole buffer to clipboard");
-    println!("~correct - replace most recent line (interactive)");
-    println!("~delete line/start [end] - immediately delete specified line or range of lines");
-    println!("~exit - exit sued");
-    println!("~help - display this list");
-    println!("~indent line level - indent a line, negative level will outdent");
-    println!("~insert line - insert text at specified line (interactive)");
-    println!("~open [filename] - load file into buffer");
-    println!("~prefix [prefix]");
-    println!("~print [start] [end] - display the contents of the buffer without line numbers");
-    println!("~prompt [prompt] - set an input prompt");
-    println!("~replace line - replace specified line (interactive)");
-    println!("~run command - run executable or shell builtin");
-    println!("~runhere command - run executable or shell builtin on file contents");
-    println!("~save [filename] - save buffer to file");
-    println!("~search term - perform regex search in whole buffer");
-    println!("~show [start] [end] - display the contents of the buffer with line numbers");
-    println!("~substitute line pattern/replacement - perform regex substitution on specified line");
-    println!("~swap source target - swap two lines");
-    println!("~write filename - write buffer to file without storing filename");
+pub fn extended_command_list(prefix: &str) {
+    println!("{}",
+"press up and down to navigate through command history
+key: ~command arg1/alt_arg1 arg2 [optional_arg] - what the command does
+~about - display about text
+~clear - clear buffer
+~copy [line] - copy line or whole buffer to clipboard
+~correct - replace most recent line (interactive)
+~delete line/start [end] - immediately delete specified line or range of lines
+~exit - exit sued
+~help - display this list
+~indent line level - indent a line, negative level will outdent
+~insert line - insert text at specified line (interactive)
+~open [filename] - load file into buffer
+~prefix [prefix]
+~print [start] [end] - display the contents of the buffer without line numbers
+~prompt [prompt] - set an input prompt
+~replace line - replace specified line (interactive)
+~run command - run executable or shell builtin
+~runhere command - run executable or shell builtin on file contents
+~save [filename] - save buffer to file
+~search term - perform regex search in whole buffer
+~show [start] [end] - display the contents of the buffer with line numbers
+~substitute line pattern/replacement - perform regex substitution on specified line
+~swap source target - swap two lines
+~write filename - write buffer to file without storing filename".replace("~", prefix));
 }
 
 /// Displays the sued version number and information about the editor itself.
