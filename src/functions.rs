@@ -523,34 +523,26 @@ pub fn nothing(file_buffer: &Vec<String>) {
 /// A helper function used for the ~substitute command.
 pub fn split_pattern_replacement(combined_args: &str) -> Vec<&str> {
     let mut pattern_replacement = Vec::new();
-    let mut temp_str = combined_args;
-    let mut previous_char: Option<char> = None;
+    let mut start = 0;
+    let mut escaped = false;
 
     for (i, c) in combined_args.char_indices() {
-        if previous_char == Some('\\') {
-            // Previous character is a backslash, continue to the next character
-            previous_char = None;
+        if escaped {
+            escaped = false;
+        }
+        else if c == '\\' {
+            escaped = true;
         }
         else if c == '/' {
-            if previous_char == Some('\\') {
-                // Special case: `\/` should be treated as a single `/` and included in the first element
-                previous_char = Some(c);
-            }
-            else {
-                // Found a forward slash, push the accumulated string to the result and reset
-                pattern_replacement.push(&temp_str[..i]);
-                temp_str = &combined_args[i + 1..];
-                previous_char = Some(c);
-            }
-        }
-        else {
-            // Any other character, update the previous character
-            previous_char = Some(c);
+            pattern_replacement.push(&combined_args[start..i]);
+            start = i + 1;
         }
     }
-    // Push the remaining string to the result
-    if !temp_str.is_empty() {
-        pattern_replacement.push(temp_str);
+    
+    if start <= combined_args.len() {
+        pattern_replacement.push(&combined_args[start..]);
     }
+
     pattern_replacement
 }
+
