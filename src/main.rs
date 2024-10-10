@@ -119,13 +119,22 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
         }
         "indent" => {
             if command_args.len() >= 2 {
-                let line_number = command_args[1].parse::<usize>().unwrap_or(0);
+                let range = suedfn::parse_tilde_range(command_args[1], buffer.contents.len());
+                let start_point = range.0;
+                let end_point = range.1;
                 if command_args.len() >= 3 {
                     let indentation: isize = command_args[2].parse().unwrap_or(0);
-                    suedfn::indent(&mut buffer.contents, line_number, indentation);
+                    for i in start_point..end_point + 1 {
+                        suedfn::indent(&mut buffer.contents, i, indentation);
+                    }
                 }
                 else {
-                    println!("indent line {} by how many spaces?", line_number);
+                    if start_point == end_point {
+                        println!("indent line {} by how many spaces?", start_point);
+                    }
+                    else {
+                        println!("indent lines {} to {} by how many spaces?", start_point, end_point);
+                    }
                 }
             }
             else {
