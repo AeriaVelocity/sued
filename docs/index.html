@@ -90,34 +90,54 @@
         </p></blockquote>
         <p>And that's all for this quick overview. Give sued a go and try it out yourself. The full command set awaits you down below.</p>
 
+        <h1 id="tilde-range-syntax">TILDE RANGE SYNTAX</h1>
+        <p>Tilde Range Syntax (TRS) allows you to specify a range of lines to operate on using simple tilde syntax.</p>
+        <p>TRS something like this, using the ~show command as an example:</p>
+        <blockquote><p>
+            ~show 1 <br>
+            1│This text is <br>
+            ~show 2~ <br>
+            2│getting pushed <br>
+            3│onto the file buffer! <br>
+            ~show ~2
+            1│This text is <br>
+            2│getting pushed <br>
+            ~show 2~3
+            2│getting pushed <br>
+            3│onto the file buffer! <br>
+        </p></blockquote>
+        <p>You can use TRS to specify only one line (X), all lines including and following a specific line (X~), all lines leading up to and including a specific line (~X), or a specific range of lines (X~Y).</p>
+        <p>TRS was implemented into sued v0.17.0 as a way to concisely represent line ranges without having to deal with argument trouble, while also making it feel sued-y.</p>
+
         <h1>COMMANDS</h1>
         <p>sued supports command history. Use ↑ and ↓ to navigate through it.</p>
         <p>All commands start with ~. Run ~ by itself to see a list of commands.</p>
         <p>You can change sued's command prefix with <strong>~prefix [prefix]</strong>. Replace ~ with your chosen prefix in this case.</p>
+        <p>All parameters marked "range" use <a href="#tilde-range-syntax">Tilde Range Syntax (TRS)</a>.</p>
         <blockquote>
             <p><strong>KEY:</strong></p>
             <p><strong>~command arg1/alt_arg2 [optional_arg]</strong> - what the command does</p>
         </blockquote>
         <p><strong>~about</strong> - display about text</p>
         <p><strong>~clear</strong> - clear buffer</p>
-        <p><strong>~copy [line]</strong> - copy line or whole buffer to clipboard</p>
+        <p><strong>~copy [range]</strong> - copy range or whole buffer to clipboard</p>
         <p><strong>~correct</strong> - replace most recent line (interactive)</p>
-        <p><strong>~delete line/start [end]</strong> - immediately delete specified line or range of lines</p>
+        <p><strong>~delete range</strong> - immediately delete specified range of lines</p>
         <p><strong>~exit</strong> - exit sued</p>
         <p><strong>~help</strong> - display this list</p>
-        <p><strong>~indent line level</strong> - indent a line, negative level will outdent</p>
+        <p><strong>~indent range level</strong> - indent a range, negative level will outdent</p>
         <p><strong>~insert line</strong> - insert text at specified line (interactive)</p>
         <p><strong>~nothing</strong> - do nothing with the buffer contents</p>
         <p><strong>~open [filename]</strong> - load file into buffer</p>
         <p><strong>~prefix [prefix]</strong> - set command prefix</p>
-        <p><strong>~print [start] [end]</strong> - print the contents of the buffer without line numbers</p>
+        <p><strong>~print [range]</strong> - print the contents of the buffer without line numbers</p>
         <p><strong>~prompt [prompt]</strong> - set input prompt</p>
         <p><strong>~replace line</strong> - replace specified line (interactive)</p>
         <p><strong>~run command</strong> - run executable or shell builtin</p>
         <p><strong>~runhere command</strong> - run executable or shell builtin on file contents</p>
         <p><strong>~save [filename]</strong> - save buffer to file</p>
         <p><strong>~search term</strong> - perform regex search in the whole buffer</p>
-        <p><strong>~show [start] [end]</strong> - display the contents of the buffer with line numbers</p>
+        <p><strong>~show [range]</strong> - display the contents of the buffer with line numbers</p>
         <p><strong>~substitute line pattern/replacement</strong> - perform regex substitution on the specified line</p>
         <p><strong>~swap source target</strong> - swap two lines</p>
         <p><strong>~write filename</strong> - write buffer to file without storing filename</p>
