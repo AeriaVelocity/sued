@@ -77,27 +77,29 @@ pub fn command_list() -> Vec<String> {
 pub fn extended_command_list(prefix: &str) {
     println!("{}",
 "press up and down to navigate through command history
+all `range` arguments use tilde range syntax (TRS)
 key: ~command arg1/alt_arg1 arg2 [optional_arg] - what the command does
 ~about - display about text
 ~clear - clear buffer
-~copy [line] - copy line or whole buffer to clipboard
+~copy [range] - copy range or whole buffer to clipboard
 ~correct - replace most recent line (interactive)
-~delete line/start [end] - immediately delete specified line or range of lines
+~delete range - immediately delete specified range of lines
 ~exit - exit sued
 ~help - display this list
-~indent line level - indent a line, negative level will outdent
+~indent range level - indent a range, negative level will outdent
 ~insert line - insert text at specified line (interactive)
+~nothing - do nothing with the buffer contents
 ~open [filename] - load file into buffer
-~prefix [prefix]
-~print [start] [end] - display the contents of the buffer without line numbers
-~prompt [prompt] - set an input prompt
+~prefix [prefix] - set command prefix
+~print [range] - print the contents of the buffer without line numbers
+~prompt [prompt] - set input prompt
 ~replace line - replace specified line (interactive)
 ~run command - run executable or shell builtin
 ~runhere command - run executable or shell builtin on file contents
 ~save [filename] - save buffer to file
-~search term - perform regex search in whole buffer
-~show [start] [end] - display the contents of the buffer with line numbers
-~substitute line pattern/replacement - perform regex substitution on specified line
+~search term - perform regex search in the whole buffer
+~show [range] - display the contents of the buffer with line numbers
+~substitute line pattern/replacement - perform regex substitution on the specified line
 ~swap source target - swap two lines
 ~write filename - write buffer to file without storing filename".replace("~", prefix));
 }
