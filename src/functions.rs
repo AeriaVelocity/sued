@@ -462,7 +462,13 @@ pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &
     }
     else {
         let temporary_file_name: String = if file_name.is_some() {
-            format!("{}", file_name.unwrap().replace(".", "-temp."))
+            let file = file_name.unwrap();
+            if file.contains(".") {
+                format!("{}", file.replace(".", "-temp."))
+            }
+            else {
+                format!("{}.temp", file)
+            }
         }
         else {
             /* Do we need a random hex string? No. Is it cool anyway? YES. */
@@ -475,6 +481,8 @@ pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &
 
             format!("{}.temp", hex_string)
         };
+
+        println!("writing temporary file to {}", temporary_file_name);
 
         if command_args.len() <= 1 {
             println!("run what?");
