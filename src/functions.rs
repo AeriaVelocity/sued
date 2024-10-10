@@ -298,24 +298,10 @@ pub fn delete(file_buffer: &mut Vec<String>, line_number: usize) {
     }
 }
 
-/// Remove the range of `start` and `end` from the `file_buffer`.
-/// Provides functionality for the `~delete` command if more than one line number was specified.
-pub fn delete_range(file_buffer: &mut Vec<String>, start: usize, end: usize) {
-    let range_exists = 
-        check_if_line_in_buffer(file_buffer, start, true) && 
-        check_if_line_in_buffer(file_buffer, end, true);
-
-    if range_exists {
-        for line in (start..=end).rev() {
-            file_buffer.remove(line - 1);
-        }
-    }
-}
-
 /// Copy the provided `line_number` to the system clipboard.
 /// If no `line_number` is specified (it's not in the buffer), copy the whole buffer.
 /// Provides functionality for the `~copy` command.
-pub fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
+pub fn copy(file_buffer: &mut Vec<String>, range: (usize, usize)) {
     if file_buffer.is_empty() {
         println!("no buffer contents");
         return;
@@ -330,10 +316,19 @@ pub fn copy(file_buffer: &mut Vec<String>, line_number: usize) {
 
     match clipboard_context.get_contents() {
         Ok(_) => {
-            let mut copy_message = String::from("copying whole buffer");
-            if check_if_line_in_buffer(file_buffer, line_number, false) {
-                to_copy = file_buffer[line_number - 1].clone();
-                copy_message = format!("copying line {}", line_number);
+            let mut copy_message = String::new();
+            if range.0 == range.1 {
+                let line_number = range.0;
+                if check_if_line_in_buffer(file_buffer, line_number, false) {
+                    to_copy = file_buffer[line_number - 1].clone();
+                    copy_message = format!("copying line {}", line_number);
+                }
+            }
+            else {
+                if check_if_line_in_buffer(file_buffer, range.0, false) && check_if_line_in_buffer(file_buffer, range.1, false) {
+                    to_copy = file_buffer[range.0 - 1..range.1].join("\n");
+                    copy_message = format!("copying lines {} to {}", range.0, range.1);
+                }
             }
             println!("{}", copy_message);
             clipboard_context.set_contents(to_copy).unwrap();

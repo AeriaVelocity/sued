@@ -91,12 +91,13 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             buffer.file_path = None;
         },
         "copy" => {
+            let end_point = buffer.contents.len();
             if command_args.len() >= 2 {
-                let line_number = command_args[1].parse::<usize>().unwrap_or(0);
-                suedfn::copy(&mut buffer.contents, line_number);
+                let line_number = command_args[1];
+                suedfn::copy(&mut buffer.contents, suedfn::parse_tilde_range(line_number, end_point));
             }
             else {
-                suedfn::copy(&mut buffer.contents, 0);
+                suedfn::copy(&mut buffer.contents, (1, end_point));
             }
         }
         "correct" => {
