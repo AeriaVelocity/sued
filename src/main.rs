@@ -1,4 +1,4 @@
-//! sued - shut up editor, a vector-oriented line editor by Arsalan "Aeria" Kazmi
+//! sued - shut up editor, a vector-oriented line editor by Arsalan "Aeri" Kazmi
 //! 
 //! to understand sued, read `README.md` or `https://aeriavelocity.github.io/sued`.
 //! 
