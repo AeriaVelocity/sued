@@ -168,8 +168,9 @@ pub fn show(buffer_contents: &Vec<String>, start_point: usize, end_point: usize,
 /// If `file_path` is a directory, returns the directory listing as a `String` vector.
 /// Used for the `~open` command.
 pub fn open(file_path: &str, current_file_path: &mut Option<String>) -> Vec<String> {
+    let path_exists = PathBuf::from(file_path).exists();
     let file_exists = fs::read_to_string(file_path);
-    let file_is_dir = fs::metadata(file_path).unwrap().is_dir();
+    let is_dir = path_exists && fs::metadata(file_path).unwrap().is_dir();
     match file_exists {
         Ok(contents) => {
             println!("file {} opened", file_path);
@@ -177,7 +178,7 @@ pub fn open(file_path: &str, current_file_path: &mut Option<String>) -> Vec<Stri
             return contents.lines().map(|line| line.to_owned()).collect();
         }
         Err(e) => {
-            if file_is_dir {
+            if is_dir {
                 println!("{} is a directory", file_path);
                 let listings: Vec<String> = fs::read_dir(file_path).unwrap().map(
                     |res| res.unwrap().path().display().to_string()
