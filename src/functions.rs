@@ -186,17 +186,22 @@ pub fn open(file_path: &str, current_file_path: &mut Option<String>) -> Vec<Stri
                 println!("directory listing of {} opened as text", file_path);
                 return listings;
             }
+            let error_specifier: &str;
             match e.kind() {
                 std::io::ErrorKind::NotFound => {
-                    println!("file {} not found", file_path);
+                    error_specifier = "not found";
                 },
                 std::io::ErrorKind::PermissionDenied => {
-                    println!("file {} can't be opened", file_path);
+                    error_specifier = "can't be opened";
                 },
+                std::io::ErrorKind::InvalidData => {
+                    error_specifier = "is not text";
+                }
                 _ => {
-                    println!("file {} failed to open", file_path);
+                    error_specifier = "failed to open";
                 }
             }
+            println!("file {} {}: {}", file_path, error_specifier, e.to_string());
         }
     }
     Vec::new()
