@@ -112,7 +112,7 @@ pub fn about_sued() {
               sued is a vector-oriented line editor, heavily inspired by the ed editor\n\
               you can write text simply by typing, and use sued's extensive command set for editing\n\
               editor commands are prefixed with a default prefix of ~, type ~help for a full list\n\
-              sued written by Arsalan \"Velocity\" Kazmi <sonicspeed848@gmail.com>");
+              sued written by Arsalan \"Aeri\" Kazmi <sonicspeed848@gmail.com>");
 }
 
 /// Writes the `buffer_contents` to the `file_path`, if there are any contents.
