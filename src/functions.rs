@@ -482,8 +482,6 @@ pub fn shell_command_with_file(mut command_args: Vec<String>, buffer_contents: &
             format!("{}.temp", hex_string)
         };
 
-        println!("writing temporary file to {}", temporary_file_name);
-
         if command_args.len() <= 1 {
             println!("run what?");
             return;
