@@ -253,30 +253,28 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             }
 
             // Do the opposite if the argument is suffixed with `~`
-            if command_args.len() >= 2 && command_args[1].ends_with("~") {
+            else if command_args.len() >= 2 && command_args[1].ends_with("~") {
                 let end_from_arg = command_args[1].replace("~", "");
                 if let Ok(end_from_arg) = end_from_arg.parse::<usize>() {
                     start_point = end_from_arg;
                 }
             }
 
-            // If one or more arguments specified, set the start point
-            if command_args.len() >= 2 {
-                if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
+            // If a range argument (format X~Y), display the range from X to Y
+            else if command_args.len() >= 2 && command_args[1].contains("~") {
+                let range: Vec<&str> = command_args[1].split("~").collect();
+                if let Ok(start_from_arg) = range[0].parse::<usize>() {
                     start_point = start_from_arg;
                 }
-            }
-
-            // If two arguments, display the range from arg1 to arg2
-            if command_args.len() >= 3 {
-                if let Ok(end_from_arg) = command_args[2].parse::<usize>() {
+                if let Ok(end_from_arg) = range[1].parse::<usize>() {
                     end_point = end_from_arg;
                 }
             }
 
-            // If only one argument, then set the end point to the start point
-            if command_args.len() == 2 {
+            // If only one argument, then set the start point and end point to the same value
+            else if command_args.len() == 2 {
                 if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
+                    start_point = start_from_arg;
                     end_point = start_from_arg;
                 }
             }
@@ -296,30 +294,28 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             }
 
             // Do the opposite if the argument is suffixed with `~`
-            if command_args.len() >= 2 && command_args[1].ends_with("~") {
+            else if command_args.len() >= 2 && command_args[1].ends_with("~") {
                 let end_from_arg = command_args[1].replace("~", "");
                 if let Ok(end_from_arg) = end_from_arg.parse::<usize>() {
                     start_point = end_from_arg;
                 }
             }
 
-            // If one or more arguments specified, set the start point
-            if command_args.len() >= 2 {
-                if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
+            // If a range argument (format X~Y), display the range from X to Y
+            else if command_args.len() >= 2 && command_args[1].contains("~") {
+                let range: Vec<&str> = command_args[1].split("~").collect();
+                if let Ok(start_from_arg) = range[0].parse::<usize>() {
                     start_point = start_from_arg;
                 }
-            }
-
-            // If two arguments, display the range from arg1 to arg2
-            if command_args.len() >= 3 {
-                if let Ok(end_from_arg) = command_args[2].parse::<usize>() {
+                if let Ok(end_from_arg) = range[1].parse::<usize>() {
                     end_point = end_from_arg;
                 }
             }
 
-            // If only one argument, then set the end point to the start point
-            if command_args.len() == 2 {
+            // If only one argument, then set the start point and end point to the same value
+            else if command_args.len() == 2 {
                 if let Ok(start_from_arg) = command_args[1].parse::<usize>() {
+                    start_point = start_from_arg;
                     end_point = start_from_arg;
                 }
             }
