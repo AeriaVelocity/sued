@@ -1,10 +1,16 @@
 # sued - shut up editor
 
-sued is a vector-oriented line editor, kind of similar to the venerable and standard ed text editor, just with a different command syntax and set, to provide a unique editing experience.
+sued is a stateless vector-oriented command-based text editor written in Rust,
+with focus on speed, simplicity, ease of use and staying the hell out of your
+way. It's inspired by more contemporary editors, such as the ed family (ed, em,
+ex, vi, Vim, Neovim, etc.).
 
-No, it's not "super user editor", or an editor that will sue you. It's "soo-ed", "shut up editor".
+No, it's not "super user editor", or an editor that will sue you. It's "soo-ed",
+"shut up editor".
 
-To be clear, it's a text editor that works on Rust's `Vec` type. To be clearer, it's a text editor that works on lines and isn't graphical, like you're probably used to.
+To be clear, it's a text editor that works on Rust's `Vec` type. To be clearer,
+it's a text editor that works on lines and isn't graphical, like you're probably
+used to.
 
 ~~Yes, I know ed doesn't use vectors, shut up~~
 
@@ -53,7 +59,7 @@ and make sure that `~/.cargo/bin/` is in your PATH or you won't be able to run i
 
 ## Documentation
 
-sued's documentation is present [online](https://that1m8head.github.io/sued) in the form of a man page-like website.
+sued's documentation is present [online](https://aeriavelocity.github.io/sued) in the form of a man page-like website.
 
 You can also just read the source code yourself.
 
