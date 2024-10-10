@@ -571,3 +571,34 @@ pub fn split_pattern_replacement(combined_args: &str) -> Vec<&str> {
     pattern_replacement
 }
 
+/// A helper function used by all commands with range specifiers.
+/// Returns the range of lines to operate on.
+pub fn parse_tilde_range(specifier: &str, buffer_len: usize) -> (usize, usize) {
+    let start_point = 1;
+    let end_point = buffer_len;
+
+    if specifier.starts_with("~") {
+        if let Ok(end) = specifier.trim_start_matches("~").parse::<usize>() {
+            return (start_point, end);
+        }
+    }
+    else if specifier.ends_with("~") {
+        if let Ok(start) = specifier.trim_end_matches("~").parse::<usize>() {
+            return (start, end_point);
+        }
+    }
+    else if specifier.contains("~") {
+        let range: Vec<&str> = specifier.split("~").collect();
+        if let Ok(start) = range[0].parse::<usize>() {
+            if let Ok(end) = range[1].parse::<usize>() {
+                return (start, end);
+            }
+        }
+    }
+    else if let Ok(specified_line) = specifier.parse::<usize>() {
+        return (specified_line, specified_line);
+    }
+
+    (start_point, end_point)
+}
+
