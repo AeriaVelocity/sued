@@ -165,17 +165,37 @@ pub fn show(buffer_contents: &Vec<String>, start_point: usize, end_point: usize,
 }
 
 /// Verifies the `file_path`'s file existence, then returns the file contents as a `String` vector.
+/// If `file_path` is a directory, returns the directory listing as a `String` vector.
 /// Used for the `~open` command.
 pub fn open(file_path: &str, current_file_path: &mut Option<String>) -> Vec<String> {
     let file_exists = fs::read_to_string(file_path);
+    let file_is_dir = fs::metadata(file_path).unwrap().is_dir();
     match file_exists {
         Ok(contents) => {
             println!("file {} opened", file_path);
             *current_file_path = Some(file_path.to_string());
             return contents.lines().map(|line| line.to_owned()).collect();
         }
-        Err(_) => {
-            println!("no such file {}", file_path);
+        Err(e) => {
+            if file_is_dir {
+                println!("{} is a directory", file_path);
+                let listings: Vec<String> = fs::read_dir(file_path).unwrap().map(
+                    |res| res.unwrap().path().display().to_string()
+                ).collect();
+                println!("directory listing of {} opened as text", file_path);
+                return listings;
+            }
+            match e.kind() {
+                std::io::ErrorKind::NotFound => {
+                    println!("file {} not found", file_path);
+                },
+                std::io::ErrorKind::PermissionDenied => {
+                    println!("file {} can't be opened", file_path);
+                },
+                _ => {
+                    println!("file {} failed to open", file_path);
+                }
+            }
         }
     }
     Vec::new()
