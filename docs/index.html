@@ -56,7 +56,7 @@
         <p>Upon starting sued, you'll be greeted by the startup message.</p>
         <blockquote><p>
             $ sued <br>
-            sued v0.16.0 - it's pronounced "soo-ed" <br>
+            sued v0.17.0 - it's pronounced "soo-ed" <br>
             type ~ for commands, otherwise just start typing <br>
         </p></blockquote>
         <p>Once you're here, you can just begin typing up your text file.</p>
@@ -74,12 +74,18 @@
             2│getting pushed <br>
             3│onto the file buffer! <br>
         </p></blockquote>
+        <p>Only want to show a little bit of it? Let's specify a range in the <code>~show</code> command.</p>
+        <blockquote><p>
+            ~show 2 <br>
+            2│getting pushed <br>
+        </p></blockquote>
+        <p>You can learn more about ranges and Tilde Range Syntax (TRS) in the <a href="#tilde-range-syntax">Tilde Range Syntax</a> section.</p>
         <p>Saving is straightforward too. You just enter <code>~save filename</code>.</p>
         <blockquote><p>
             ~save sued-test.txt <br>
             saved to sued-text.txt <br>
         </p></blockquote>
-        <p>Don't like how your commands are on the same line as the outputs? You can always set a <code>~prompt</code>.</p>
+        <p>Is the editing experience a bit <em>too</em> seamless? Feel free to set a <code>~prompt</code>.</p>
         <blockquote><p>
             ~prompt sued> <br>
             sued> ~show <br>
@@ -91,7 +97,7 @@
         <blockquote><p>
             sued> ~replace 3 <br>
             replacing line 3 <br>
-            original line is onto the file buffer! <br>
+            original line is 'onto the file buffer!' <br>
             into the file buffer vector! <br>
             replaced <br>
             sued> ~show <br>
@@ -99,11 +105,19 @@
             2│getting pushed <br>
             3│into the file buffer vector! <br>
         </p></blockquote>
+        <p>What about replacing only a part of a line instead of the whole line? sued supports regex through the <code>~substitute</code> command.</p>
+        <blockquote><p>
+            ~substitute 3 buffer vector/contents <br>
+            ~show <br>
+            1│This text is <br>
+            2│getting pushed <br>
+            3│into the file contents! <br>
+        </p></blockquote>
         <p>And that's all for this quick overview. Give sued a go and try it out yourself. The full command set awaits you down below.</p>
 
         <h1 id="tilde-range-syntax">TILDE RANGE SYNTAX</h1>
         <p>Tilde Range Syntax (TRS) allows you to specify a range of lines to operate on using simple tilde syntax.</p>
-        <p>TRS looks like this, using the ~show command as an example:</p>
+        <p>TRS looks like this, using the <code>~show</code> command as an example:</p>
         <blockquote><p>
             ~show 1 <br>
             1│This text is <br>
@@ -117,7 +131,7 @@
             2│getting pushed <br>
             3│onto the file buffer! <br>
         </p></blockquote>
-        <p>You can use TRS to specify only one line (X), all lines including and following a specific line (X~), all lines leading up to and including a specific line (~X), or a specific range of lines (X~Y).</p>
+        <p>You can use TRS to specify only one line <code>(X)</code>, all lines including and following a specific line <code>(X~)</code>, all lines leading up to and including a specific line <code>(~X)</code>, or a specific range of lines <code>(X~Y)</code>.</p>
         <p>TRS was implemented into sued v0.17.0 as a way to concisely represent line ranges without having to deal with argument trouble, while also making it feel sued-y.</p>
 
         <h1>COMMANDS</h1>
