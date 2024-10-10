@@ -58,6 +58,7 @@ pub fn command_list() -> Vec<String> {
         "prefix",
         "print",
         "prompt",
+        "reopen",
         "replace",
         "run",
         "runhere",
@@ -77,7 +78,7 @@ pub fn command_list() -> Vec<String> {
 pub fn extended_command_list(prefix: &str) {
     println!("{}",
 "press up and down to navigate through command history
-all `range` arguments use tilde range syntax (TRS)
+all `range` arguments use tilde range syntax (X~, ~X, X~Y)
 key: ~command arg1/alt_arg1 arg2 [optional_arg] - what the command does
 ~about - display about text
 ~clear - clear buffer
@@ -93,6 +94,7 @@ key: ~command arg1/alt_arg1 arg2 [optional_arg] - what the command does
 ~prefix [prefix] - set command prefix
 ~print [range] - print the contents of the buffer without line numbers
 ~prompt [prompt] - set input prompt
+~reopen - load last opened file into buffer
 ~replace line - replace specified line (interactive)
 ~run command - run executable or shell builtin
 ~runhere command - run executable or shell builtin on file contents

@@ -160,6 +160,10 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 println!("open what?");
             }
         },
+        "reopen" => {
+            let file_path = buffer.file_path.clone().unwrap_or_default();
+            buffer.contents = suedfn::open(file_path.as_str(), &mut buffer.file_path);
+        },
         "replace" => {
             if command_args.len() >= 2 {
                 let line_number = command_args[1].parse::<usize>().unwrap_or(0);
