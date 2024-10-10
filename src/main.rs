@@ -104,17 +104,16 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
             suedfn::replace(&mut buffer.contents, line_number);
         }
         "del" | "delete" => {
-            if command_args.len() >= 3 {
-                let start = command_args[1].parse::<usize>().unwrap_or_default();
-                let end = command_args[2].parse::<usize>().unwrap_or_default();
-                suedfn::delete_range(&mut buffer.contents, start, end);
-            }
-            else if command_args.len() >= 2 {
-                let line_number = command_args[1].parse::<usize>().unwrap_or_default();
-                suedfn::delete(&mut buffer.contents, line_number);
+            if command_args.len() >= 2 {
+                let range = suedfn::parse_tilde_range(command_args[1], buffer.contents.len());
+                let start_point = range.0;
+                let end_point = range.1;
+                for line_number in start_point..end_point + 1 {
+                    suedfn::delete(&mut buffer.contents, line_number);
+                }
             }
             else {
-                println!("delete which line?");
+                println!("delete what?");
             }
         }
         "indent" => {
@@ -124,8 +123,8 @@ fn process_command(command_args: Vec<&str>, buffer: &mut FileBuffer, prompt: &mu
                 let end_point = range.1;
                 if command_args.len() >= 3 {
                     let indentation: isize = command_args[2].parse().unwrap_or(0);
-                    for i in start_point..end_point + 1 {
-                        suedfn::indent(&mut buffer.contents, i, indentation);
+                    for line_number in start_point..end_point + 1 {
+                        suedfn::indent(&mut buffer.contents, line_number, indentation);
                     }
                 }
                 else {
