@@ -109,4 +109,5 @@ It's been tested on Windows, Fedora and Android, and works great under all three
 
 sued is free. You can get it for free, but it's also free.
 
-It's released under the Do What The F-ck You Want Public License (WTFPL) which means you can do bloody anything with it. I don't care, and sued certainly doesn't.
+It's released under the GNU General Public License version 3 or later, because
+free software, hell yeah!
